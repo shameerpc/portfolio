@@ -2,28 +2,30 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiTerminal, FiCornerDownLeft, FiPlay, FiWifi } from 'react-icons/fi';
 import { cyberAudio } from '../utils/cyberAudio';
+import { useGame } from '../context';
+import { useLanguage } from '../i18n';
 
 const COMMANDS = {
   help: [
     '──────────────────────────────────────────────────────────────',
-    'SHAMSEER PC // DEVELOPER TERMINAL v3.0',
+    'SHAMSEER PC // DEVELOPER TERMINAL v3.5',
     '──────────────────────────────────────────────────────────────',
     '  help       - Display available CLI commands',
-    '  skills     - Inspect full-stack & creative capability matrix',
-    '  projects   - View verified client platforms & production URLs',
-    '  regions    - GCC (Qatar & UAE) & international coverage briefing',
-    '  contact    - Direct communication channels & WhatsApp link',
-    '  hire       - Client onboarding workflow & retainer availability',
-    '  status     - Current engineering stack & availability status',
+    '  about      - Executive background & dual-discipline overview',
+    '  projects   - Inspect live GCC client platforms & production URLs',
+    '  skills     - Full-stack & creative capability matrix',
+    '  cv         - Download the official CV resume directly',
+    '  hire       - Instant WhatsApp project inquiry dispatch',
+    '  contact    - Direct communication channels & coordinates',
+    '  konami     - Retro gamer easter egg sequence',
     '  clear      - Clear terminal screen buffer',
     '──────────────────────────────────────────────────────────────',
   ],
-  skills: [
-    '[MERN CORE]   : React 19, Node.js, Express.js, MongoDB, RESTful APIs',
-    '[FULL STACK]  : Redux Toolkit, Context API, Tailwind CSS, Framer Motion',
-    '[CREATIVE]    : Luxury Poster Design, Social Ad Creatives, Photoshop, Illustrator',
-    '[VIDEO/MEDIA] : Meta Ads Manager, Premiere Pro, CapCut, Motion Design',
-    'Competency    : Enterprise-grade architecture, scalable clean code, GCC deployment.',
+  about: [
+    'SHAMSEER PC // Full-Stack MERN Developer & Creative Director',
+    'Based in Qatar / UAE (Dubai) / India · Serving clients worldwide.',
+    'Specialized in building enterprise web applications that scale,',
+    'paired with high-converting commercial ad creatives and brand assets.',
   ],
   projects: [
     '1. VALUE FM (https://valuefm.com.qa)',
@@ -35,11 +37,20 @@ const COMMANDS = {
     '4. MYTHOUGHTSHUB (https://mythoughtshub.eu.cc/)',
     '   - Editorial publishing platform with authenticated author workflows',
   ],
-  regions: [
-    'PRIMARY HUBS : Qatar (Doha) & UAE (Dubai / Abu Dhabi) & India',
-    'EXPERTISE    : Scalable SaaS platforms, multi-division corporate portals,',
-    '               and premium visual brand assets designed for high-value GCC markets.',
-    'AVAILABILITY : Remote enterprise contracts, agency partnerships, and selective retainers.',
+  skills: [
+    '[MERN CORE]   : React 19, Node.js, Express.js, MongoDB, RESTful APIs',
+    '[FULL STACK]  : Redux Toolkit, Context API, Tailwind CSS 3, Framer Motion',
+    '[CREATIVE]    : Luxury Poster Design, Key Visuals, Photoshop, Illustrator',
+    '[VIDEO/MEDIA] : Meta Ads Manager, Premiere Pro, CapCut, Motion Design',
+    'Competency    : Enterprise-grade architecture, scalable clean code, GCC deployment.',
+  ],
+  cv: [
+    'Downloading official CV: /cv/Shamseer-PC-CV.pdf ...',
+    'File dispatched. Check your downloads folder or browser downloads manager.',
+  ],
+  hire: [
+    'Initiating direct WhatsApp channel to Shamseer PC (+91 7012819002)...',
+    'Opening chat in a new tab. Direct reply guaranteed within 24 hours.',
   ],
   contact: [
     'DIRECT CHANNELS:',
@@ -49,31 +60,22 @@ const COMMANDS = {
     '  - GitHub   : https://github.com/shameerpc',
     'Direct response guaranteed within 24 hours.',
   ],
-  hire: [
-    '──────────────────────────────────────────────────────────────',
-    'CLIENT ONBOARDING WORKFLOW',
-    '──────────────────────────────────────────────────────────────',
-    '1. Discovery & Technical Scoping : Feasibility & requirements (Day 1)',
-    '2. Design & Architecture          : Prototypes & data models',
-    '3. Production Build              : Full-stack MERN with responsive testing',
-    '4. Launch & Handover             : Deployment, documentation & post-launch support',
-    'Next step: Send a project brief in the Contact section below.',
-  ],
-  status: [
-    'ENVIRONMENT TELEMETRY:',
-    '  - Stack      : React 19 · Vite · Tailwind CSS · Framer Motion',
-    '  - Node/MERN  : Active',
-    '  - Deployment : Production Build V2',
-    '  - Location   : Qatar / UAE / India / Worldwide Remote',
-    '  - Status     : OPEN FOR NEW ENTERPRISE ENGAGEMENTS',
+  konami: [
+    '★ ★ ★ KONAMI CODE ACTIVATED ★ ★ ★',
+    '30 LIVES GRANTED // SECRET PROTOCOL UNLOCKED',
+    '"You don\'t build great software by accident. You architect it."',
+    'Keep exploring for the 3 hidden gold coins!',
   ],
 };
 
-const quickChips = ['help', 'skills', 'projects', 'regions', 'hire', 'contact', 'clear'];
+const quickChips = ['help', 'about', 'projects', 'skills', 'cv', 'hire', 'contact', 'clear'];
 
 export default function Terminal() {
+  const { unlockAchievement, setConfettiActive } = useGame();
+  const { t } = useLanguage();
+
   const [history, setHistory] = useState([
-    { type: 'output', text: 'Shamseer PC Developer Console [v3.0.0-noir]' },
+    { type: 'output', text: 'Shamseer PC Developer Console [v3.5.0-noir]' },
     { type: 'output', text: 'Connected to edge runtime · Doha / Dubai / Worldwide' },
     { type: 'output', text: 'Type "help" or click a command below to explore.' },
   ]);
@@ -90,11 +92,37 @@ export default function Terminal() {
     if (!trimmed) return;
 
     cyberAudio.playSoftClick?.();
+    unlockAchievement('curious');
 
     if (trimmed === 'clear') {
       setHistory([]);
       setInputVal('');
       return;
+    }
+
+    if (trimmed === 'cv') {
+      unlockAchievement('recruiter');
+      const link = document.createElement('a');
+      link.href = '/cv/Shamseer-PC-CV.pdf';
+      link.download = 'Shamseer-PC-CV.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    if (trimmed === 'hire') {
+      unlockAchievement('connected');
+      window.open(
+        'https://wa.me/917012819002?text=Hello%20Shamseer,%20I%20am%20contacting%20you%20via%20the%20portfolio%20terminal%20to%20discuss%20a%20project.',
+        '_blank',
+        'noopener,noreferrer'
+      );
+    }
+
+    if (trimmed === 'konami') {
+      cyberAudio.playLevelUp?.();
+      setConfettiActive(true);
+      setTimeout(() => setConfettiActive(false), 4000);
     }
 
     const newHistory = [...history, { type: 'input', text: cmdText }];
@@ -134,13 +162,13 @@ export default function Terminal() {
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#F5E6A8] text-xs font-mono uppercase tracking-wider">
             <FiTerminal className="text-xs text-[#D4AF37]" />
-            <span>Developer Terminal · CLI Interface</span>
+            <span>{t('terminal.badge', 'Hire Me the Geek Way')}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black font-sora tracking-tight text-white">
             Developer <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F5E6A8] to-[#D4AF37]">Console</span>
           </h2>
           <p className="text-sm sm:text-base text-[#94a3b8] font-sans">
-            Interactive command-line interface to inspect tech stack specs, project credentials, and workflow methodology.
+            {t('terminal.subtitle', 'Interactive CLI to query technical specifications, client credentials, and direct commands.')}
           </p>
         </div>
 
@@ -218,7 +246,7 @@ export default function Terminal() {
               type="text"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              placeholder="type 'help', 'projects', 'skills', 'hire'..."
+              placeholder="type 'help', 'cv', 'hire', 'projects', 'konami'..."
               className="flex-1 bg-transparent text-white font-mono text-xs sm:text-sm focus:outline-none placeholder-[#475569]"
               autoComplete="off"
               spellCheck="false"

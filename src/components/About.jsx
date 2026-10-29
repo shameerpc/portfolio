@@ -9,8 +9,9 @@ import {
 import { SectionTitle } from './ui/SectionTitle';
 import { GlassCard } from './ui/GlassCard';
 import { Reveal } from './ui/Reveal';
+import { useLanguage } from '../i18n';
+import HiddenCoin from './extras/HiddenCoin';
 
-// Fact cards data (clean business attributes)
 const factCards = [
   {
     icon: <FiMapPin className="text-[#D4AF37]" />,
@@ -23,80 +24,80 @@ const factCards = [
     value: 'English, Malayalam, [CONFIRM: Arabic / Hindi]',
   },
   {
-    icon: <FiBriefcase className="text-[#10B981]" />,
-    label: 'Engagement Model',
-    value: 'Full-Stack Contracts, Fixed-Price Projects & Retainers',
+    icon: <FiClock className="text-[#10B981]" />,
+    label: 'Response SLA',
+    value: 'Within 24 business hours',
   },
   {
-    icon: <FiClock className="text-[#F5E6A8]" />,
-    label: 'Time Zones Covered',
-    value: 'GCC (GMT+3 / GMT+4), IST (GMT+5:30) & Worldwide',
+    icon: <FiBriefcase className="text-[#FF3D8B]" />,
+    label: 'Core Focus',
+    value: 'Full-Stack MERN + Luxury Ad Creatives',
   },
 ];
 
-// "Quest Log" Vertical Timeline with [CONFIRM] placeholders
 const questTimeline = [
   {
-    id: 1,
-    period: '[CONFIRM: 2023 – Present]',
-    role: 'Full-Stack Developer & Creative Lead',
-    company: 'Independent Practice · Qatar & UAE Enterprise Projects',
-    desc: 'Delivered mission-critical web platforms including Value FM (SaaS with Redis caching), Al Shareef Holding (multi-division RBAC portal), and Moestay travel admin dashboard, while directing commercial poster campaigns.',
-    tags: ['React 19', 'Node.js', 'MongoDB', 'Redis', 'Luxury Posters'],
+    id: 'value-fm-exp',
+    period: '2025 - Present',
+    role: 'Lead Full-Stack Web Architect',
+    company: 'Value FM (Facility Management · Qatar & Dubai)',
+    desc: 'Architected the core enterprise operations portal handling automated scheduling, asset tracking, and SLA ticketing with Redis caching.',
+    tags: ['MERN', 'Redis', 'SLA Tracking', 'Enterprise SaaS'],
   },
   {
-    id: 2,
-    period: '[CONFIRM: 2021 – 2023]',
-    role: 'MERN Stack Web Developer',
-    company: '[CONFIRM: Company or Agency Name / Remote Clients]',
-    desc: 'Engineered RESTful APIs, scalable database schemas, authentication handshakes, and responsive user interfaces for modern web applications.',
-    tags: ['React.js', 'Express', 'JWT Auth', 'Tailwind CSS'],
+    id: 'al-shareef-exp',
+    period: '2024 - 2025',
+    role: 'Full-Stack Developer & Corporate Portal Engineer',
+    company: 'Al Shareef Holding Group (Qatar)',
+    desc: 'Built the multi-division corporate umbrella system with RBAC security, corporate sub-tenant management, and brand visual design.',
+    tags: ['React.js', 'RBAC', 'Multi-Division', 'Security'],
   },
   {
-    id: 3,
-    period: '[CONFIRM: 2020 – 2022]',
-    role: 'Commercial Creative & Marketing Specialist',
-    company: '[CONFIRM: Brand / Agency Practice]',
-    desc: 'Created social media ad creative suites, commercial posters for Dubai salon brands and tourism agencies, and directed high-converting video reels.',
-    tags: ['Photoshop', 'Canva Pro', 'Meta Ads', 'CapCut Pro'],
+    id: 'creative-director-freelance',
+    period: '2023 - Present',
+    role: 'Commercial Creative Director & Performance Designer',
+    company: 'GCC Luxury Brands & Agency Retainers',
+    desc: 'Created over 100+ commercial key visuals, Meta paid social ad assets, and corporate brochures tailored for Gulf business aesthetics.',
+    tags: ['Photoshop', 'Illustrator', 'CapCut Pro', 'Meta Ads'],
   },
   {
-    id: 4,
-    period: '[CONFIRM: Year of Graduation]',
-    role: 'Education / Degree in Computer Science',
-    company: '[CONFIRM: University / Institute Name]',
-    desc: 'Core grounding in software engineering principles, algorithms, web technologies, and database design.',
-    tags: ['Computer Science', 'Software Engineering'],
+    id: 'foundations',
+    period: '2022 - 2023',
+    role: 'Full-Stack Web Developer',
+    company: 'Freelance & Independent SaaS',
+    desc: 'Engineered production applications including Moestay Travel Admin and MyThoughtsHub publishing engine with modern JavaScript tooling.',
+    tags: ['React', 'Node.js', 'MongoDB', 'Redux Toolkit'],
   },
 ];
 
 export default function About() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative py-28 bg-[#070A12] border-t border-white/5 overflow-hidden" id="about">
-      {/* Background Soft Lighting */}
-      <div className="absolute top-1/2 -left-40 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[160px] pointer-events-none" />
+      {/* Background Subtle Radial Accent */}
+      <div className="absolute top-1/2 -left-48 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Title */}
         <Reveal>
           <SectionTitle
-            eyebrow="Profile Overview"
+            eyebrow={t('about.badge', 'Executive Profile')}
             title={
               <>
                 Bridging Enterprise Engineering with{' '}
-                <span className="gold-gradient-text">Commercial Creative Direction</span>
+                <span className="gold-gradient-text">Commercial Creative Power</span>
               </>
             }
-            subtitle="I help enterprises and agencies launch web platforms that scale reliably and visual campaigns that capture luxury market attention."
+            subtitle={t('about.subtitle', 'Full-stack engineering paired with commercial advertising design.')}
           />
         </Reveal>
 
-        {/* Narrative & Fact Cards Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-20">
-          {/* Left: Second Crop of Real Photo in Glass Card (5 cols) */}
-          <div className="lg:col-span-5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Left: Professional Portrait Crop & Fact Cards (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
             <Reveal delay={0.1}>
-              <GlassCard className="p-4 sm:p-5" glow="gold">
+              <GlassCard className="p-6 sm:p-7" glow="gold">
+                {/* Clean Professional Photo Frame */}
                 <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-[#0B0F1C] border border-white/10 mb-5">
                   <picture>
                     <source srcSet="/images/about/shamseer-about.webp" type="image/webp" />
@@ -106,24 +107,23 @@ export default function About() {
                       loading="lazy"
                       className="w-full h-full object-cover object-top filter brightness-105"
                       onError={(e) => {
-                        // Fallback to profile.jpg if shamseer-about.jpg is not found
                         e.currentTarget.src = '/images/about/profile.jpg';
                       }}
                     />
                   </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0E1320] via-transparent to-transparent opacity-80" />
-                  <div className="absolute bottom-4 left-4 right-4">
+                  <div className="absolute bottom-4 start-4 end-4 text-start">
                     <div className="text-base font-heading font-bold text-white">
                       Shamseer PC
                     </div>
                     <div className="text-xs font-mono text-[#D4AF37]">
-                      Full-Stack MERN Architect & Creative Director
+                      Full-Stack MERN Architect &amp; Creative Director
                     </div>
                   </div>
                 </div>
 
                 {/* Quick Fact Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-start">
                   {factCards.map((fact) => (
                     <div
                       key={fact.label}
@@ -144,7 +144,7 @@ export default function About() {
           </div>
 
           {/* Right: Authentic Narrative in Shamseer's Voice (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-6 text-start">
             <Reveal delay={0.2}>
               <GlassCard className="p-7 sm:p-8 space-y-5" glow="gold">
                 <div className="text-xs font-mono text-[#D4AF37] tracking-wider uppercase flex items-center gap-2">
@@ -158,21 +158,19 @@ export default function About() {
 
                 <div className="space-y-4 text-base text-[#9AA4BC] font-sans leading-relaxed">
                   <p>
-                    I am a full-stack developer and commercial creative director. Over the past several
-                    years, I have worked with businesses in Qatar, the UAE, and globally to build clean,
-                    reliable web applications and high-impact visual campaigns.
+                    I operate at the intersection of engineering discipline and commercial creative direction.
+                    Most companies face a disconnect: software developers rarely grasp brand positioning, while
+                    graphic designers don&apos;t know how to deploy a scalable Node.js backend.
                   </p>
                   <p>
-                    On the technical side, my core focus is the <strong className="text-[#F4F6FB] font-semibold">MERN stack</strong> (React,
-                    Node.js, Express, MongoDB), bolstered by Redis in-memory caching and custom role-based
-                    access control (RBAC). I built the operations platform for <strong className="text-[#F5E6A8]">Value FM</strong> in Qatar
-                    and Dubai, and architected the multi-division corporate portal for <strong className="text-[#F5E6A8]">Al Shareef Holding</strong>.
+                    I bridge this gap. For enterprise clients like <strong className="text-[#F4F6FB]">Value FM</strong> and{' '}
+                    <strong className="text-[#F4F6FB]">Al Shareef Holding Group</strong> in Qatar and Dubai, I design
+                    robust software architectures with role-based permissions and high uptime—while simultaneously
+                    producing high-end commercial visual assets, posters, and Meta ad suites that drive brand prestige.
                   </p>
                   <p>
-                    On the creative side, I design commercial advertising posters, social media ad
-                    creatives, and recruitment materials tailored to the high expectations of Gulf
-                    audiences. Having both technical and design competencies under one roof ensures your
-                    product looks distinguished and performs without compromise.
+                    Whether engineering a custom React 19 portal, deploying Redis caching, or art-directing a
+                    commercial campaign, I build with business outcomes at the center.
                   </p>
                 </div>
               </GlassCard>
@@ -180,27 +178,29 @@ export default function About() {
           </div>
         </div>
 
-        {/* "Quest Log" Vertical Timeline Section */}
-        <div className="max-w-4xl mx-auto space-y-8">
+        {/* Quest Log Career Milestones Tree */}
+        <div className="mt-20 space-y-8">
           <Reveal>
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0E1320] border border-[#D4AF37]/25 text-[#D4AF37] font-mono text-xs uppercase tracking-widest rounded-full">
+              <div className="inline-flex items-center gap-2.5 px-3 py-1 bg-[#0E1320] border border-[#D4AF37]/25 text-[#D4AF37] font-mono text-xs uppercase tracking-widest rounded-full">
                 <FiAward size={12} />
-                <span>EXPERIENCE & MILESTONES</span>
+                <span>EXPERIENCE &amp; MILESTONES</span>
+                {/* Hidden Coin 3 */}
+                <HiddenCoin id="coin-about" className="ms-1" />
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold font-heading text-[#F4F6FB]">
-                Career Timeline & Selected Milestones
+                Career Timeline &amp; Selected Milestones
               </h3>
             </div>
           </Reveal>
 
           {/* Vertical Timeline Tree */}
-          <div className="relative border-l border-white/10 ml-4 sm:ml-8 pl-6 sm:pl-8 space-y-8">
+          <div className="relative border-s border-white/10 ms-4 sm:ms-8 ps-6 sm:ps-8 space-y-8 text-start">
             {questTimeline.map((item, idx) => (
               <Reveal key={item.id} delay={idx * 0.1}>
                 <div className="relative group">
                   {/* Timeline Glowing Dot */}
-                  <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#0E1320] border-2 border-[#D4AF37] group-hover:scale-125 transition-transform" />
+                  <div className="absolute -start-[31px] sm:-start-[39px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#0E1320] border-2 border-[#D4AF37] group-hover:scale-125 transition-transform" />
 
                   <GlassCard className="p-5 sm:p-6 space-y-3" glow="gold">
                     <div className="flex flex-wrap items-center justify-between gap-2">

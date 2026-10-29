@@ -48,6 +48,12 @@ html {
   font-family: var(--font-body);
 }
 
+[dir="rtl"],
+.rtl-mode,
+body.font-cairo {
+  font-family: var(--font-cairo), 'Inter', sans-serif;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);

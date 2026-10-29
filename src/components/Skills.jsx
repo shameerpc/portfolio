@@ -5,6 +5,8 @@ import { SectionTitle } from './ui/SectionTitle';
 import { GlassCard } from './ui/GlassCard';
 import { Reveal } from './ui/Reveal';
 import { cyberAudio } from '../utils/cyberAudio';
+import { useLanguage } from '../i18n';
+import HiddenCoin from './extras/HiddenCoin';
 
 const skillCategories = [
   {
@@ -61,19 +63,20 @@ const skillCategories = [
 ];
 
 const currentlyExploring = [
-  'Next.js 15 (App Router & Server Actions)',
-  'TypeScript Enterprise Architecture',
-  'Docker Containerization & CI/CD',
-  'AI Agent Integrations & LLM Tool Calling',
+  'Docker & Containerized Microservices',
+  'Next.js 15 App Router & Server Actions',
+  'AI Agentic Coding Workflows & LLM Tooling',
+  'PostgreSQL & Prisma ORM',
 ];
 
 const levelColors = {
-  Expert: 'text-[#D4AF37] border-[#D4AF37]/40 bg-[#D4AF37]/10',
-  Advanced: 'text-[#22D3EE] border-[#22D3EE]/40 bg-[#22D3EE]/10',
-  Proficient: 'text-[#10B981] border-[#10B981]/40 bg-[#10B981]/10',
+  Expert: 'text-[#D4AF37] bg-[#D4AF37]/10 border-[#D4AF37]/30',
+  Advanced: 'text-[#22D3EE] bg-[#22D3EE]/10 border-[#22D3EE]/30',
+  Proficient: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30',
 };
 
 export default function Skills() {
+  const { t } = useLanguage();
   const [activeTooltip, setActiveTooltip] = useState(null);
 
   return (
@@ -81,48 +84,54 @@ export default function Skills() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionTitle
-            eyebrow="Technical Stack & Expertise"
+            eyebrow={t('skills.badge', 'Technical Matrix')}
             title={
               <>
-                Skills & Proficiencies{' '}
-                <span className="gold-gradient-text">Grounded in Delivery</span>
+                Skills &amp; Capabilities{' '}
+                <span className="gold-gradient-text">Matrix</span>
               </>
             }
-            subtitle="No arbitrary percentage bars — verified competence levels across engineering, design, and growth."
+            subtitle={t('skills.subtitle', 'Verified competencies across modern web engineering and visual media.')}
           />
         </Reveal>
 
         {/* 4 Skill Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {skillCategories.map((cat, ci) => (
-            <Reveal key={cat.title} delay={ci * 0.1}>
-              <GlassCard className="p-6 sm:p-8 h-full" glow="gold">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-12">
+          {skillCategories.map((cat, idx) => (
+            <Reveal key={cat.title} delay={idx * 0.1}>
+              <GlassCard className="p-6 sm:p-7 space-y-5" glow="gold">
                 {/* Category Header */}
-                <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
-                  <div className="p-2.5 rounded-xl bg-[#070A12] border border-white/10 text-lg">
+                <div className="flex items-center gap-3 border-b border-white/10 pb-4 text-start">
+                  <div
+                    className="p-2.5 rounded-xl border"
+                    style={{
+                      borderColor: `${cat.accent}40`,
+                      backgroundColor: `${cat.accent}15`,
+                    }}
+                  >
                     {cat.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold font-heading text-white">
+                    <h3 className="text-lg font-bold font-heading text-white">
                       {cat.title}
                     </h3>
-                    <span className="text-[10px] font-mono text-[#9AA4BC]">
-                      CORE DISCIPLINE 0{ci + 1}
-                    </span>
+                    <div className="text-[11px] font-mono text-[#9AA4BC]">
+                      {cat.skills.length} core competencies
+                    </div>
                   </div>
                 </div>
 
-                {/* Chips Grid with Tooltips */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Skill Chips with Level Badges */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {cat.skills.map((s) => (
                     <div
                       key={s.name}
                       onMouseEnter={() => {
-                        cyberAudio.playHover();
+                        cyberAudio.playHover?.();
                         setActiveTooltip(s.name);
                       }}
                       onMouseLeave={() => setActiveTooltip(null)}
-                      className="relative p-3 rounded-xl bg-[#070A12]/80 border border-white/5 hover:border-[#D4AF37]/40 transition-colors group cursor-default"
+                      className="relative p-3 rounded-xl bg-[#070A12]/80 border border-white/5 hover:border-[#D4AF37]/40 transition-colors group cursor-default text-start"
                     >
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <span className="text-xs font-heading font-semibold text-white">
@@ -147,7 +156,7 @@ export default function Skills() {
                         <motion.div
                           initial={{ opacity: 0, y: 4 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="absolute -top-7 left-2 z-20 px-2 py-0.5 rounded bg-[#141A2B] border border-[#D4AF37]/50 text-[10px] font-mono text-[#F5E6A8] shadow-lg pointer-events-none whitespace-nowrap"
+                          className="absolute -top-7 start-2 z-20 px-2 py-0.5 rounded bg-[#141A2B] border border-[#D4AF37]/50 text-[10px] font-mono text-[#F5E6A8] shadow-lg pointer-events-none whitespace-nowrap"
                         >
                           built with this ✓
                         </motion.div>
@@ -163,13 +172,13 @@ export default function Skills() {
         {/* Currently Exploring / Learning Row */}
         <Reveal delay={0.2}>
           <div className="p-6 sm:p-7 rounded-2xl bg-[#0E1320]/60 border border-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 text-start">
               <div className="p-2.5 rounded-xl bg-[#070A12] border border-white/10 text-[#D4AF37]">
                 <FiCompass size={20} />
               </div>
               <div>
                 <h4 className="text-sm font-bold font-heading text-white">
-                  Currently Exploring & Deepening
+                  {t('skills.learning', 'Currently Exploring & Deepening')}
                 </h4>
                 <p className="text-xs text-[#9AA4BC]">
                   Active technical research and modern architecture evolution.
@@ -177,7 +186,7 @@ export default function Skills() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {currentlyExploring.map((tech) => (
                 <span
                   key={tech}
@@ -186,6 +195,9 @@ export default function Skills() {
                   {tech}
                 </span>
               ))}
+
+              {/* Hidden Coin 2 */}
+              <HiddenCoin id="coin-skills" className="ms-1" />
             </div>
           </div>
         </Reveal>

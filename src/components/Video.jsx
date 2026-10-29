@@ -4,24 +4,29 @@ import { SectionTitle } from './ui/SectionTitle';
 import { GlassCard } from './ui/GlassCard';
 import { Reveal } from './ui/Reveal';
 import { cyberAudio } from '../utils/cyberAudio';
+import { useLanguage } from '../i18n';
+import { useGame } from '../context';
 
 export default function Video() {
+  const { t } = useLanguage();
+  const { unlockAchievement } = useGame();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
   const videoRef = useRef(null);
 
-  // TODO: Reference optimized /videos/showreel.mp4 when compressed in Prompt 6.
+  // Reference optimized /videos/showreel.mp4 when compressed in Prompt 6.
   // Fall back to current showreel file for now.
   const videoSrc = '/videos/copy_8F66225F-B2F5-4B63-8D6C-3FE20851FF28.mov';
 
   const togglePlay = () => {
-    cyberAudio.playSoftClick();
+    cyberAudio.playSoftClick?.();
     if (!videoRef.current) return;
     if (videoRef.current.paused) {
       videoRef.current.play();
       setIsPlaying(true);
       setHasStarted(true);
+      unlockAchievement('director');
     } else {
       videoRef.current.pause();
       setIsPlaying(false);
@@ -46,91 +51,88 @@ export default function Video() {
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionTitle
-            eyebrow="Motion & Video Editing"
+            eyebrow={t('video.badge', 'Motion & Direction')}
             title={
               <>
                 Commercial Video Editing &{' '}
                 <span className="gold-gradient-text">Short-Form Motion</span>
               </>
             }
-            subtitle="Engaging video cuts crafted with CapCut Pro and Premiere Pro for social ad campaigns and brand reels."
+            subtitle={t('video.subtitle', 'Engaging video cuts crafted with CapCut Pro and Premiere Pro for social ad campaigns and brand reels.')}
           />
         </Reveal>
 
         <Reveal delay={0.15}>
-          <GlassCard className="p-4 sm:p-5 rounded-3xl overflow-hidden shadow-2xl" glow="gold">
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black group">
-              {/* Lazy-mounted video with preload="none" and no autoplay with sound */}
+          <GlassCard className="p-3 sm:p-4 rounded-3xl overflow-hidden group" glow="gold">
+            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl">
+              {/* HTML5 Native Video Tag with Lazy Mount and preload none */}
               <video
                 ref={videoRef}
                 src={videoSrc}
                 preload="none"
-                playsInline
                 muted={isMuted}
+                playsInline
                 loop
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 className="w-full h-full object-cover"
-              />
-
-              {/* Play / Pause Large Center Button Overlay */}
-              <div
-                onClick={togglePlay}
-                className={`absolute inset-0 flex items-center justify-center cursor-pointer transition-all duration-300 ${
-                  isPlaying
-                    ? 'bg-transparent opacity-0 group-hover:opacity-100 hover:bg-black/30'
-                    : 'bg-black/40 opacity-100'
-                }`}
+                poster="/images/creative/posters/dubai_neo_2050.jpg"
               >
-                <button
-                  type="button"
-                  className="w-20 h-20 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] flex items-center justify-center text-2xl shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:scale-110 active:scale-95 transition-transform"
-                  aria-label={isPlaying ? 'Pause Showreel' : 'Play Showreel'}
-                >
-                  {isPlaying ? <FiPause /> : <FiPlay className="ml-1" />}
-                </button>
-              </div>
+                <track kind="captions" />
+              </video>
 
-              {/* Poster Placeholder Title until started */}
+              {/* Big Initial Play Button Overlay */}
               {!hasStarted && (
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#070A12]/80 backdrop-blur-md border border-white/10 text-xs font-mono text-[#D4AF37] pointer-events-none">
-                  COMMERCIAL SHOWREEL · CAPCUT & PREMIERE
+                <div
+                  onClick={togglePlay}
+                  className="absolute inset-0 bg-black/50 backdrop-blur-xs flex flex-col items-center justify-center cursor-pointer group-hover:bg-black/40 transition-colors"
+                >
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#F5E6A8] text-[#070A12] flex items-center justify-center text-3xl shadow-[0_0_40px_rgba(212,175,55,0.4)] group-hover:scale-110 transition-transform">
+                    <FiPlay className="ms-1" />
+                  </div>
+                  <span className="mt-4 font-heading font-bold text-sm tracking-wide text-white">
+                    {t('video.playVideo', 'Play Commercial Showreel')}
+                  </span>
+                  <span className="text-xs font-mono text-[#D4AF37] mt-1">
+                    (Sound initially muted · Tap to unmute)
+                  </span>
                 </div>
               )}
-            </div>
 
-            {/* Bottom Controls Bar */}
-            <div className="mt-4 px-3 py-2 rounded-xl bg-[#070A12] border border-white/5 flex items-center justify-between text-xs font-sans text-[#9AA4BC]">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={togglePlay}
-                  className="px-3 py-1 rounded-lg bg-[#141A2B] text-white hover:text-[#D4AF37] font-heading font-semibold text-xs flex items-center gap-1.5 transition-colors"
-                >
-                  {isPlaying ? <FiPause size={13} /> : <FiPlay size={13} />}
-                  <span>{isPlaying ? 'Pause' : 'Play showreel'}</span>
-                </button>
+              {/* Custom Bottom Glass Player Bar */}
+              {hasStarted && (
+                <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-center justify-between text-white text-sm opacity-90 hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={togglePlay}
+                      className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors"
+                      aria-label={isPlaying ? 'Pause' : 'Play'}
+                    >
+                      {isPlaying ? <FiPause size={16} /> : <FiPlay size={16} />}
+                    </button>
 
-                <button
-                  onClick={toggleMute}
-                  className="p-1.5 rounded-lg bg-[#141A2B] text-[#9AA4BC] hover:text-white transition-colors"
-                  aria-label={isMuted ? 'Unmute Audio' : 'Mute Audio'}
-                >
-                  {isMuted ? <FiVolumeX size={15} /> : <FiVolume2 size={15} />}
-                </button>
-              </div>
+                    <button
+                      onClick={toggleMute}
+                      className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors"
+                      aria-label={isMuted ? 'Unmute' : 'Mute'}
+                    >
+                      {isMuted ? <FiVolumeX size={16} /> : <FiVolume2 size={16} />}
+                    </button>
 
-              <div className="flex items-center gap-3">
-                <span className="text-[11px] font-mono hidden sm:inline text-[#D4AF37]">
-                  1080P MASTER CUT
-                </span>
-                <button
-                  onClick={handleFullscreen}
-                  className="p-1.5 rounded-lg bg-[#141A2B] text-[#9AA4BC] hover:text-white transition-colors"
-                  aria-label="Fullscreen"
-                >
-                  <FiMaximize size={15} />
-                </button>
-              </div>
+                    <span className="text-xs font-mono text-[#9AA4BC]">
+                      1080p Showreel
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={handleFullscreen}
+                    className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors"
+                    aria-label="Fullscreen"
+                  >
+                    <FiMaximize size={16} />
+                  </button>
+                </div>
+              )}
             </div>
           </GlassCard>
         </Reveal>

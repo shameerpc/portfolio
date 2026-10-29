@@ -5,6 +5,9 @@ import { SectionTitle } from './ui/SectionTitle';
 import { GlassCard } from './ui/GlassCard';
 import { Reveal } from './ui/Reveal';
 import { cyberAudio } from '../utils/cyberAudio';
+import { useLanguage } from '../i18n';
+import { useGame } from '../context';
+import TiltCard from './extras/TiltCard';
 
 const projects = [
   {
@@ -63,53 +66,56 @@ const projects = [
 
 const filterOptions = ['All', 'Qatar', 'Web apps'];
 
-function ProjectCarousel({ images, title }) {
+function ProjectCarousel({ images, title, onInteract }) {
   const [current, setCurrent] = useState(0);
-  const total = images.length;
 
-  const next = useCallback((e) => {
-    e.stopPropagation();
-    cyberAudio.playHover();
-    setCurrent((c) => (c + 1) % total);
-  }, [total]);
+  const next = useCallback(() => {
+    cyberAudio.playSoftClick?.();
+    onInteract?.();
+    setCurrent((c) => (c + 1) % images.length);
+  }, [images.length, onInteract]);
 
-  const prev = useCallback((e) => {
-    e.stopPropagation();
-    cyberAudio.playHover();
-    setCurrent((c) => (c - 1 + total) % total);
-  }, [total]);
+  const prev = useCallback(() => {
+    cyberAudio.playSoftClick?.();
+    onInteract?.();
+    setCurrent((c) => (c - 1 + images.length) % images.length);
+  }, [images.length, onInteract]);
 
   return (
-    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#070A12] select-none group">
+    <div className="relative aspect-[16/10] overflow-hidden bg-[#0A0D18] group">
       <AnimatePresence mode="wait">
         <motion.img
-          key={current}
+          key={images[current]}
           src={images[current]}
-          alt={`${title} preview ${current + 1}`}
+          alt={`${title} screenshot ${current + 1}`}
           loading="lazy"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.25 }}
           className="w-full h-full object-cover object-top"
+          onError={(e) => {
+            e.currentTarget.src = '/images/webdev/valufm1.png';
+          }}
         />
       </AnimatePresence>
 
-      {total > 1 && (
+      {/* Navigation Arrows */}
+      {images.length > 1 && (
         <>
           <button
             onClick={prev}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#070A12]/80 hover:bg-[#D4AF37] text-white hover:text-[#070A12] border border-white/10 opacity-0 group-hover:opacity-100 transition-all z-20"
+            className="absolute start-2.5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#070A12]/80 hover:bg-[#D4AF37] text-white hover:text-[#070A12] border border-white/10 opacity-0 group-hover:opacity-100 transition-all z-20 cursor-pointer"
             aria-label="Previous Slide"
           >
-            <FiChevronLeft size={16} />
+            <FiChevronLeft size={16} className="rtl:rotate-180" />
           </button>
           <button
             onClick={next}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#070A12]/80 hover:bg-[#D4AF37] text-white hover:text-[#070A12] border border-white/10 opacity-0 group-hover:opacity-100 transition-all z-20"
+            className="absolute end-2.5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#070A12]/80 hover:bg-[#D4AF37] text-white hover:text-[#070A12] border border-white/10 opacity-0 group-hover:opacity-100 transition-all z-20 cursor-pointer"
             aria-label="Next Slide"
           >
-            <FiChevronRight size={16} />
+            <FiChevronRight size={16} className="rtl:rotate-180" />
           </button>
           <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20 bg-black/60 px-2.5 py-1 rounded-full">
             {images.map((_, i) => (
@@ -128,25 +134,35 @@ function ProjectCarousel({ images, title }) {
 }
 
 export default function WebDev() {
+  const { t } = useLanguage();
+  const { playerClass, unlockAchievement } = useGame();
   const [activeFilter, setActiveFilter] = useState('All');
+
+  const isDevClass = playerClass === 'developer';
 
   const filteredProjects = activeFilter === 'All'
     ? projects
     : projects.filter((p) => p.filterTag === activeFilter);
+
+  const handleInteraction = () => {
+    unlockAchievement('explorer');
+  };
 
   return (
     <section className="relative py-28 bg-[#070A12] border-t border-white/5 overflow-hidden" id="webdev">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionTitle
-            eyebrow="Selected Work"
+            eyebrow={t('work.badge', 'Selected Work')}
             title={
               <>
                 Production Web Platforms &{' '}
-                <span className="gold-gradient-text">Enterprise Solutions</span>
+                <span className={isDevClass ? 'cyan-gradient-text' : 'gold-gradient-text'}>
+                  Enterprise Solutions
+                </span>
               </>
             }
-            subtitle="Real case studies deployed for commercial organizations in Qatar, the UAE, and global markets."
+            subtitle={t('work.subtitle', 'Real case studies deployed for commercial organizations in Qatar, the UAE, and global markets.')}
           />
         </Reveal>
 
@@ -156,16 +172,19 @@ export default function WebDev() {
             <button
               key={f}
               onClick={() => {
-                cyberAudio.playSoftClick();
+                cyberAudio.playSoftClick?.();
                 setActiveFilter(f);
+                handleInteraction();
               }}
-              className={`px-4 py-1.5 rounded-full text-xs font-heading font-semibold transition-all duration-200 border ${
+              className={`px-4 py-1.5 rounded-full text-xs font-heading font-semibold transition-all duration-200 border cursor-pointer ${
                 activeFilter === f
-                  ? 'bg-[#D4AF37] text-[#070A12] border-[#D4AF37] shadow-sm'
+                  ? isDevClass
+                    ? 'bg-[#22D3EE] text-[#070A12] border-[#22D3EE] shadow-sm font-bold'
+                    : 'bg-[#D4AF37] text-[#070A12] border-[#D4AF37] shadow-sm'
                   : 'bg-[#0E1320] border-white/10 text-[#9AA4BC] hover:text-[#F4F6FB]'
               }`}
             >
-              {f}
+              {f === 'All' ? t('work.filterAll', 'All Deployments') : f === 'Qatar' ? t('work.filterQatar', 'Qatar 🇶🇦') : t('work.filterWebApps', 'Web Apps')}
             </button>
           ))}
         </div>
@@ -174,97 +193,114 @@ export default function WebDev() {
         <div className="space-y-12">
           {filteredProjects.map((p, idx) => (
             <Reveal key={p.id} delay={idx * 0.1}>
-              <GlassCard className="p-6 sm:p-8 rounded-3xl group relative overflow-hidden" glow="gold">
-                {/* Hover Stamp: "Mission complete ✓" */}
-                <div className="absolute top-4 right-4 z-20 px-3 py-1 rounded-full bg-[#10B981]/15 border border-[#10B981]/40 text-[#10B981] text-[11px] font-mono font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1 shadow-sm">
-                  <FiCheckCircle size={12} />
-                  <span>Mission complete ✓</span>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                  {/* Browser Mockup Visual (6 cols) */}
-                  <div className="lg:col-span-6 rounded-2xl overflow-hidden border border-white/10 bg-[#0E1320] shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                    {/* Simulated Browser Chrome Bar */}
-                    <div className="px-4 py-2.5 bg-[#141A2B] border-b border-white/10 flex items-center justify-between text-xs font-mono text-[#9AA4BC]">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FF3D8B]/70" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#D4AF37]/70" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]/70" />
-                        <span className="ml-2 text-[11px] text-[#9AA4BC] truncate max-w-[200px]">
-                          https://{new URL(p.live).hostname}
-                        </span>
-                      </div>
-                      <span className="text-[10px] text-[#D4AF37] font-semibold">{p.region}</span>
-                    </div>
-
-                    <ProjectCarousel images={p.images} title={p.title} />
+              <TiltCard maxTilt={5}>
+                <GlassCard 
+                  className={`p-6 sm:p-8 rounded-3xl group relative overflow-hidden transition-all duration-300 ${
+                    isDevClass 
+                      ? 'border-[#22D3EE]/50 shadow-[0_0_35px_rgba(34,211,238,0.2)]' 
+                      : 'border-white/10'
+                  }`} 
+                  glow={isDevClass ? 'cyan' : 'gold'}
+                >
+                  {/* Hover Stamp: "Mission complete ✓" */}
+                  <div className="absolute top-4 end-4 z-20 px-3 py-1 rounded-full bg-[#10B981]/15 border border-[#10B981]/40 text-[#10B981] text-[11px] font-mono font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1 shadow-sm">
+                    <FiCheckCircle size={12} />
+                    <span>{t('work.missionComplete', 'Mission complete ✓')}</span>
                   </div>
 
-                  {/* Problem → Solution → Result Content (6 cols) */}
-                  <div className="lg:col-span-6 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-[#D4AF37] text-[11px] font-mono font-bold">
-                        {p.category}
-                      </span>
-                      <span className="text-xs font-mono text-[#9AA4BC]">{p.region}</span>
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    {/* Browser Mockup Visual (6 cols) */}
+                    <div className="lg:col-span-6 rounded-2xl overflow-hidden border border-white/10 bg-[#0E1320] shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                      {/* Simulated Browser Chrome Bar */}
+                      <div className="px-4 py-2.5 bg-[#141A2B] border-b border-white/10 flex items-center justify-between text-xs font-mono text-[#9AA4BC]">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#FF3D8B]/70" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#D4AF37]/70" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]/70" />
+                          <span className="ms-2 text-[11px] text-[#9AA4BC] truncate max-w-[200px]">
+                            https://{new URL(p.live).hostname}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-[#D4AF37] font-semibold">{p.region}</span>
+                      </div>
+
+                      <ProjectCarousel images={p.images} title={p.title} onInteract={handleInteraction} />
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl font-bold font-heading text-[#F4F6FB]">
-                      {p.title}
-                    </h3>
-
-                    {/* Problem → Solution → Result Rows */}
-                    <div className="space-y-2.5 text-xs sm:text-sm font-sans pt-1">
-                      <div className="p-3 rounded-xl bg-[#070A12]/80 border border-white/5 space-y-0.5">
-                        <span className="text-[10px] font-mono font-bold text-[#FF3D8B] uppercase tracking-wider block">
-                          PROBLEM
+                    {/* Case Study Details (6 cols) */}
+                    <div className="lg:col-span-6 space-y-4 text-start">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs font-mono font-bold uppercase tracking-wider ${isDevClass ? 'text-[#22D3EE]' : 'text-[#D4AF37]'}`}>
+                          {p.category}
                         </span>
-                        <p className="text-[#9AA4BC] leading-relaxed">{p.problem}</p>
+                        <span className="text-white/20">•</span>
+                        <span className="text-xs font-mono text-[#9AA4BC]">{p.region}</span>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-[#070A12]/80 border border-white/5 space-y-0.5">
-                        <span className="text-[10px] font-mono font-bold text-[#22D3EE] uppercase tracking-wider block">
-                          SOLUTION
-                        </span>
-                        <p className="text-[#9AA4BC] leading-relaxed">{p.solution}</p>
+                      <h3 className="text-2xl font-bold font-heading text-white">
+                        {p.title}
+                      </h3>
+
+                      {/* Problem -> Solution -> Result */}
+                      <div className="space-y-2.5 text-xs sm:text-sm font-sans pt-1">
+                        <div className="p-3 rounded-xl bg-[#070A12]/80 border border-white/5 space-y-1">
+                          <span className="text-[10px] font-mono font-bold uppercase text-[#FF3D8B] tracking-wider block">
+                            {t('work.problem', 'Challenge')}
+                          </span>
+                          <p className="text-[#9AA4BC] leading-relaxed">{p.problem}</p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-[#070A12]/80 border border-white/5 space-y-1">
+                          <span className={`text-[10px] font-mono font-bold uppercase tracking-wider block ${isDevClass ? 'text-[#22D3EE]' : 'text-[#D4AF37]'}`}>
+                            {t('work.solution', 'Architecture')}
+                          </span>
+                          <p className="text-[#9AA4BC] leading-relaxed">{p.solution}</p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-[#10B981]/5 border border-[#10B981]/20 space-y-1">
+                          <span className="text-[10px] font-mono font-bold uppercase text-[#10B981] tracking-wider block">
+                            {t('work.outcome', 'Impact')}
+                          </span>
+                          <p className="text-[#cbd5e1] leading-relaxed">{p.result}</p>
+                        </div>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-[#070A12]/80 border border-[#D4AF37]/20 space-y-0.5">
-                        <span className="text-[10px] font-mono font-bold text-[#D4AF37] uppercase tracking-wider block">
-                          OUTCOME
-                        </span>
-                        <p className="text-[#F4F6FB] font-medium leading-relaxed">{p.result}</p>
+                      {/* Tech Chips */}
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        {p.stack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-2.5 py-1 rounded-lg bg-[#141A2B] border border-white/10 text-[11px] font-mono text-[#F4F6FB]"
+                          >
+                            {tech}
+                          </span>
+                        ))}
                       </div>
-                    </div>
 
-                    {/* Tech Chips */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {p.stack.map((t) => (
-                        <span
-                          key={t}
-                          className="px-2.5 py-1 rounded-full bg-[#141A2B] border border-white/5 text-[11px] font-mono text-[#9AA4BC]"
+                      {/* Direct Live Site Button */}
+                      <div className="pt-2">
+                        <a
+                          href={p.live}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => {
+                            cyberAudio.playSoftClick?.();
+                            handleInteraction();
+                          }}
+                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-xs transition-all ${
+                            isDevClass
+                              ? 'bg-[#22D3EE] text-[#070A12] hover:bg-[#67E8F9] shadow-[0_0_20px_rgba(34,211,238,0.35)]'
+                              : 'bg-gradient-to-r from-[#D4AF37] to-[#F5E6A8] text-[#070A12] hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                          }`}
                         >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Live Link Button */}
-                    <div className="pt-2">
-                      <a
-                        href={p.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => cyberAudio.playSoftClick()}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] font-heading font-bold text-xs shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
-                      >
-                        <span>Visit live site</span>
-                        <FiExternalLink size={13} />
-                      </a>
+                          <span>{t('work.visitSite', 'Visit live site')}</span>
+                          <FiExternalLink size={13} />
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </GlassCard>
+                </GlassCard>
+              </TiltCard>
             </Reveal>
           ))}
         </div>

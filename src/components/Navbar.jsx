@@ -1,26 +1,74 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { FiVolume2, FiVolumeX, FiMenu, FiX, FiDownload, FiArrowRight } from 'react-icons/fi';
+import { 
+  FiVolume2, 
+  FiVolumeX, 
+  FiMenu, 
+  FiX, 
+  FiDownload, 
+  FiChevronDown, 
+  FiAward, 
+  FiCheck,
+  FiCode,
+  FiPenTool,
+  FiZap 
+} from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { cyberAudio } from '../utils/cyberAudio';
 import { useLanguage } from '../i18n';
+import { useGame, ACHIEVEMENTS_LIST } from '../context';
+import { trackEvent } from '../utils/analytics';
 
-const navLinks = [
-  { label: 'Home', href: '#hero', id: 'hero' },
-  { label: 'About', href: '#about', id: 'about' },
-  { label: 'Services', href: '#services', id: 'services' },
-  { label: 'Work', href: '#webdev', id: 'webdev' },
-  { label: 'Creative', href: '#creative', id: 'creative' },
-  { label: 'Skills', href: '#skills', id: 'skills' },
-  { label: 'Contact', href: '#contact', id: 'contact' },
-];
+const classMeta = {
+  full_package: { label: 'Full Package', icon: <FiZap className="text-[#D4AF37]" /> },
+  developer: { label: 'Developer', icon: <FiCode className="text-[#22D3EE]" /> },
+  creative: { label: 'Creative Lead', icon: <FiPenTool className="text-[#FF3D8B]" /> },
+};
 
 export default function Navbar() {
-  const { lang, toggleLang } = useLanguage();
+  const { lang, toggleLang, t } = useLanguage();
+  const { 
+    playerClass, 
+    setPlayerClass, 
+    unlockedAchievements, 
+    achievementsEnabled, 
+    toggleAchievementsEnabled,
+    unlockAchievement 
+  } = useGame();
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [audioMuted, setAudioMuted] = useState(cyberAudio.isMuted());
+  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const [achieveMenuOpen, setAchieveMenuOpen] = useState(false);
+
+  const roleMenuRef = useRef(null);
+  const achieveMenuRef = useRef(null);
+
+  // Close popovers when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (roleMenuRef.current && !roleMenuRef.current.contains(e.target)) {
+        setRoleMenuOpen(false);
+      }
+      if (achieveMenuRef.current && !achieveMenuRef.current.contains(e.target)) {
+        setAchieveMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const navLinks = [
+    { label: t('nav.home', 'Home'), href: '#hero', id: 'hero' },
+    { label: t('nav.about', 'About'), href: '#about', id: 'about' },
+    { label: t('nav.services', 'Services'), href: '#services', id: 'services' },
+    { label: t('nav.work', 'Work'), href: '#webdev', id: 'webdev' },
+    { label: t('nav.creative', 'Creative'), href: '#creative', id: 'creative' },
+    { label: t('nav.skills', 'Skills'), href: '#skills', id: 'skills' },
+    { label: t('nav.contact', 'Contact'), href: '#contact', id: 'contact' },
+  ];
 
   // Scroll progress bar
   const { scrollYProgress } = useScroll();
@@ -69,17 +117,29 @@ export default function Navbar() {
     }
   };
 
+  const handleCvDownload = () => {
+    cyberAudio.playCoin();
+    trackEvent('cv_download', { source: 'navbar' });
+    unlockAchievement('recruiter');
+  };
+
+  const handleWhatsAppClick = () => {
+    cyberAudio.playSoftClick();
+    trackEvent('whatsapp_click', { source: 'navbar' });
+    unlockAchievement('connected');
+  };
+
   return (
     <>
       <header
         className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 font-sans ${
           scrolled
-            ? 'bg-[#070A12]/85 backdrop-blur-xl border-b border-[#F4F6FB]/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)] py-3'
+            ? 'bg-[#070A12]/90 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.6)] py-3'
             : 'bg-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo "SP" in Champagne Gold */}
+          {/* Logo "SP" */}
           <a
             href="#hero"
             onClick={() => cyberAudio.playSoftClick()}
@@ -90,28 +150,28 @@ export default function Navbar() {
               <span className="text-[#D4AF37] font-orbitron font-black text-sm tracking-wider">
                 SP
               </span>
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
+              <span className="absolute -top-1 -end-1 w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading font-bold text-sm tracking-wide text-[#F4F6FB] group-hover:text-[#F5E6A8] transition-colors">
                 Shamseer PC
               </span>
               <span className="text-[10px] font-mono text-[#9AA4BC] tracking-wider uppercase">
-                MERN & Creative Lead
+                {t('hero.role', 'MERN & Creative Lead')}
               </span>
             </div>
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-[#0E1320]/60 border border-white/5 px-3 py-1.5 rounded-full backdrop-blur-md">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-[#0E1320]/70 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
                 <a
                   key={link.href}
                   href={link.href}
-                  onMouseEnter={() => cyberAudio.playHover()}
-                  onClick={() => cyberAudio.playSoftClick()}
+                  onMouseEnter={() => cyberAudio.playHover?.()}
+                  onClick={() => cyberAudio.playSoftClick?.()}
                   className={`text-xs font-heading font-medium tracking-wide px-3 py-1.5 rounded-full transition-all duration-200 relative ${
                     isActive
                       ? 'text-[#070A12] bg-[#D4AF37] font-bold shadow-[0_2px_10px_rgba(212,175,55,0.3)]'
@@ -122,39 +182,142 @@ export default function Navbar() {
                 </a>
               );
             })}
-            {/* Direct CV Download Link */}
-            <a
-              href="/cv/Shamseer-PC-CV.pdf"
-              download="Shamseer-PC-CV.pdf"
-              onMouseEnter={() => cyberAudio.playHover()}
-              onClick={() => cyberAudio.playSoftClick()}
-              className="text-xs font-heading font-semibold text-[#D4AF37] hover:text-[#F5E6A8] px-3 py-1.5 rounded-full hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-1"
-            >
-              <span>CV</span>
-              <span className="text-[9px] font-mono px-1 py-0.2 bg-[#D4AF37]/15 rounded border border-[#D4AF37]/30">
-                PDF
-              </span>
-            </a>
           </nav>
 
           {/* Right Action Cluster */}
-          <div className="hidden md:flex items-center gap-2.5">
-            {/* Language Switcher */}
+          <div className="hidden md:flex items-center gap-2">
+            {/* Player Class Personalization Selector */}
+            <div className="relative" ref={roleMenuRef}>
+              <button
+                onClick={() => setRoleMenuOpen(!roleMenuOpen)}
+                className="px-2.5 py-1.5 rounded-full bg-[#0E1320] border border-white/10 hover:border-[#D4AF37]/50 text-xs font-mono text-[#cbd5e1] hover:text-white flex items-center gap-1.5 transition-all"
+                title="Change playing role"
+              >
+                {classMeta[playerClass]?.icon}
+                <span className="hidden xl:inline text-[11px] text-[#94a3b8]">Role:</span>
+                <span className="text-[11px] font-semibold text-white">
+                  {classMeta[playerClass]?.label}
+                </span>
+                <FiChevronDown className="text-xs text-[#94a3b8]" />
+              </button>
+
+              <AnimatePresence>
+                {roleMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                    className="absolute end-0 mt-2 w-48 p-1.5 rounded-xl bg-[#0E1320] border border-[#D4AF37]/30 shadow-2xl backdrop-blur-xl z-50 text-xs"
+                  >
+                    <div className="px-2.5 py-1.5 text-[10px] font-mono text-[#64748b] uppercase tracking-wider border-b border-white/10">
+                      Personalize Portfolio
+                    </div>
+                    {Object.entries(classMeta).map(([key, val]) => (
+                      <button
+                        key={key}
+                        onClick={() => {
+                          setPlayerClass(key);
+                          setRoleMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all text-left rtl:text-right ${
+                          playerClass === key
+                            ? 'bg-[#D4AF37]/15 text-[#F5E6A8] font-bold'
+                            : 'text-[#cbd5e1] hover:bg-white/5'
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          {val.icon}
+                          <span>{val.label}</span>
+                        </span>
+                        {playerClass === key && <FiCheck className="text-[#D4AF37]" />}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Achievements Popover Trigger */}
+            <div className="relative" ref={achieveMenuRef}>
+              <button
+                onClick={() => setAchieveMenuOpen(!achieveMenuOpen)}
+                className="px-2.5 py-1.5 rounded-full bg-[#0E1320] border border-[#D4AF37]/30 hover:border-[#D4AF37] text-xs font-mono text-[#F5E6A8] flex items-center gap-1.5 transition-all"
+                title="View Achievements"
+              >
+                <FiAward className="text-xs text-[#D4AF37]" />
+                <span className="text-[11px] font-bold">
+                  {unlockedAchievements.length}/{ACHIEVEMENTS_LIST.length}
+                </span>
+              </button>
+
+              <AnimatePresence>
+                {achieveMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                    className="absolute end-0 mt-2 w-72 p-3 rounded-2xl bg-[#0E1320] border border-[#D4AF37]/30 shadow-[0_20px_50px_rgba(0,0,0,0.9)] backdrop-blur-xl z-50 text-xs space-y-3"
+                  >
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                      <div className="font-sora font-bold text-white flex items-center gap-1.5">
+                        <FiAward className="text-[#D4AF37]" />
+                        <span>Achievements ({unlockedAchievements.length}/{ACHIEVEMENTS_LIST.length})</span>
+                      </div>
+                      <button
+                        onClick={toggleAchievementsEnabled}
+                        className="text-[10px] font-mono text-[#94a3b8] hover:text-white"
+                        title="Toggle popups"
+                      >
+                        {achievementsEnabled ? 'Alerts: ON' : 'Alerts: OFF'}
+                      </button>
+                    </div>
+
+                    <div className="max-h-56 overflow-y-auto space-y-2 pr-1">
+                      {ACHIEVEMENTS_LIST.map((item) => {
+                        const isUnlocked = unlockedAchievements.includes(item.id);
+                        return (
+                          <div
+                            key={item.id}
+                            className={`p-2 rounded-xl border flex items-center gap-2.5 transition-all ${
+                              isUnlocked
+                                ? 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-white'
+                                : 'bg-black/30 border-white/5 text-[#64748b] opacity-60'
+                            }`}
+                          >
+                            <span className="text-lg shrink-0">{item.icon}</span>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-semibold text-xs truncate">
+                                {item.title} {isUnlocked && '✓'}
+                              </div>
+                              <div className="text-[10px] text-[#94a3b8] truncate">
+                                {item.desc}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Language Switcher (EN | العربية) */}
             <button
               onClick={() => {
-                cyberAudio.playSoftClick();
+                cyberAudio.playSoftClick?.();
                 toggleLang();
               }}
-              className="px-2.5 py-1.5 rounded-full bg-[#0E1320] border border-white/10 hover:border-[#D4AF37]/40 text-[#F4F6FB] hover:text-[#D4AF37] text-xs font-heading font-bold transition-colors"
+              className="px-3 py-1.5 rounded-full bg-[#0E1320] border border-white/10 hover:border-[#D4AF37]/50 text-[#F4F6FB] hover:text-[#D4AF37] text-xs font-heading font-bold transition-colors cursor-pointer"
               title="Toggle Language (EN / العربية)"
             >
-              {lang === 'en' ? 'عربي' : 'EN'}
+              {lang === 'en' ? 'العربية' : 'English'}
             </button>
 
             {/* Sound Toggle */}
             <button
               onClick={handleAudioToggle}
-              className={`p-2 rounded-full border text-xs transition-all ${
+              className={`p-2 rounded-full border text-xs transition-all cursor-pointer ${
                 !audioMuted
                   ? 'border-[#D4AF37]/50 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.2)]'
                   : 'border-white/10 bg-[#0E1320] text-[#9AA4BC] hover:text-[#F4F6FB]'
@@ -170,8 +333,8 @@ export default function Navbar() {
               href="https://wa.me/917012819002?text=Hello%20Shamseer,%20I%20would%20like%20to%20discuss%20a%20project."
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => cyberAudio.playSoftClick()}
-              className="p-2 rounded-full bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-[#070A12] border border-[#25D366]/40 transition-all duration-200 shadow-sm"
+              onClick={handleWhatsAppClick}
+              className="p-2 rounded-full bg-[#10B981]/15 hover:bg-[#10B981] text-[#10B981] hover:text-[#070A12] border border-[#10B981]/40 transition-all duration-200 shadow-sm"
               title="Chat on WhatsApp (+91 7012819002)"
               aria-label="Chat on WhatsApp"
             >
@@ -182,32 +345,38 @@ export default function Navbar() {
             <a
               href="/cv/Shamseer-PC-CV.pdf"
               download="Shamseer-PC-CV.pdf"
-              onMouseEnter={() => cyberAudio.playHover()}
-              onClick={() => cyberAudio.playCoin()}
-              className="relative inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] font-heading font-bold text-xs shadow-[0_4px_18px_rgba(212,175,55,0.25)] hover:shadow-[0_6px_24px_rgba(212,175,55,0.4)] hover:-translate-y-0.5 active:translate-y-0 transition-all overflow-hidden group"
+              onClick={handleCvDownload}
+              className="relative inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] font-heading font-bold text-xs shadow-[0_4px_18px_rgba(212,175,55,0.25)] hover:shadow-[0_6px_24px_rgba(212,175,55,0.4)] transition-all overflow-hidden"
             >
               <FiDownload size={13} />
-              <span>Download CV</span>
-              <span className="text-[9px] font-mono font-bold bg-[#070A12]/20 px-1 py-0.5 rounded">
-                PDF
-              </span>
+              <span>CV</span>
             </a>
           </div>
 
           {/* Mobile Hamburger & Controls */}
           <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={() => {
+                cyberAudio.playSoftClick?.();
+                toggleLang();
+              }}
+              className="px-2.5 py-1 text-xs font-bold rounded-full bg-[#0E1320] border border-white/10 text-white"
+            >
+              {lang === 'en' ? 'عربي' : 'EN'}
+            </button>
             <a
               href="https://wa.me/917012819002"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 bg-[#25D366]/15 text-[#25D366] border border-[#25D366]/30 rounded-full"
+              onClick={handleWhatsAppClick}
+              className="p-2 bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 rounded-full"
               aria-label="WhatsApp"
             >
               <FaWhatsapp size={16} />
             </a>
             <button
               onClick={() => {
-                cyberAudio.playSoftClick();
+                cyberAudio.playSoftClick?.();
                 setMobileOpen(!mobileOpen);
               }}
               className="p-2 bg-[#0E1320] border border-white/10 text-[#F4F6FB] rounded-full"
@@ -218,96 +387,75 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Gold Scroll Progress Bar under Navbar */}
+        {/* Animated Gold Progress Bar */}
         <motion.div
-          className="h-[2px] bg-gradient-to-r from-[#D4AF37] via-[#F5E6A8] to-[#22D3EE] origin-left"
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] via-[#F5E6A8] to-[#D4AF37] origin-left"
           style={{ scaleX }}
         />
       </header>
 
-      {/* Full-Screen Mobile Animated Drawer */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-50 bg-[#070A12]/98 backdrop-blur-2xl flex flex-col justify-between p-6 pt-24 md:hidden overflow-y-auto"
+            className="fixed inset-x-0 top-16 z-30 bg-[#070A12]/95 border-b border-white/10 p-6 backdrop-blur-2xl md:hidden space-y-4"
           >
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <span className="text-xs font-mono text-[#D4AF37] font-semibold tracking-wider">
-                  NAVIGATION
-                </span>
-                <button
+            {/* Mobile Nav Links */}
+            <nav className="flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="p-2 rounded-full bg-[#0E1320] text-white"
+                  className="px-4 py-2.5 rounded-xl bg-white/5 text-sm font-heading font-medium text-[#cbd5e1] hover:text-white hover:bg-[#D4AF37]/15"
                 >
-                  <FiX size={18} />
-                </button>
-              </div>
+                  {link.label}
+                </a>
+              ))}
+            </nav>
 
-              <div className="flex flex-col space-y-3">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
+            {/* Mobile Role Switcher */}
+            <div className="pt-2 border-t border-white/10">
+              <div className="text-[11px] font-mono text-[#94a3b8] mb-2 uppercase">
+                {t('nav.playingAs', 'Role Mode')}:
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {Object.entries(classMeta).map(([key, val]) => (
+                  <button
+                    key={key}
                     onClick={() => {
-                      cyberAudio.playSoftClick();
+                      setPlayerClass(key);
                       setMobileOpen(false);
                     }}
-                    className={`text-lg font-heading font-semibold py-2 px-3 rounded-xl transition-all flex items-center justify-between ${
-                      activeSection === link.id
-                        ? 'text-[#070A12] bg-[#D4AF37] font-bold'
-                        : 'text-[#F4F6FB] hover:text-[#D4AF37] bg-white/[0.03]'
+                    className={`p-2 rounded-xl border text-[11px] font-mono flex flex-col items-center gap-1 ${
+                      playerClass === key
+                        ? 'bg-[#D4AF37]/15 border-[#D4AF37] text-[#F5E6A8]'
+                        : 'bg-white/5 border-white/10 text-[#94a3b8]'
                     }`}
                   >
-                    <span>{link.label}</span>
-                    <FiArrowRight size={14} className="opacity-60" />
-                  </a>
+                    {val.icon}
+                    <span className="truncate">{val.label}</span>
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Mobile Drawer Footer Actions */}
-            <div className="space-y-4 pt-6 border-t border-white/10">
-              <div className="flex items-center justify-between gap-3">
-                <button
-                  onClick={toggleLang}
-                  className="flex-1 py-2 rounded-xl bg-[#0E1320] border border-white/10 text-xs font-heading font-bold text-center"
-                >
-                  {lang === 'en' ? 'Switch to العربية' : 'Switch to English'}
-                </button>
-                <button
-                  onClick={handleAudioToggle}
-                  className="p-2.5 rounded-xl bg-[#0E1320] border border-white/10 text-[#D4AF37]"
-                >
-                  {!audioMuted ? <FiVolume2 size={16} /> : <FiVolumeX size={16} />}
-                </button>
-              </div>
-
-              <a
-                href="/cv/Shamseer-PC-CV.pdf"
-                download="Shamseer-PC-CV.pdf"
-                onClick={() => setMobileOpen(false)}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] font-heading font-bold text-xs flex items-center justify-center gap-2"
-              >
-                <FiDownload size={15} />
-                <span>Download CV (PDF)</span>
-              </a>
-
-              <a
-                href="https://wa.me/917012819002"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileOpen(false)}
-                className="w-full py-3 rounded-xl bg-[#25D366]/15 border border-[#25D366]/40 text-[#25D366] font-heading font-bold text-xs flex items-center justify-center gap-2"
-              >
-                <FaWhatsapp size={16} />
-                <span>Chat on WhatsApp (+91 7012819002)</span>
-              </a>
-            </div>
+            {/* Mobile CV Button */}
+            <a
+              href="/cv/Shamseer-PC-CV.pdf"
+              download="Shamseer-PC-CV.pdf"
+              onClick={() => {
+                handleCvDownload();
+                setMobileOpen(false);
+              }}
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] font-heading font-bold text-xs flex items-center justify-center gap-2"
+            >
+              <FiDownload />
+              <span>Download CV (PDF)</span>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

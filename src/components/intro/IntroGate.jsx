@@ -67,8 +67,27 @@ export function IntroGate({ onComplete }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-[#070A12] text-[#F4F6FB] overflow-hidden select-none">
-      {/* Universal "Skip Intro ›" Button (Always accessible from second 0) */}
-      <div className="absolute top-5 right-5 z-50">
+      {/* Universal Top Bar Controls (Always accessible from second 0) */}
+      <div className="absolute top-5 end-5 z-50 flex items-center gap-2">
+        <button
+          onClick={() => {
+            cyberAudio.playSoftClick();
+            // Toggle language
+            if (typeof window !== 'undefined') {
+              const cur = localStorage.getItem('spc_lang') || 'en';
+              const next = cur === 'en' ? 'ar' : 'en';
+              localStorage.setItem('spc_lang', next);
+              document.documentElement.lang = next;
+              document.documentElement.dir = next === 'ar' ? 'rtl' : 'ltr';
+              window.location.reload();
+            }
+          }}
+          className="px-3 py-1.5 rounded-full bg-[#0E1320]/80 hover:bg-[#D4AF37]/15 border border-white/10 hover:border-[#D4AF37]/50 text-xs font-heading font-bold text-white hover:text-[#D4AF37] transition-all backdrop-blur-md shadow-lg"
+          aria-label="Toggle language"
+        >
+          {typeof window !== 'undefined' && localStorage.getItem('spc_lang') === 'ar' ? 'English' : 'العربية'}
+        </button>
+
         <button
           onClick={handleSkipAll}
           className="group px-3.5 py-1.5 rounded-full bg-[#0E1320]/80 hover:bg-[#D4AF37]/15 border border-white/10 hover:border-[#D4AF37]/50 text-xs font-mono text-[#9AA4BC] hover:text-[#F5E6A8] transition-all flex items-center gap-1.5 backdrop-blur-md shadow-lg"

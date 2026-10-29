@@ -1,8 +1,13 @@
-import { FiLinkedin, FiGithub, FiArrowUp, FiMail } from 'react-icons/fi';
+import { FiLinkedin, FiGithub, FiArrowUp, FiMail, FiTv } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { cyberAudio } from '../utils/cyberAudio';
+import { useLanguage } from '../i18n';
+import { useGame } from '../context';
 
 export default function Footer() {
+  const { t } = useLanguage();
+  const { retroMode, toggleRetroMode } = useGame();
+
   const scrollToTop = () => {
     cyberAudio.playSoftClick?.();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -30,10 +35,26 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Regional note */}
-          <div className="flex items-center gap-2 text-[11px] font-mono text-[#94a3b8] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-            <span>Serving Qatar · UAE · GCC · India · Worldwide</span>
+          {/* Regional note & Retro Mode Toggle */}
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-[#94a3b8] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+              <span>Serving Qatar · UAE · GCC · India · Worldwide</span>
+            </div>
+
+            {/* Optional Retro Mode Toggle */}
+            <button
+              onClick={toggleRetroMode}
+              className={`px-3 py-1.5 rounded-full border text-[11px] font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
+                retroMode
+                  ? 'bg-[#10B981]/15 border-[#10B981]/50 text-[#10B981] shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                  : 'bg-white/5 border-white/10 text-[#94a3b8] hover:text-white'
+              }`}
+              title="Toggle Retro CRT Scanlines overlay"
+            >
+              <FiTv size={13} />
+              <span>{t('footer.retroMode', 'Retro CRT')}: {retroMode ? 'ON' : 'OFF'}</span>
+            </button>
           </div>
 
           {/* Social Links & Back to Top */}
@@ -86,10 +107,10 @@ export default function Footer() {
         {/* Legal & Attribution */}
         <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#64748b] gap-3">
           <div>
-            Built with React · Designed &amp; developed by Shamseer PC
+            {t('footer.attribution', 'Built with React · Designed & developed by Shamseer PC')}
           </div>
           <div>
-            © {new Date().getFullYear()} All rights reserved.
+            © {new Date().getFullYear()} {t('footer.rights', 'All rights reserved.')}
           </div>
         </div>
       </div>
