@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { LanguageProvider } from './i18n';
 import IntroGate from './components/intro/IntroGate';
 import Navbar from './components/Navbar';
@@ -16,22 +16,7 @@ import Footer from './components/Footer';
 
 export default function App() {
   const [introComplete, setIntroComplete] = useState(false);
-  const [scanlinesActive, setScanlinesActive] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('spc_crt_scanlines');
-    if (saved !== null) {
-      setScanlinesActive(saved === 'true');
-    }
-  }, []);
-
-  const toggleScanlines = () => {
-    setScanlinesActive((prev) => {
-      const next = !prev;
-      localStorage.setItem('spc_crt_scanlines', String(next));
-      return next;
-    });
-  };
+  const [scanlinesActive] = useState(false);
 
   return (
     <LanguageProvider>
@@ -47,10 +32,7 @@ export default function App() {
         {/* Main Application Suite */}
         {introComplete && (
           <>
-            <Navbar
-              scanlinesActive={scanlinesActive}
-              onToggleScanlines={toggleScanlines}
-            />
+            <Navbar />
 
             <main>
               <Hero />

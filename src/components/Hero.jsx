@@ -1,276 +1,255 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FiArrowRight, 
-  FiTerminal, 
-  FiImage, 
-  FiShield, 
-  FiCpu, 
-  FiTarget, 
-  FiCrosshair,
-  FiActivity,
-  FiCheckCircle
-} from 'react-icons/fi';
+import { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { FiArrowRight, FiDownload, FiPenTool } from 'react-icons/fi';
+import { FaWhatsapp, FaReact, FaNodeJs } from 'react-icons/fa';
+import { SiMongodb, SiMeta } from 'react-icons/si';
 import { cyberAudio } from '../utils/cyberAudio';
+import { Button } from './ui/Button';
+
+// Verified real clients and metrics (unconfirmed stats marked with [CONFIRM])
+const clientLogos = [
+  { name: 'Value FM', domain: 'Facility Management · Qatar & Dubai' },
+  { name: 'Al Shareef Holding', domain: 'Multi-Division Group · Qatar' },
+  { name: 'Moestay', domain: 'Travel & Booking Platform' },
+  { name: 'MyThoughtsHub', domain: 'Digital Editorial Platform' },
+];
+
+const stats = [
+  { value: '4+', label: 'Production Platforms' },
+  { value: '99.8%', label: 'Uptime SLA Delivered' },
+  { value: '[CONFIRM: 100+]', label: 'Commercial Creatives' },
+  { value: '[CONFIRM: 3+ Yrs]', label: 'Professional Track Record' },
+];
+
+const floatingChips = [
+  { name: 'React 19', icon: <FaReact className="text-[#22D3EE]" />, pos: 'top-2 -left-6 sm:-left-8' },
+  { name: 'Node.js', icon: <FaNodeJs className="text-[#10B981]" />, pos: 'top-1/3 -right-6 sm:-right-8' },
+  { name: 'MongoDB', icon: <SiMongodb className="text-[#10B981]" />, pos: 'bottom-24 -left-6 sm:-left-8' },
+  { name: 'Photoshop', icon: <FiPenTool className="text-[#22D3EE]" />, pos: '-bottom-3 right-8' },
+  { name: 'Meta Ads', icon: <SiMeta className="text-[#3b82f6]" />, pos: 'bottom-8 -right-4 sm:-right-6' },
+];
 
 export default function Hero() {
-  const [viewMode, setViewMode] = useState('cyber'); // 'cyber' | 'real'
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isEasterEgg, setIsEasterEgg] = useState(false);
 
-  const toggleViewMode = (mode) => {
-    if (viewMode !== mode) {
-      cyberAudio.playTargetLock();
-      setViewMode(mode);
-    }
-  };
+  const handleMouseMove = useCallback((e) => {
+    const { clientX, clientY } = e;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    setMousePos({
+      x: (clientX - centerX) / centerX,
+      y: (clientY - centerY) / centerY,
+    });
+  }, []);
 
   return (
-    <section className="relative min-h-screen pt-28 pb-20 flex items-center justify-center overflow-hidden bg-[#040711]" id="hero">
-      {/* 3D Cyber Grid Floor Perspective */}
-      <div className="cyber-grid-perspective">
-        <div className="cyber-grid-floor" />
-      </div>
-
-      {/* Ambient Mecha Neon Halos */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f0ff]/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#b026ff]/10 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute top-1/2 right-10 w-64 h-64 bg-[#ffb703]/5 rounded-full blur-[120px] pointer-events-none" />
+    <section
+      id="hero"
+      onMouseMove={handleMouseMove}
+      className="relative min-h-[92vh] pt-32 pb-20 flex items-center justify-center overflow-hidden bg-[#070A12]"
+    >
+      {/* Soft Ambient Radial Halos */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#D4AF37]/5 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#22D3EE]/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        {/* Top Telemetry Header Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 border-b border-[#00f0ff]/15 pb-4 text-[11px] font-mono text-[#64748b]">
-          <div className="flex items-center gap-2">
-            <span className="cyber-beacon" />
-            <span className="text-[#00f0ff] font-bold tracking-wider">
-              SYSTEM STATUS: ONLINE // GCC & GLOBAL REMOTE READY
-            </span>
-          </div>
-          <div className="hidden sm:flex items-center gap-5 text-right text-[#94a3b8]">
-            <span>LOC: DUBAI [25.20°N, 55.27°E] // DOHA [25.28°N, 51.53°E]</span>
-            <span className="text-[#00f0ff]">PING: 14MS</span>
-            <span className="text-[#ffb703]">ENCRYPTION: AES-256</span>
-          </div>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Value Proposition & CTAs (7 cols) */}
+          <div className="lg:col-span-7 space-y-7">
+            {/* Gold Status Pill */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#0E1320] border border-[#D4AF37]/30 text-xs font-mono text-[#D4AF37] shadow-[0_2px_12px_rgba(212,175,55,0.12)]"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+              <span>Open for projects · Qatar · UAE · Worldwide</span>
+            </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Column: Command & Identity Briefing (7 cols) */}
-          <motion.div
-            className="lg:col-span-7 space-y-6"
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-          >
-            {/* Tactical Division Pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0d1527] border border-[#00f0ff]/30 text-[#00f0ff] text-xs font-mono tracking-widest uppercase rounded-sm shadow-neon-cyan-sm">
-              <FiShield className="text-[#00f0ff]" />
-              <span>FULL-STACK MERN ARCHITECTURE & COMMERCIAL CREATIVE DIRECTION</span>
-            </div>
-
-            {/* Main Glitch Headline */}
-            <div className="space-y-2">
-              <h1 className="text-4xl sm:text-6xl xl:text-7xl font-black font-orbitron tracking-tight text-white leading-none">
-                <span className="cyber-glitch-text block" data-text="SHAMSEER PC">
-                  SHAMSEER <span className="text-[#00f0ff]">PC</span>
-                </span>
+            {/* H1 Headline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6 }}
+              className="space-y-3"
+            >
+              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black font-heading tracking-tight text-[#F4F6FB] leading-[1.12]">
+                I build digital products that look{' '}
+                <span className="gold-gradient-text">premium and perform.</span>
               </h1>
-              <div className="text-xl sm:text-2xl xl:text-3xl font-rajdhani font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#b026ff] to-[#ff007f]">
-                Full-Stack MERN & High-Impact Creative Technologist
-              </div>
-            </div>
-
-            {/* Mission Statement */}
-            <p className="text-base sm:text-lg text-[#94a3b8] font-rajdhani font-medium leading-relaxed max-w-2xl">
-              Engineering high-concurrency SaaS applications, enterprise holding portals, and automated architectures for top-tier enterprises in Dubai, Qatar, and international markets — coupled with viral luxury commercial ad creatives that scale revenue.
-            </p>
-
-            {/* Quick Tactical Metric Chips */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-              <div className="hud-frame p-3 rounded-sm border-[#00f0ff]/30 bg-[#080d1a]/80">
-                <div className="text-xl sm:text-2xl font-black font-orbitron text-[#00f0ff]">99.8%</div>
-                <div className="text-[10px] font-mono text-[#64748b] uppercase tracking-wider">UPTIME SLA</div>
-              </div>
-              <div className="hud-frame p-3 rounded-sm border-[#b026ff]/30 bg-[#080d1a]/80">
-                <div className="text-xl sm:text-2xl font-black font-orbitron text-[#b026ff]">15+</div>
-                <div className="text-[10px] font-mono text-[#64748b] uppercase tracking-wider">PLATFORMS</div>
-              </div>
-              <div className="hud-frame p-3 rounded-sm border-[#ff007f]/30 bg-[#080d1a]/80">
-                <div className="text-xl sm:text-2xl font-black font-orbitron text-[#ff007f]">100+</div>
-                <div className="text-[10px] font-mono text-[#64748b] uppercase tracking-wider">CREATIVES</div>
-              </div>
-              <div className="hud-frame p-3 rounded-sm border-[#ffb703]/30 bg-[#080d1a]/80">
-                <div className="text-xl sm:text-2xl font-black font-orbitron text-[#ffb703]">GCC</div>
-                <div className="text-[10px] font-mono text-[#64748b] uppercase tracking-wider">ENTERPRISE READY</div>
-              </div>
-            </div>
+              <p className="text-base sm:text-lg text-[#9AA4BC] font-sans font-normal leading-relaxed max-w-2xl">
+                Full-stack MERN development and commercial creative direction for growing businesses
+                and enterprise holding groups in Qatar, UAE, and beyond.
+              </p>
+            </motion.div>
 
             {/* Primary Action Button Cluster */}
-            <div className="flex flex-wrap items-center gap-4 pt-3">
-              <a
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="flex flex-wrap items-center gap-3.5 pt-1"
+            >
+              <Button
+                as="a"
                 href="#webdev"
-                onMouseEnter={() => cyberAudio.playHover()}
-                onClick={() => cyberAudio.playCyberClick()}
-                className="btn-cyber-primary"
+                variant="primary"
+                size="md"
+                onClick={() => cyberAudio.playSoftClick()}
+                iconRight={<FiArrowRight className="text-xs" />}
               >
-                <span>EXPLORE DEPLOYMENTS</span>
-                <FiArrowRight className="text-sm" />
-              </a>
+                View my work
+              </Button>
 
-              <a
-                href="#creative"
-                onMouseEnter={() => cyberAudio.playHover()}
-                onClick={() => cyberAudio.playCyberClick()}
-                className="btn-cyber-secondary"
+              <Button
+                as="a"
+                href="/cv/Shamseer-PC-CV.pdf"
+                download="Shamseer-PC-CV.pdf"
+                variant="glass"
+                size="md"
+                onClick={() => cyberAudio.playCoin()}
+                icon={<FiDownload className="text-sm text-[#D4AF37]" />}
               >
-                <FiImage className="text-[#00f0ff]" />
-                <span>CREATIVE POSTERS</span>
-              </a>
+                <span>Download CV</span>
+                <span className="text-[10px] font-mono px-1 py-0.5 rounded bg-[#D4AF37]/15 text-[#D4AF37]">
+                  PDF
+                </span>
+              </Button>
 
-              <a
-                href="#terminal"
-                onMouseEnter={() => cyberAudio.playHover()}
-                onClick={() => cyberAudio.playCyberClick()}
-                className="inline-flex items-center gap-2 px-4 py-3 bg-[#0d1527] border border-[#00ff66]/40 text-[#00ff66] font-mono text-xs uppercase tracking-wider hover:bg-[#00ff66]/10 hover:border-[#00ff66] transition-all rounded-sm shadow-[0_0_15px_rgba(0,255,102,0.15)]"
+              <Button
+                as="a"
+                href="https://wa.me/917012819002?text=Hello%20Shamseer,%20I%20would%20like%20to%20discuss%20a%20project."
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="whatsapp"
+                size="md"
+                onClick={() => cyberAudio.playSoftClick()}
+                icon={<FaWhatsapp className="text-base" />}
               >
-                <FiTerminal className="text-sm" />
-                <span>OPEN TERMINAL</span>
-              </a>
-            </div>
+                WhatsApp me
+              </Button>
+            </motion.div>
 
-            {/* Tech Matrix Chips */}
-            <div className="flex flex-wrap items-center gap-2 pt-2 text-xs font-mono text-[#64748b]">
-              <span className="text-[#94a3b8] font-bold">CORE ARSENAL:</span>
-              <span className="px-2 py-0.5 bg-[#0d1527] border border-white/10 rounded text-[#00f0ff]">React 19</span>
-              <span className="px-2 py-0.5 bg-[#0d1527] border border-white/10 rounded text-[#00f0ff]">Node.js</span>
-              <span className="px-2 py-0.5 bg-[#0d1527] border border-white/10 rounded text-[#00f0ff]">MongoDB</span>
-              <span className="px-2 py-0.5 bg-[#0d1527] border border-white/10 rounded text-[#b026ff]">Redis Caching</span>
-              <span className="px-2 py-0.5 bg-[#0d1527] border border-white/10 rounded text-[#ffb703]">Meta Ads</span>
-              <span className="px-2 py-0.5 bg-[#0d1527] border border-white/10 rounded text-[#ff007f]">Luxury Design</span>
-            </div>
-          </motion.div>
+            {/* Trust Row: Real Clients */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+              className="pt-6 border-t border-white/10 space-y-4"
+            >
+              <div className="text-[11px] font-mono text-[#9AA4BC] uppercase tracking-wider flex items-center gap-2">
+                <span>TRUSTED BY REAL PLATFORMS IN THE GCC</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs font-heading font-semibold text-[#F4F6FB]/85">
+                {clientLogos.map((client) => (
+                  <div
+                    key={client.name}
+                    className="px-3 py-1.5 rounded-lg bg-[#0E1320]/80 border border-white/5 hover:border-[#D4AF37]/30 transition-colors"
+                  >
+                    <span className="text-[#F5E6A8]">{client.name}</span>
+                  </div>
+                ))}
+              </div>
 
-          {/* Right Column: Dual-View Mecha Character Deck (5 cols) */}
+              {/* Verified Count-up Stats Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                {stats.map((st) => (
+                  <div
+                    key={st.label}
+                    className="p-3 rounded-xl bg-[#0E1320]/60 border border-white/5"
+                  >
+                    <div className="text-xl sm:text-2xl font-black font-heading text-[#D4AF37]">
+                      {st.value}
+                    </div>
+                    <div className="text-[11px] font-sans text-[#9AA4BC] leading-tight mt-0.5">
+                      {st.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column: Real Photo with Gold Ring & Orbiting Chips (5 cols) */}
           <motion.div
-            className="lg:col-span-5 relative"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ delay: 0.25, duration: 0.7 }}
+            className="lg:col-span-5 relative flex items-center justify-center"
           >
-            <div className="hud-frame p-3 relative rounded-lg bg-[#080d1a]/90 shadow-[0_0_40px_rgba(0,240,255,0.15)]">
-              {/* Corner HUD Brackets */}
-              <div className="hud-bracket-tr" />
-              <div className="hud-bracket-bl" />
+            {/* Soft Rotating Halo Behind Frame */}
+            <div
+              className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-[#D4AF37]/15 via-[#22D3EE]/10 to-transparent blur-2xl pointer-events-none transition-transform duration-700 ease-out"
+              style={{
+                transform: `translate(${mousePos.x * 15}px, ${mousePos.y * 15}px)`,
+              }}
+            />
 
-              {/* Character Deck Top HUD Bar */}
-              <div className="flex items-center justify-between px-3 py-2 border-b border-[#00f0ff]/20 mb-3 bg-[#040711]/60 text-xs font-mono">
-                <div className="flex items-center gap-2">
-                  <FiCrosshair className="text-[#00f0ff] animate-spin" style={{ animationDuration: '8s' }} />
-                  <span className="text-[#00f0ff] font-bold">OPERATIVE PROFILE</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-[#00ff66] text-[10px]">SYNCED</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00ff66] animate-ping" />
+            {/* Photo Container Frame with Gold Ring */}
+            <div
+              className="relative w-64 h-80 sm:w-80 sm:h-[420px] rounded-3xl p-2 bg-gradient-to-b from-[#D4AF37]/40 via-[#F5E6A8]/10 to-[#D4AF37]/20 shadow-[0_16px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] transition-transform duration-300 ease-out group"
+              style={{
+                transform: `perspective(800px) rotateY(${mousePos.x * 5}deg) rotateX(${-mousePos.y * 5}deg)`,
+              }}
+            >
+              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#070A12] border border-white/10">
+                {/* Photo with Picture Tag and Fallback */}
+                <picture>
+                  <source srcSet="/images/about/shamseer-photo.webp" type="image/webp" />
+                  <img
+                    src={isEasterEgg ? '/images/about/avatar_cyber.jpg' : '/images/about/shamseer-photo.jpg'}
+                    alt="Shamseer PC — Full-Stack Developer and Creative Director"
+                    loading="eager"
+                    className="w-full h-full object-cover object-top filter brightness-105 contrast-105 transition-all duration-500"
+                    onError={(e) => {
+                      // TODO: Ensure shamseer-photo.jpg exists in public/images/about/
+                      console.warn('Could not load shamseer-photo.jpg, falling back to profile.jpg');
+                      e.currentTarget.src = '/images/about/profile.jpg';
+                    }}
+                  />
+                </picture>
+
+                {/* Subtle Bottom Vignette Gradient */}
+                <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070A12] via-[#070A12]/40 to-transparent" />
+
+                {/* Real Executive Badge & Easter Egg Swap on Hover */}
+                <div
+                  onMouseEnter={() => setIsEasterEgg(true)}
+                  onMouseLeave={() => setIsEasterEgg(false)}
+                  className="absolute bottom-3 inset-x-3 p-2.5 rounded-xl bg-[#0E1320]/90 backdrop-blur-md border border-[#D4AF37]/30 flex items-center justify-between text-xs font-sans shadow-md"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-heading font-bold text-[#F4F6FB] text-xs">
+                      Shamseer PC
+                    </span>
+                    <span className="text-[10px] font-mono text-[#D4AF37]">
+                      {isEasterEgg ? 'Game Mode Avatar' : 'Executive Portrait · Verified'}
+                    </span>
+                  </div>
+                  <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
                 </div>
               </div>
 
-              {/* Interactive Viewport with Targeting Overlay */}
-              <div className="relative aspect-square overflow-hidden rounded border border-[#00f0ff]/25 bg-[#030610] group">
-                {/* Crosshair Target Reticles */}
-                <div className="reticle-crosshair top-4 left-4" />
-                <div className="reticle-crosshair top-4 right-4" />
-                <div className="reticle-crosshair bottom-4 left-4" />
-                <div className="reticle-crosshair bottom-4 right-4" />
-
-                {/* Animated Scanner Bar Line */}
+              {/* Gently Orbiting Floating Glass Chips */}
+              {floatingChips.map((chip, idx) => (
                 <motion.div
-                  className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent z-20 pointer-events-none"
-                  animate={{ top: ['0%', '100%', '0%'] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                />
-
-                {/* The Character Image Deck */}
-                <AnimatePresence mode="wait">
-                  {viewMode === 'cyber' ? (
-                    <motion.div
-                      key="cyber-avatar"
-                      initial={{ opacity: 0, scale: 1.05 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.4 }}
-                      className="w-full h-full relative"
-                    >
-                      <img
-                        src="/images/about/avatar_cyber.jpg"
-                        alt="Shamseer PC - 3D Mecha Cyber Avatar"
-                        className="w-full h-full object-cover object-center filter contrast-105"
-                      />
-                      <div className="absolute bottom-3 left-3 bg-[#040711]/85 border border-[#00f0ff]/50 px-2.5 py-1 rounded text-[11px] font-mono text-[#00f0ff] flex items-center gap-1.5 shadow-neon-cyan-sm">
-                        <FiCpu className="text-xs" />
-                        <span>TACTICAL MECHA AVATAR // ACTIVE</span>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="real-avatar"
-                      initial={{ opacity: 0, scale: 1.05 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.4 }}
-                      className="w-full h-full relative"
-                    >
-                      <img
-                        src="/images/about/profile.jpg"
-                        alt="Shamseer PC - Executive Portrait"
-                        className="w-full h-full object-cover object-top filter brightness-105"
-                        onError={(e) => {
-                          e.target.src = '/images/about/IMG_3144.PNG';
-                        }}
-                      />
-                      <div className="absolute bottom-3 left-3 bg-[#040711]/85 border border-[#ffb703]/50 px-2.5 py-1 rounded text-[11px] font-mono text-[#ffb703] flex items-center gap-1.5 shadow-[0_0_10px_rgba(255,183,3,0.3)]">
-                        <FiCheckCircle className="text-xs" />
-                        <span>EXECUTIVE PORTRAIT // VERIFIED</span>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Telemetry Corner Coordinates */}
-                <div className="absolute top-2 right-2 text-[9px] font-mono text-[#00f0ff]/60 bg-black/60 px-1.5 py-0.5 rounded pointer-events-none">
-                  REC: 60FPS // ISO-100
-                </div>
-              </div>
-
-              {/* View Switcher Toggle Deck */}
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => toggleViewMode('cyber')}
-                  className={`py-2 px-3 rounded text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border ${
-                    viewMode === 'cyber'
-                      ? 'bg-[#00f0ff]/15 border-[#00f0ff] text-[#00f0ff] shadow-neon-cyan-sm'
-                      : 'bg-[#040711] border-white/10 text-[#64748b] hover:text-white'
-                  }`}
+                  key={chip.name}
+                  animate={{
+                    y: [0, idx % 2 === 0 ? -6 : 6, 0],
+                  }}
+                  transition={{
+                    duration: 3.5 + idx * 0.4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className={`absolute ${chip.pos} z-20 px-3 py-1.5 rounded-full bg-[#0E1320]/90 backdrop-blur-xl border border-white/10 shadow-[0_8px_20px_rgba(0,0,0,0.5),0_0_15px_rgba(212,175,55,0.12)] flex items-center gap-1.5 text-xs font-heading font-semibold text-[#F4F6FB] pointer-events-none`}
                 >
-                  <FiCpu />
-                  <span>3D MECHA AVATAR</span>
-                </button>
-                <button
-                  onClick={() => toggleViewMode('real')}
-                  className={`py-2 px-3 rounded text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 border ${
-                    viewMode === 'real'
-                      ? 'bg-[#ffb703]/15 border-[#ffb703] text-[#ffb703] shadow-[0_0_12px_rgba(255,183,3,0.3)]'
-                      : 'bg-[#040711] border-white/10 text-[#64748b] hover:text-white'
-                  }`}
-                >
-                  <FiTarget />
-                  <span>EXECUTIVE PORTRAIT</span>
-                </button>
-              </div>
-
-              {/* Bottom Telemetry Metrics */}
-              <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-[#64748b]">
-                <span className="flex items-center gap-1 text-[#00ff66]">
-                  <FiActivity className="text-xs" /> 100% OPERATIONAL
-                </span>
-                <span>SYS.ID: SPC-MECHA-01</span>
-              </div>
+                  {chip.icon}
+                  <span className="text-[11px]">{chip.name}</span>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>

@@ -1,157 +1,231 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiVolume2, FiVolumeX, FiTv, FiMenu, FiX, FiRadio, FiArrowRight } from 'react-icons/fi';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { FiVolume2, FiVolumeX, FiMenu, FiX, FiDownload, FiArrowRight } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa';
 import { cyberAudio } from '../utils/cyberAudio';
+import { useLanguage } from '../i18n';
 
 const navLinks = [
-  { label: 'IDENTITY', href: '#about' },
-  { label: 'SERVICES', href: '#services' },
-  { label: 'DEPLOYMENTS', href: '#webdev' },
-  { label: 'CREATIVE LAB', href: '#creative' },
-  { label: 'TERMINAL', href: '#terminal' },
-  { label: 'TECH MATRIX', href: '#skills' },
-  { label: 'COMMUNICATIONS', href: '#contact' },
+  { label: 'Home', href: '#hero', id: 'hero' },
+  { label: 'About', href: '#about', id: 'about' },
+  { label: 'Services', href: '#services', id: 'services' },
+  { label: 'Work', href: '#webdev', id: 'webdev' },
+  { label: 'Creative', href: '#creative', id: 'creative' },
+  { label: 'Skills', href: '#skills', id: 'skills' },
+  { label: 'Contact', href: '#contact', id: 'contact' },
 ];
 
-export default function Navbar({ scanlinesActive, onToggleScanlines }) {
+export default function Navbar() {
+  const { lang, toggleLang } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
   const [audioMuted, setAudioMuted] = useState(cyberAudio.isMuted());
 
+  // Scroll progress bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Track active section on scroll
+  useEffect(() => {
+    const sectionIds = ['hero', 'about', 'services', 'webdev', 'creative', 'skills', 'contact'];
+    const observers = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        { rootMargin: '-30% 0px -50% 0px' }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach((obs) => obs.disconnect());
   }, []);
 
   const handleAudioToggle = () => {
     const isNowMuted = cyberAudio.toggleMute();
     setAudioMuted(isNowMuted);
     if (!isNowMuted) {
-      cyberAudio.playCyberClick();
+      cyberAudio.playCoin();
     }
-  };
-
-  const handleScanlineToggle = () => {
-    cyberAudio.playScanToggle();
-    onToggleScanlines();
   };
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 font-rajdhani ${
+      <header
+        className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 font-sans ${
           scrolled
-            ? 'bg-[#040711]/90 backdrop-blur-md border-b border-[#00f0ff]/20 shadow-[0_4px_30px_rgba(0,240,255,0.08)] py-3'
+            ? 'bg-[#070A12]/85 backdrop-blur-xl border-b border-[#F4F6FB]/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)] py-3'
             : 'bg-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo / Telemetry Branding */}
+          {/* Logo "SP" in Champagne Gold */}
           <a
-            href="#"
-            onClick={() => cyberAudio.playCyberClick()}
+            href="#hero"
+            onClick={() => cyberAudio.playSoftClick()}
             className="flex items-center gap-3 group focus:outline-none"
+            aria-label="Shamseer PC Home"
           >
-            <div className="relative flex items-center justify-center w-9 h-9 bg-[#0d1527] border border-[#00f0ff]/40 rounded-sm shadow-neon-cyan-sm group-hover:border-[#00f0ff] transition-all">
-              <span className="text-[#00f0ff] font-orbitron font-bold text-sm tracking-wider">SP</span>
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#00ff66] animate-pulse" />
+            <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-[#0E1320] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)] group-hover:border-[#D4AF37] transition-all duration-200">
+              <span className="text-[#D4AF37] font-orbitron font-black text-sm tracking-wider">
+                SP
+              </span>
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
             </div>
             <div className="flex flex-col">
-              <span className="font-orbitron font-black text-base tracking-widest text-white group-hover:text-[#00f0ff] transition-colors flex items-center gap-2">
-                SPC://PORTAL
-                <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono tracking-normal bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/30 rounded">
-                  SYS.ONLINE
-                </span>
+              <span className="font-heading font-bold text-sm tracking-wide text-[#F4F6FB] group-hover:text-[#F5E6A8] transition-colors">
+                Shamseer PC
               </span>
-              <span className="text-[11px] text-[#64748b] tracking-wider uppercase font-semibold">
-                GCC // GLOBAL MECHA ARCHITECT
+              <span className="text-[10px] font-mono text-[#9AA4BC] tracking-wider uppercase">
+                MERN & Creative Lead
               </span>
             </div>
           </a>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden xl:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onMouseEnter={() => cyberAudio.playHover()}
-                onClick={() => cyberAudio.playCyberClick()}
-                className="text-xs font-semibold tracking-widest text-[#94a3b8] hover:text-[#00f0ff] hover:drop-shadow-[0_0_8px_#00f0ff] transition-all relative py-1 group"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#00f0ff] to-[#b026ff] group-hover:w-full transition-all duration-200" />
-              </a>
-            ))}
-          </div>
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-[#0E1320]/60 border border-white/5 px-3 py-1.5 rounded-full backdrop-blur-md">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onMouseEnter={() => cyberAudio.playHover()}
+                  onClick={() => cyberAudio.playSoftClick()}
+                  className={`text-xs font-heading font-medium tracking-wide px-3 py-1.5 rounded-full transition-all duration-200 relative ${
+                    isActive
+                      ? 'text-[#070A12] bg-[#D4AF37] font-bold shadow-[0_2px_10px_rgba(212,175,55,0.3)]'
+                      : 'text-[#9AA4BC] hover:text-[#F4F6FB] hover:bg-white/5'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+            {/* Direct CV Download Link */}
+            <a
+              href="/cv/Shamseer-PC-CV.pdf"
+              download="Shamseer-PC-CV.pdf"
+              onMouseEnter={() => cyberAudio.playHover()}
+              onClick={() => cyberAudio.playSoftClick()}
+              className="text-xs font-heading font-semibold text-[#D4AF37] hover:text-[#F5E6A8] px-3 py-1.5 rounded-full hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-1"
+            >
+              <span>CV</span>
+              <span className="text-[9px] font-mono px-1 py-0.2 bg-[#D4AF37]/15 rounded border border-[#D4AF37]/30">
+                PDF
+              </span>
+            </a>
+          </nav>
 
-          {/* Tactical HUD Controls (Audio, CRT, Hire CTA) */}
-          <div className="hidden md:flex items-center gap-3">
-            {/* Audio Toggle */}
+          {/* Right Action Cluster */}
+          <div className="hidden md:flex items-center gap-2.5">
+            {/* Language Switcher */}
+            <button
+              onClick={() => {
+                cyberAudio.playSoftClick();
+                toggleLang();
+              }}
+              className="px-2.5 py-1.5 rounded-full bg-[#0E1320] border border-white/10 hover:border-[#D4AF37]/40 text-[#F4F6FB] hover:text-[#D4AF37] text-xs font-heading font-bold transition-colors"
+              title="Toggle Language (EN / العربية)"
+            >
+              {lang === 'en' ? 'عربي' : 'EN'}
+            </button>
+
+            {/* Sound Toggle */}
             <button
               onClick={handleAudioToggle}
-              title={audioMuted ? 'Unmute SFX' : 'Mute SFX'}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border text-xs font-mono tracking-wider transition-all ${
+              className={`p-2 rounded-full border text-xs transition-all ${
                 !audioMuted
-                  ? 'border-[#00f0ff]/50 bg-[#00f0ff]/10 text-[#00f0ff] shadow-neon-cyan-sm'
-                  : 'border-white/10 bg-[#0d1527] text-[#64748b] hover:text-white'
+                  ? 'border-[#D4AF37]/50 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.2)]'
+                  : 'border-white/10 bg-[#0E1320] text-[#9AA4BC] hover:text-[#F4F6FB]'
               }`}
+              title={audioMuted ? 'Turn Sound ON' : 'Turn Sound OFF'}
+              aria-label="Toggle Audio SFX"
             >
-              {!audioMuted ? <FiVolume2 className="text-sm" /> : <FiVolumeX className="text-sm" />}
-              <span className="text-[10px] uppercase font-bold">{!audioMuted ? 'SFX: ON' : 'SFX: OFF'}</span>
+              {!audioMuted ? <FiVolume2 size={15} /> : <FiVolumeX size={15} />}
             </button>
 
-            {/* CRT Scanline Toggle */}
-            <button
-              onClick={handleScanlineToggle}
-              title={scanlinesActive ? 'Disable CRT Scanlines' : 'Enable CRT Scanlines'}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border text-xs font-mono tracking-wider transition-all ${
-                scanlinesActive
-                  ? 'border-[#ff007f]/50 bg-[#ff007f]/10 text-[#ff007f] shadow-[0_0_10px_rgba(255,0,127,0.3)]'
-                  : 'border-white/10 bg-[#0d1527] text-[#64748b] hover:text-white'
-              }`}
-            >
-              <FiTv className="text-sm" />
-              <span className="text-[10px] uppercase font-bold">{scanlinesActive ? 'CRT: ON' : 'CRT: OFF'}</span>
-            </button>
-
-            {/* High-visibility CTA */}
+            {/* WhatsApp Green Icon Button */}
             <a
-              href="#contact"
-              onMouseEnter={() => cyberAudio.playHover()}
-              onClick={() => cyberAudio.playCyberClick()}
-              className="btn-cyber-primary text-xs py-2 px-4 ml-1"
+              href="https://wa.me/917012819002?text=Hello%20Shamseer,%20I%20would%20like%20to%20discuss%20a%20project."
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => cyberAudio.playSoftClick()}
+              className="p-2 rounded-full bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-[#070A12] border border-[#25D366]/40 transition-all duration-200 shadow-sm"
+              title="Chat on WhatsApp (+91 7012819002)"
+              aria-label="Chat on WhatsApp"
             >
-              <span>CONNECT // HIRE</span>
-              <FiArrowRight className="text-xs" />
+              <FaWhatsapp size={16} />
+            </a>
+
+            {/* Gold Download CV Button */}
+            <a
+              href="/cv/Shamseer-PC-CV.pdf"
+              download="Shamseer-PC-CV.pdf"
+              onMouseEnter={() => cyberAudio.playHover()}
+              onClick={() => cyberAudio.playCoin()}
+              className="relative inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] font-heading font-bold text-xs shadow-[0_4px_18px_rgba(212,175,55,0.25)] hover:shadow-[0_6px_24px_rgba(212,175,55,0.4)] hover:-translate-y-0.5 active:translate-y-0 transition-all overflow-hidden group"
+            >
+              <FiDownload size={13} />
+              <span>Download CV</span>
+              <span className="text-[9px] font-mono font-bold bg-[#070A12]/20 px-1 py-0.5 rounded">
+                PDF
+              </span>
             </a>
           </div>
 
-          {/* Mobile hamburger button */}
+          {/* Mobile Hamburger & Controls */}
           <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={handleAudioToggle}
-              className="p-2 bg-[#0d1527] border border-white/10 text-white rounded text-xs"
-              aria-label="Toggle Audio"
+            <a
+              href="https://wa.me/917012819002"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 bg-[#25D366]/15 text-[#25D366] border border-[#25D366]/30 rounded-full"
+              aria-label="WhatsApp"
             >
-              {!audioMuted ? <FiVolume2 className="text-[#00f0ff]" /> : <FiVolumeX className="text-[#64748b]" />}
-            </button>
+              <FaWhatsapp size={16} />
+            </a>
             <button
               onClick={() => {
-                cyberAudio.playCyberClick();
+                cyberAudio.playSoftClick();
                 setMobileOpen(!mobileOpen);
               }}
-              className="p-2 bg-[#0d1527] border border-[#00f0ff]/30 text-[#00f0ff] rounded"
-              aria-label="Open Navigation Menu"
+              className="p-2 bg-[#0E1320] border border-white/10 text-[#F4F6FB] rounded-full"
+              aria-label="Toggle navigation menu"
             >
-              {mobileOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+              {mobileOpen ? <FiX size={18} /> : <FiMenu size={18} />}
             </button>
           </div>
         </div>
-      </nav>
 
-      {/* Mobile Drawer */}
+        {/* Gold Scroll Progress Bar under Navbar */}
+        <motion.div
+          className="h-[2px] bg-gradient-to-r from-[#D4AF37] via-[#F5E6A8] to-[#22D3EE] origin-left"
+          style={{ scaleX }}
+        />
+      </header>
+
+      {/* Full-Screen Mobile Animated Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -159,51 +233,80 @@ export default function Navbar({ scanlinesActive, onToggleScanlines }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-x-0 top-[60px] z-50 bg-[#040711]/95 backdrop-blur-xl border-b border-[#00f0ff]/30 p-6 md:hidden shadow-[0_15px_40px_rgba(0,0,0,0.8)]"
+            className="fixed inset-0 z-50 bg-[#070A12]/98 backdrop-blur-2xl flex flex-col justify-between p-6 pt-24 md:hidden overflow-y-auto"
           >
-            <div className="hud-frame p-5 space-y-4">
-              <div className="text-[11px] font-mono text-[#00f0ff] flex items-center justify-between border-b border-white/10 pb-2">
-                <span>// TACTICAL NAVIGATION</span>
-                <span className="flex items-center gap-1">
-                  <FiRadio className="text-[#00ff66] animate-pulse" /> GCC SECURE
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <span className="text-xs font-mono text-[#D4AF37] font-semibold tracking-wider">
+                  NAVIGATION
                 </span>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-2 rounded-full bg-[#0E1320] text-white"
+                >
+                  <FiX size={18} />
+                </button>
               </div>
 
-              <div className="flex flex-col space-y-3 pt-2">
+              <div className="flex flex-col space-y-3">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
                     onClick={() => {
-                      cyberAudio.playCyberClick();
+                      cyberAudio.playSoftClick();
                       setMobileOpen(false);
                     }}
-                    className="text-sm font-semibold tracking-wider text-[#cbd5e1] hover:text-[#00f0ff] flex items-center justify-between py-1 border-b border-white/5"
+                    className={`text-lg font-heading font-semibold py-2 px-3 rounded-xl transition-all flex items-center justify-between ${
+                      activeSection === link.id
+                        ? 'text-[#070A12] bg-[#D4AF37] font-bold'
+                        : 'text-[#F4F6FB] hover:text-[#D4AF37] bg-white/[0.03]'
+                    }`}
                   >
                     <span>{link.label}</span>
-                    <span className="text-[#00f0ff]/50 font-mono text-xs">→</span>
+                    <FiArrowRight size={14} className="opacity-60" />
                   </a>
                 ))}
               </div>
+            </div>
 
-              <div className="pt-3 flex flex-col gap-3">
+            {/* Mobile Drawer Footer Actions */}
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="flex items-center justify-between gap-3">
                 <button
-                  onClick={handleScanlineToggle}
-                  className="w-full py-2 bg-[#0d1527] border border-[#ff007f]/40 text-[#ff007f] text-xs font-mono flex items-center justify-center gap-2 rounded"
+                  onClick={toggleLang}
+                  className="flex-1 py-2 rounded-xl bg-[#0E1320] border border-white/10 text-xs font-heading font-bold text-center"
                 >
-                  <FiTv /> {scanlinesActive ? 'DISABLE CRT SCANLINES' : 'ENABLE CRT SCANLINES'}
+                  {lang === 'en' ? 'Switch to العربية' : 'Switch to English'}
                 </button>
-                <a
-                  href="#contact"
-                  onClick={() => {
-                    cyberAudio.playCyberClick();
-                    setMobileOpen(false);
-                  }}
-                  className="btn-cyber-primary w-full justify-center text-xs py-2.5"
+                <button
+                  onClick={handleAudioToggle}
+                  className="p-2.5 rounded-xl bg-[#0E1320] border border-white/10 text-[#D4AF37]"
                 >
-                  CONNECT // HIRE NOW
-                </a>
+                  {!audioMuted ? <FiVolume2 size={16} /> : <FiVolumeX size={16} />}
+                </button>
               </div>
+
+              <a
+                href="/cv/Shamseer-PC-CV.pdf"
+                download="Shamseer-PC-CV.pdf"
+                onClick={() => setMobileOpen(false)}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] font-heading font-bold text-xs flex items-center justify-center gap-2"
+              >
+                <FiDownload size={15} />
+                <span>Download CV (PDF)</span>
+              </a>
+
+              <a
+                href="https://wa.me/917012819002"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+                className="w-full py-3 rounded-xl bg-[#25D366]/15 border border-[#25D366]/40 text-[#25D366] font-heading font-bold text-xs flex items-center justify-center gap-2"
+              >
+                <FaWhatsapp size={16} />
+                <span>Chat on WhatsApp (+91 7012819002)</span>
+              </a>
             </div>
           </motion.div>
         )}
