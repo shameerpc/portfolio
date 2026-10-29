@@ -1,114 +1,139 @@
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { FiPlay, FiPause, FiVideo } from 'react-icons/fi';
+import { FiPlay, FiPause, FiMaximize, FiVolume2, FiVolumeX } from 'react-icons/fi';
+import { SectionTitle } from './ui/SectionTitle';
+import { GlassCard } from './ui/GlassCard';
+import { Reveal } from './ui/Reveal';
 import { cyberAudio } from '../utils/cyberAudio';
 
 export default function Video() {
-  const [playing, setPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasStarted, setHasStarted] = useState(false);
   const videoRef = useRef(null);
 
+  // TODO: Reference optimized /videos/showreel.mp4 when compressed in Prompt 6.
+  // Fall back to current showreel file for now.
+  const videoSrc = '/videos/copy_8F66225F-B2F5-4B63-8D6C-3FE20851FF28.mov';
+
   const togglePlay = () => {
-    cyberAudio.playCyberClick();
+    cyberAudio.playSoftClick();
     if (!videoRef.current) return;
     if (videoRef.current.paused) {
       videoRef.current.play();
-      setPlaying(true);
+      setIsPlaying(true);
+      setHasStarted(true);
     } else {
       videoRef.current.pause();
-      setPlaying(false);
+      setIsPlaying(false);
+    }
+  };
+
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
+  const handleFullscreen = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.requestFullscreen) {
+      videoRef.current.requestFullscreen();
     }
   };
 
   return (
-    <section className="relative py-24 bg-[#040711] overflow-hidden" id="video">
+    <section className="relative py-28 bg-[#070A12] border-t border-white/5 overflow-hidden" id="video">
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0d1527] border border-[#ff007f]/30 text-[#ff007f] font-mono text-xs uppercase tracking-widest rounded-sm">
-            <FiVideo className="text-xs" />
-            <span>COMMERCIAL MOTION & EDITING // HIGH ROAS REELS</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-orbitron tracking-tight text-white">
-            WORK IN <span className="text-[#ff007f] drop-shadow-[0_0_15px_rgba(255,0,127,0.4)]">MOTION</span>
-          </h2>
-          <p className="text-base sm:text-lg text-[#94a3b8] font-rajdhani">
-            High-energy commercial video editing and social ad reels crafted with CapCut Pro and Premiere Pro.
-          </p>
-        </div>
+        <Reveal>
+          <SectionTitle
+            eyebrow="Motion & Video Editing"
+            title={
+              <>
+                Commercial Video Editing &{' '}
+                <span className="gold-gradient-text">Short-Form Motion</span>
+              </>
+            }
+            subtitle="Engaging video cuts crafted with CapCut Pro and Premiere Pro for social ad campaigns and brand reels."
+          />
+        </Reveal>
 
-        {/* Tactical Video Player HUD Frame */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="hud-frame hud-frame-purple p-3 sm:p-4 rounded-xl bg-[#080d1a] border-[#b026ff]/35 shadow-[0_0_40px_rgba(176,38,255,0.15)]"
-        >
-          <div className="hud-bracket-tr" />
-          <div className="hud-bracket-bl" />
+        <Reveal delay={0.15}>
+          <GlassCard className="p-4 sm:p-5 rounded-3xl overflow-hidden shadow-2xl" glow="gold">
+            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black group">
+              {/* Lazy-mounted video with preload="none" and no autoplay with sound */}
+              <video
+                ref={videoRef}
+                src={videoSrc}
+                preload="none"
+                playsInline
+                muted={isMuted}
+                loop
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                className="w-full h-full object-cover"
+              />
 
-          {/* Player Header Bar */}
-          <div className="flex items-center justify-between px-3 py-2 border-b border-white/10 mb-3 text-xs font-mono">
-            <div className="flex items-center gap-2 text-[#00f0ff]">
-              <span className="w-2 h-2 rounded-full bg-[#ff007f] animate-ping" />
-              <span className="font-bold">REEL STREAM // MASTER CODEC H.264</span>
-            </div>
-            <div className="flex items-center gap-3 text-[#64748b]">
-              <span className="text-[#00ff66]">BUFFER: 100%</span>
-              <span>AUDIO: STEREO 48KHZ</span>
-            </div>
-          </div>
-
-          {/* Video Viewport */}
-          <div className="relative aspect-video rounded-lg overflow-hidden bg-black border border-white/10 group">
-            <video
-              ref={videoRef}
-              className="w-full h-full object-contain"
-              src="/videos/copy_8F66225F-B2F5-4B63-8D6C-3FE20851FF28.mov"
-              playsInline
-              loop
-              onPlay={() => setPlaying(true)}
-              onPause={() => setPlaying(false)}
-            />
-
-            {/* Big Interactive Play/Pause Button Overlay */}
-            <div
-              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 cursor-pointer ${
-                playing ? 'bg-transparent hover:bg-black/40 opacity-0 hover:opacity-100' : 'bg-black/50 opacity-100'
-              }`}
-              onClick={togglePlay}
-            >
-              <button
-                className="w-20 h-20 rounded-full bg-[#040711]/90 border-2 border-[#00f0ff] flex items-center justify-center text-white text-2xl shadow-[0_0_30px_rgba(0,240,255,0.6)] hover:scale-110 transition-transform"
-                aria-label={playing ? 'Pause Video' : 'Play Video'}
-              >
-                {playing ? <FiPause className="text-[#00f0ff]" /> : <FiPlay className="text-[#00f0ff] ml-1" />}
-              </button>
-            </div>
-
-            {/* Corner Timecode Telemetry */}
-            <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 border border-white/10 text-[10px] font-mono text-white rounded">
-              CAM-01 // TC: 00:00:12:04
-            </div>
-          </div>
-
-          {/* Controls Bar */}
-          <div className="mt-3 px-3 py-2 bg-[#040711] border border-white/5 rounded flex flex-wrap items-center justify-between text-xs font-mono text-[#94a3b8] gap-3">
-            <div className="flex items-center gap-3">
-              <button
+              {/* Play / Pause Large Center Button Overlay */}
+              <div
                 onClick={togglePlay}
-                className="px-3 py-1 bg-[#0d1527] border border-[#00f0ff]/30 text-[#00f0ff] rounded hover:border-[#00f0ff] flex items-center gap-1.5 font-bold"
+                className={`absolute inset-0 flex items-center justify-center cursor-pointer transition-all duration-300 ${
+                  isPlaying
+                    ? 'bg-transparent opacity-0 group-hover:opacity-100 hover:bg-black/30'
+                    : 'bg-black/40 opacity-100'
+                }`}
               >
-                {playing ? <FiPause /> : <FiPlay />}
-                <span>{playing ? 'PAUSE STREAM' : 'PLAY STREAM'}</span>
-              </button>
-              <span className="text-[11px] text-[#64748b]">FORMAT: 1080P PRORES MASTER</span>
+                <button
+                  type="button"
+                  className="w-20 h-20 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] flex items-center justify-center text-2xl shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:scale-110 active:scale-95 transition-transform"
+                  aria-label={isPlaying ? 'Pause Showreel' : 'Play Showreel'}
+                >
+                  {isPlaying ? <FiPause /> : <FiPlay className="ml-1" />}
+                </button>
+              </div>
+
+              {/* Poster Placeholder Title until started */}
+              {!hasStarted && (
+                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#070A12]/80 backdrop-blur-md border border-white/10 text-xs font-mono text-[#D4AF37] pointer-events-none">
+                  COMMERCIAL SHOWREEL · CAPCUT & PREMIERE
+                </div>
+              )}
             </div>
-            <div className="flex items-center gap-3 text-[11px]">
-              <span className="text-[#ffb703]">EDITED: CAPCUT PRO & PREMIERE</span>
-              <span className="text-[#00ff66]">SYNC: LOCKED</span>
+
+            {/* Bottom Controls Bar */}
+            <div className="mt-4 px-3 py-2 rounded-xl bg-[#070A12] border border-white/5 flex items-center justify-between text-xs font-sans text-[#9AA4BC]">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={togglePlay}
+                  className="px-3 py-1 rounded-lg bg-[#141A2B] text-white hover:text-[#D4AF37] font-heading font-semibold text-xs flex items-center gap-1.5 transition-colors"
+                >
+                  {isPlaying ? <FiPause size={13} /> : <FiPlay size={13} />}
+                  <span>{isPlaying ? 'Pause' : 'Play showreel'}</span>
+                </button>
+
+                <button
+                  onClick={toggleMute}
+                  className="p-1.5 rounded-lg bg-[#141A2B] text-[#9AA4BC] hover:text-white transition-colors"
+                  aria-label={isMuted ? 'Unmute Audio' : 'Mute Audio'}
+                >
+                  {isMuted ? <FiVolumeX size={15} /> : <FiVolume2 size={15} />}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] font-mono hidden sm:inline text-[#D4AF37]">
+                  1080P MASTER CUT
+                </span>
+                <button
+                  onClick={handleFullscreen}
+                  className="p-1.5 rounded-lg bg-[#141A2B] text-[#9AA4BC] hover:text-white transition-colors"
+                  aria-label="Fullscreen"
+                >
+                  <FiMaximize size={15} />
+                </button>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </GlassCard>
+        </Reveal>
       </div>
     </section>
   );

@@ -7,10 +7,11 @@ import About from './components/About';
 import Services from './components/Services';
 import WebDev from './components/WebDev';
 import CreativeWork from './components/CreativeWork';
-import Brochure from './components/Brochure';
 import Video from './components/Video';
-import Terminal from './components/Terminal';
 import Skills from './components/Skills';
+import Testimonials from './components/Testimonials';
+import CVSection from './components/CVSection';
+import Terminal from './components/Terminal';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -26,7 +27,7 @@ export default function App() {
           <IntroGate onComplete={() => setIntroComplete(true)} />
         )}
 
-        {/* Optional Retro Scanline Overlay Easter Egg */}
+        {/* Optional Retro Scanline Overlay */}
         {scanlinesActive && <div className="scanlines-fx" />}
 
         {/* Main Application Suite */}
@@ -40,10 +41,11 @@ export default function App() {
               <Services />
               <WebDev />
               <CreativeWork />
-              <Brochure />
               <Video />
-              <Terminal />
               <Skills />
+              <Testimonials />
+              <CVSection />
+              <Terminal />
               <Contact />
             </main>
 

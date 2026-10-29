@@ -1,182 +1,188 @@
 import { motion } from 'framer-motion';
-import { 
-  FiCode, 
-  FiPenTool, 
-  FiTrendingUp, 
-  FiZap, 
-  FiCheck
-} from 'react-icons/fi';
+import { FiCode, FiPenTool, FiTrendingUp, FiCheck, FiArrowRight } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa';
+import { SectionTitle } from './ui/SectionTitle';
+import { GlassCard } from './ui/GlassCard';
+import { Reveal } from './ui/Reveal';
 import { cyberAudio } from '../utils/cyberAudio';
 
-const serviceModules = [
+const services = [
   {
-    id: 'MOD-01',
-    icon: <FiCode className="text-2xl text-[#00f0ff]" />,
-    accent: '#00f0ff',
-    borderClass: 'border-[#00f0ff]/30 hover:border-[#00f0ff]',
-    shadowClass: 'hover:shadow-[0_0_30px_rgba(0,240,255,0.25)]',
-    tag: 'ARCHITECTURE // DEV',
-    title: 'Web Development & SaaS Engines',
-    desc: 'High-performance MERN architecture built for heavy concurrency and enterprise reliability. Custom REST APIs, sub-millisecond Redis caching, WebSocket events, and bulletproof RBAC security.',
-    specs: [
-      { k: 'TECH STACK', v: 'React 19, Node.js, Express, MongoDB' },
-      { k: 'CACHING & SYNC', v: 'Redis In-Memory, WebSockets' },
-      { k: 'SECURITY', v: 'JWT, OAuth2, RBAC, Rate Limiting' },
-      { k: 'LATENCY SLA', v: '< 120ms P99 API Response Time' },
+    id: 'web-dev',
+    icon: <FiCode className="text-2xl text-[#22D3EE]" />,
+    accent: '#22D3EE',
+    title: 'Web & SaaS Development',
+    outcome: 'High-concurrency full-stack platforms engineered for uptime, speed, and real enterprise business workflows.',
+    bullets: [
+      'Production MERN Architecture (React 19, Node.js, Express, MongoDB)',
+      'Sub-millisecond Redis Caching & State Management',
+      'Role-Based Access Control (RBAC) & Secure JWT Authentication',
+      'Scalable RESTful APIs, WebSockets & Automated Webhooks',
     ],
-    features: [
-      'Multi-tenant SaaS Architecture',
-      'Automated Facility & Logistics Systems',
-      'Scalable Database Modeling & Aggregations',
-      'Custom Webhook Integrations',
-    ],
+    whatsappMsg: 'Hello Shamseer, I am interested in a quote for Web & SaaS Development.',
   },
   {
-    id: 'MOD-02',
-    icon: <FiPenTool className="text-2xl text-[#ff007f]" />,
-    accent: '#ff007f',
-    borderClass: 'border-[#ff007f]/30 hover:border-[#ff007f]',
-    shadowClass: 'hover:shadow-[0_0_30px_rgba(255,0,127,0.25)]',
-    tag: 'AESTHETICS // BRAND',
-    title: 'Creative & Commercial Poster Design',
-    desc: 'Ultra-luxury visual communication crafted for the prestige markets of Dubai, Qatar, and international capitals. Commercial advertising posters, social media ad creatives, corporate brochures, and brand identity systems.',
-    specs: [
-      { k: 'PRIMARY TOOLS', v: 'Photoshop, Illustrator, Canva Pro' },
-      { k: 'REGIONAL FOCUS', v: 'Dubai Luxury, GCC Enterprise, Hospitality' },
-      { k: 'DELIVERABLES', v: 'Ultra HD Print & Digital Vectors' },
-      { k: 'CONVERSION FOCUS', v: 'Click-Through & Brand Recall Max' },
+    id: 'creative',
+    icon: <FiPenTool className="text-2xl text-[#D4AF37]" />,
+    accent: '#D4AF37',
+    title: 'Creative Design',
+    outcome: 'Luxury visual assets crafted to establish immediate brand authority across Dubai, Qatar, and international markets.',
+    bullets: [
+      'High-Converting Commercial Poster Design',
+      'Corporate Fleet & Recruitment Brochure Collateral',
+      'Luxury Salon & Hospitality Brand Identity Systems',
+      'Social Media Creative Suites & Display Assets',
     ],
-    features: [
-      'Dubai Luxury Travel & Salon Campaigns',
-      'Recruitment & Fleet Logistics Brochures',
-      'High-Impact Social Ad Creatives',
-      'Complete Corporate Brand Guideline Systems',
-    ],
+    whatsappMsg: 'Hello Shamseer, I am interested in a quote for Creative Design (posters, brochures, brand).',
   },
   {
-    id: 'MOD-03',
-    icon: <FiTrendingUp className="text-2xl text-[#ffb703]" />,
-    accent: '#ffb703',
-    borderClass: 'border-[#ffb703]/30 hover:border-[#ffb703]',
-    shadowClass: 'hover:shadow-[0_0_30px_rgba(255,183,3,0.25)]',
-    tag: 'ACQUISITION // GROWTH',
-    title: 'Digital Marketing & Motion Video',
-    desc: 'End-to-end user acquisition pipelines combining data-driven paid advertising on Meta/Facebook with punchy, high-retention video reels edited in Premiere and CapCut for maximum ROAS.',
-    specs: [
-      { k: 'AD CHANNELS', v: 'Meta Ads Manager, Instagram, TikTok' },
-      { k: 'VIDEO SUITE', v: 'Premiere Pro, CapCut Pro, After Effects' },
-      { k: 'ANALYTICS', v: 'Google Analytics 4, Meta Pixel, GTM' },
-      { k: 'OPTIMIZATION', v: 'A/B Creative Testing & Funnel Tuning' },
+    id: 'marketing-video',
+    icon: <FiTrendingUp className="text-2xl text-[#FF3D8B]" />,
+    accent: '#FF3D8B',
+    title: 'Marketing & Video',
+    outcome: 'Data-driven growth campaigns paired with kinetic short-form video that drive real customer acquisition.',
+    bullets: [
+      'Meta / Facebook Ads Management & Funnel Architecture',
+      'CapCut Pro & Premiere Pro Commercial Video Reels',
+      'Technical SEO & Search Console Optimization',
+      'Google Analytics 4 (GA4) Tracking & ROAS Attribution',
     ],
-    features: [
-      'Meta Ad Campaign Strategy & Execution',
-      'Commercial Reels & Short-Form Video',
-      'Technical SEO & Search Console Authority',
-      'Real-Time Attribution & ROAS Dashboards',
-    ],
+    whatsappMsg: 'Hello Shamseer, I am interested in a quote for Digital Marketing & Video editing.',
   },
+];
+
+const workflowSteps = [
+  { step: '01', title: 'Discover', desc: 'Deep dive into your business goals, technical requirements, and target GCC audience.' },
+  { step: '02', title: 'Design', desc: 'Craft clean UI architectures, wireframes, and high-impact visual prototypes.' },
+  { step: '03', title: 'Build', desc: 'Write scalable MERN code, optimize database schemas, and create print/ad assets.' },
+  { step: '04', title: 'Launch & Support', desc: 'Deploy with zero downtime, conduct testing, and provide ongoing iteration support.' },
 ];
 
 export default function Services() {
   return (
-    <section className="relative py-24 bg-[#040711] overflow-hidden" id="services">
-      {/* Background glow effects */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[#00f0ff]/5 rounded-full blur-[160px] pointer-events-none" />
+    <section className="relative py-28 bg-[#070A12] border-t border-white/5 overflow-hidden" id="services">
+      {/* Background Soft Lighting */}
+      <div className="absolute top-1/3 right-0 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0d1527] border border-[#00f0ff]/30 text-[#00f0ff] font-mono text-xs uppercase tracking-widest rounded-sm">
-            <FiZap className="text-xs" />
-            <span>TACTICAL ARSENAL // CORE CAPABILITIES</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-orbitron tracking-tight text-white">
-            MISSION-CRITICAL <span className="gradient-text-cyan">SERVICES</span>
-          </h2>
-          <p className="text-base sm:text-lg text-[#94a3b8] font-rajdhani">
-            Engineered to deploy enterprise platforms with extreme uptime and launch advertising campaigns with unmatched prestige.
-          </p>
-        </div>
+        {/* Section Header */}
+        <Reveal>
+          <SectionTitle
+            eyebrow="Capabilities & Solutions"
+            title={
+              <>
+                Specialized Services That{' '}
+                <span className="gold-gradient-text">Drive Measurable Growth</span>
+              </>
+            }
+            subtitle="Bridging technical engineering with commercial design to deliver end-to-end digital solutions."
+          />
+        </Reveal>
 
-        {/* 3 Tactical Modules Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {serviceModules.map((mod, i) => (
-            <motion.div
-              key={mod.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ delay: i * 0.15, duration: 0.7 }}
-              onMouseEnter={() => cyberAudio.playHover()}
-              className={`hud-frame p-6 sm:p-7 rounded-lg bg-[#080d1a]/90 flex flex-col justify-between transition-all duration-300 ${mod.borderClass} ${mod.shadowClass}`}
-            >
-              {/* Corner brackets */}
-              <div className="hud-bracket-tr" />
-              <div className="hud-bracket-bl" />
-
-              <div>
-                {/* Module Head Bar */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6 text-xs font-mono">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-[#040711] rounded border border-white/10">
-                      {mod.icon}
-                    </div>
-                    <span className="font-bold tracking-wider" style={{ color: mod.accent }}>
-                      {mod.tag}
+        {/* 3 Clean Services Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
+          {services.map((s, idx) => (
+            <Reveal key={s.id} delay={idx * 0.12}>
+              <GlassCard
+                glow={s.id === 'creative' ? 'gold' : s.id === 'web-dev' ? 'cyan' : 'magenta'}
+                className="p-7 sm:p-8 h-full flex flex-col justify-between group"
+              >
+                <div>
+                  {/* Icon & Category Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: 'spring', stiffness: 300 }}
+                      className="p-3.5 rounded-2xl bg-[#070A12] border border-white/10 shadow-sm"
+                    >
+                      {s.icon}
+                    </motion.div>
+                    <span
+                      className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                      style={{
+                        color: s.accent,
+                        backgroundColor: `${s.accent}12`,
+                        border: `1px solid ${s.accent}30`,
+                      }}
+                    >
+                      SERVICE 0{idx + 1}
                     </span>
                   </div>
-                  <span className="text-[11px] font-mono text-[#64748b] bg-[#040711] px-2 py-0.5 rounded border border-white/5">
-                    {mod.id}
-                  </span>
-                </div>
 
-                {/* Title & Description */}
-                <h3 className="text-2xl font-bold font-orbitron text-white mb-3 leading-snug">
-                  {mod.title}
-                </h3>
-                <p className="text-sm text-[#94a3b8] font-rajdhani leading-relaxed mb-6">
-                  {mod.desc}
-                </p>
+                  {/* Title & Outcome Sentence */}
+                  <h3 className="text-2xl font-bold font-heading text-[#F4F6FB] mb-3">
+                    {s.title}
+                  </h3>
+                  <p className="text-sm text-[#9AA4BC] font-sans leading-relaxed mb-6">
+                    {s.outcome}
+                  </p>
 
-                {/* System Specifications Box */}
-                <div className="p-4 bg-[#040711] border border-white/10 rounded-sm mb-6 space-y-2">
-                  <div className="text-[10px] font-mono text-[#64748b] uppercase tracking-wider mb-1 flex items-center justify-between">
-                    <span>// SYSTEM SPECIFICATION</span>
-                    <span className="text-[#00ff66]">OPTIMIZED</span>
+                  {/* 4 Bullets */}
+                  <div className="space-y-2.5 mb-8">
+                    {s.bullets.map((bullet) => (
+                      <div key={bullet} className="flex items-start gap-2.5 text-xs font-sans text-[#F4F6FB]/90 leading-snug">
+                        <FiCheck className="text-xs shrink-0 mt-0.5" style={{ color: s.accent }} />
+                        <span>{bullet}</span>
+                      </div>
+                    ))}
                   </div>
-                  {mod.specs.map((sp) => (
-                    <div key={sp.k} className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-[#64748b] text-[11px]">{sp.k}:</span>
-                      <span className="text-white font-medium text-[11px] text-right">{sp.v}</span>
-                    </div>
-                  ))}
                 </div>
 
-                {/* Feature Bullet Matrix */}
-                <div className="space-y-2 mb-6">
-                  {mod.features.map((feat) => (
-                    <div key={feat} className="flex items-center gap-2 text-xs font-rajdhani font-semibold text-[#cbd5e1]">
-                      <FiCheck className="text-xs shrink-0" style={{ color: mod.accent }} />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
+                {/* WhatsApp "Get a Quote" Button */}
+                <div className="pt-4 border-t border-white/10">
+                  <a
+                    href={`https://wa.me/917012819002?text=${encodeURIComponent(s.whatsappMsg)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => cyberAudio.playSoftClick()}
+                    className="w-full py-2.5 px-4 rounded-full bg-[#141A2B] hover:bg-[#D4AF37]/15 border border-white/10 hover:border-[#D4AF37] text-white hover:text-[#F5E6A8] text-xs font-heading font-semibold tracking-wide flex items-center justify-center gap-2 transition-all duration-200"
+                  >
+                    <FaWhatsapp className="text-[#25D366] text-sm" />
+                    <span>Get a quote on WhatsApp</span>
+                    <FiArrowRight className="text-xs opacity-60" />
+                  </a>
                 </div>
-              </div>
-
-              {/* Action Button */}
-              <div className="pt-4 border-t border-white/10">
-                <a
-                  href="#contact"
-                  onClick={() => cyberAudio.playCyberClick()}
-                  className="w-full py-2.5 px-4 bg-[#0d1527] border border-white/15 hover:border-[#00f0ff] hover:bg-[#00f0ff]/10 text-white hover:text-[#00f0ff] text-xs font-mono font-bold tracking-wider uppercase rounded-sm flex items-center justify-center gap-2 transition-all shadow-sm"
-                >
-                  <span>ENGAGE SPECIFICATION</span>
-                  <span>→</span>
-                </a>
-              </div>
-            </motion.div>
+              </GlassCard>
+            </Reveal>
           ))}
         </div>
+
+        {/* 4-Step "How I Work" Process Flow */}
+        <Reveal delay={0.2}>
+          <div className="rounded-3xl p-8 sm:p-10 bg-[#0E1320]/60 border border-white/5 backdrop-blur-md">
+            <div className="text-center max-w-xl mx-auto mb-10 space-y-1">
+              <span className="text-xs font-mono text-[#D4AF37] tracking-widest uppercase">
+                THE METHODOLOGY
+              </span>
+              <h4 className="text-2xl font-bold font-heading text-[#F4F6FB]">
+                How I Work With Clients
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+              {workflowSteps.map((ws, i) => (
+                <div key={ws.step} className="relative space-y-2.5 group">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-mono font-bold text-[#D4AF37] px-2.5 py-1 rounded bg-[#D4AF37]/10 border border-[#D4AF37]/25">
+                      {ws.step}
+                    </span>
+                    <h5 className="text-base font-bold font-heading text-white">
+                      {ws.title}
+                    </h5>
+                  </div>
+                  <p className="text-xs text-[#9AA4BC] font-sans leading-relaxed">
+                    {ws.desc}
+                  </p>
+                  {i < workflowSteps.length - 1 && (
+                    <div className="hidden lg:block absolute top-3.5 -right-3 text-[#D4AF37]/30 text-xs font-mono">
+                      →
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
