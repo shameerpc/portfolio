@@ -244,6 +244,10 @@ export default function Hero() {
                           : '/images/about/shamseer-photo.jpg'
                       }
                       alt="Shamseer PC - Full-Stack Developer & Creative Director"
+                      width="400"
+                      height="400"
+                      decoding="async"
+                      fetchPriority="high"
                       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       onError={(e) => {
                         e.currentTarget.src = '/images/about/profile.jpg';

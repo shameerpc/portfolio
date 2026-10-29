@@ -1,26 +1,37 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { LanguageProvider } from './i18n';
 import { GameProvider, useGame } from './context';
-import IntroGate from './components/intro/IntroGate';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
-import Services from './components/Services';
-import WebDev from './components/WebDev';
-import CreativeWork from './components/CreativeWork';
-import Video from './components/Video';
-import Skills from './components/Skills';
-import Testimonials from './components/Testimonials';
-import CVSection from './components/CVSection';
-import Terminal from './components/Terminal';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
-
-// Extras & Game Layer
-import CustomCursor from './components/extras/CustomCursor';
 import AchievementToaster from './components/extras/AchievementToaster';
-import SecretConsultationModal from './components/extras/SecretConsultationModal';
-import Confetti from './components/extras/Confetti';
+
+// Lazy-loaded Below-the-Fold Sections & Game Modals for Code Splitting
+const IntroGate = lazy(() => import('./components/intro/IntroGate'));
+const Services = lazy(() => import('./components/Services'));
+const WebDev = lazy(() => import('./components/WebDev'));
+const CreativeWork = lazy(() => import('./components/CreativeWork'));
+const Video = lazy(() => import('./components/Video'));
+const Skills = lazy(() => import('./components/Skills'));
+const Testimonials = lazy(() => import('./components/Testimonials'));
+const CVSection = lazy(() => import('./components/CVSection'));
+const Terminal = lazy(() => import('./components/Terminal'));
+const Contact = lazy(() => import('./components/Contact'));
+
+// Lazy Extras
+const CustomCursor = lazy(() => import('./components/extras/CustomCursor'));
+const SecretConsultationModal = lazy(() => import('./components/extras/SecretConsultationModal'));
+const Confetti = lazy(() => import('./components/extras/Confetti'));
+
+// Minimal elegant fallback for lazy chunks
+function SectionLoader() {
+  return (
+    <div className="py-24 flex items-center justify-center">
+      <div className="w-7 h-7 rounded-full border-2 border-[#D4AF37]/20 border-t-[#D4AF37] animate-spin" />
+    </div>
+  );
+}
 
 function AppContent() {
   const { playerClass, retroMode, confettiActive } = useGame();
@@ -28,21 +39,29 @@ function AppContent() {
 
   return (
     <div className="relative min-h-screen bg-[#070A12] text-[#F4F6FB] selection:bg-[#D4AF37] selection:text-[#070A12] font-sans">
-      {/* Desktop-only custom cursor with trailing gold aura */}
-      <CustomCursor />
+      {/* Desktop-only custom cursor */}
+      <Suspense fallback={null}>
+        <CustomCursor />
+      </Suspense>
 
       {/* Floating achievement toasts */}
       <AchievementToaster />
 
       {/* Easter egg consultation reward modal */}
-      <SecretConsultationModal />
+      <Suspense fallback={null}>
+        <SecretConsultationModal />
+      </Suspense>
 
       {/* Canvas confetti celebration */}
-      <Confetti active={confettiActive} />
+      <Suspense fallback={null}>
+        <Confetti active={confettiActive} />
+      </Suspense>
 
       {/* Cinematic Game-Style Intro Gate */}
       {!introComplete && (
-        <IntroGate onComplete={() => setIntroComplete(true)} />
+        <Suspense fallback={null}>
+          <IntroGate onComplete={() => setIntroComplete(true)} />
+        </Suspense>
       )}
 
       {/* Optional Retro CRT Scanlines overlay */}
@@ -53,37 +72,39 @@ function AppContent() {
         <>
           <Navbar />
 
-          <main>
+          <main id="main-content" tabIndex="-1" className="focus:outline-none">
             <Hero />
             <About />
 
             {/* Personalized Section Ordering based on player_class */}
-            {playerClass === 'developer' ? (
-              <>
-                <WebDev />
-                <Services />
-                <CreativeWork />
-              </>
-            ) : playerClass === 'creative' ? (
-              <>
-                <CreativeWork />
-                <Services />
-                <WebDev />
-              </>
-            ) : (
-              <>
-                <Services />
-                <WebDev />
-                <CreativeWork />
-              </>
-            )}
+            <Suspense fallback={<SectionLoader />}>
+              {playerClass === 'developer' ? (
+                <>
+                  <WebDev />
+                  <Services />
+                  <CreativeWork />
+                </>
+              ) : playerClass === 'creative' ? (
+                <>
+                  <CreativeWork />
+                  <Services />
+                  <WebDev />
+                </>
+              ) : (
+                <>
+                  <Services />
+                  <WebDev />
+                  <CreativeWork />
+                </>
+              )}
 
-            <Video />
-            <Skills />
-            <Testimonials />
-            <CVSection />
-            <Terminal />
-            <Contact />
+              <Video />
+              <Skills />
+              <Testimonials />
+              <CVSection />
+              <Terminal />
+              <Contact />
+            </Suspense>
           </main>
 
           <Footer />

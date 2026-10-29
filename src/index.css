@@ -325,3 +325,18 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY: VISIBLE FOCUS RINGS (CYAN WCAG AA)
+   ═══════════════════════════════════════════════════════════════ */
+
+:focus-visible {
+  outline: 2px solid #22D3EE !important;
+  outline-offset: 3px !important;
+}
+
+button:focus-visible,
+a:focus-visible {
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.5) !important;
+}
+

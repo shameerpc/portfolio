@@ -84,20 +84,31 @@ function ProjectCarousel({ images, title, onInteract }) {
   return (
     <div className="relative aspect-[16/10] overflow-hidden bg-[#0A0D18] group">
       <AnimatePresence mode="wait">
-        <motion.img
+        <motion.picture
           key={images[current]}
-          src={images[current]}
-          alt={`${title} screenshot ${current + 1}`}
-          loading="lazy"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="w-full h-full object-cover object-top"
-          onError={(e) => {
-            e.currentTarget.src = '/images/webdev/valufm1.png';
-          }}
-        />
+          className="w-full h-full block"
+        >
+          <source
+            srcSet={images[current].replace(/\.(png|jpg|jpeg)$/, '.webp')}
+            type="image/webp"
+          />
+          <img
+            src={images[current]}
+            alt={`${title} screenshot ${current + 1}`}
+            loading="lazy"
+            decoding="async"
+            width="1280"
+            height="800"
+            className="w-full h-full object-cover object-top"
+            onError={(e) => {
+              e.currentTarget.src = '/images/webdev/valufm1.png';
+            }}
+          />
+        </motion.picture>
       </AnimatePresence>
 
       {/* Navigation Arrows */}

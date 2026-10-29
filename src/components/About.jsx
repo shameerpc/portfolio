@@ -105,6 +105,9 @@ export default function About() {
                       src="/images/about/shamseer-about.jpg"
                       alt="Shamseer PC in executive attire"
                       loading="lazy"
+                      decoding="async"
+                      width="800"
+                      height="1000"
                       className="w-full h-full object-cover object-top filter brightness-105"
                       onError={(e) => {
                         e.currentTarget.src = '/images/about/profile.jpg';

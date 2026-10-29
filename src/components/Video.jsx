@@ -15,18 +15,23 @@ export default function Video() {
   const [hasStarted, setHasStarted] = useState(false);
   const videoRef = useRef(null);
 
-  // Reference optimized /videos/showreel.mp4 when compressed in Prompt 6.
-  // Fall back to current showreel file for now.
-  const videoSrc = '/videos/copy_8F66225F-B2F5-4B63-8D6C-3FE20851FF28.mov';
-
   const togglePlay = () => {
     cyberAudio.playSoftClick?.();
+    if (!hasStarted) {
+      setHasStarted(true);
+      unlockAchievement('director');
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+        }
+      }, 50);
+      return;
+    }
+
     if (!videoRef.current) return;
     if (videoRef.current.paused) {
       videoRef.current.play();
       setIsPlaying(true);
-      setHasStarted(true);
-      unlockAchievement('director');
     } else {
       videoRef.current.pause();
       setIsPlaying(false);
@@ -65,36 +70,49 @@ export default function Video() {
         <Reveal delay={0.15}>
           <GlassCard className="p-3 sm:p-4 rounded-3xl overflow-hidden group" glow="gold">
             <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl">
-              {/* HTML5 Native Video Tag with Lazy Mount and preload none */}
-              <video
-                ref={videoRef}
-                src={videoSrc}
-                preload="none"
-                muted={isMuted}
-                playsInline
-                loop
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                className="w-full h-full object-cover"
-                poster="/images/creative/posters/dubai_neo_2050.jpg"
-              >
-                <track kind="captions" />
-              </video>
+              {/* Native HTML5 Video Element: Lazy Mounted with preload="none" */}
+              {hasStarted ? (
+                <video
+                  ref={videoRef}
+                  preload="none"
+                  muted={isMuted}
+                  playsInline
+                  loop
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  className="w-full h-full object-cover"
+                  poster="/videos/showreel-poster.jpg"
+                >
+                  <source src="/videos/showreel.mp4" type="video/mp4" />
+                  <source src="/videos/showreel.webm" type="video/webm" />
+                  <track kind="captions" />
+                </video>
+              ) : (
+                <img
+                  src="/videos/showreel-poster.jpg"
+                  alt="Commercial showreel video poster"
+                  loading="lazy"
+                  decoding="async"
+                  width="1280"
+                  height="720"
+                  className="w-full h-full object-cover filter brightness-95"
+                />
+              )}
 
               {/* Big Initial Play Button Overlay */}
               {!hasStarted && (
                 <div
                   onClick={togglePlay}
-                  className="absolute inset-0 bg-black/50 backdrop-blur-xs flex flex-col items-center justify-center cursor-pointer group-hover:bg-black/40 transition-colors"
+                  className="absolute inset-0 bg-black/45 backdrop-blur-xs flex flex-col items-center justify-center cursor-pointer group-hover:bg-black/35 transition-colors"
                 >
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#F5E6A8] text-[#070A12] flex items-center justify-center text-3xl shadow-[0_0_40px_rgba(212,175,55,0.4)] group-hover:scale-110 transition-transform">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#F5E6A8] text-[#070A12] flex items-center justify-center text-3xl shadow-[0_0_40px_rgba(212,175,55,0.45)] group-hover:scale-110 transition-transform">
                     <FiPlay className="ms-1" />
                   </div>
                   <span className="mt-4 font-heading font-bold text-sm tracking-wide text-white">
                     {t('video.playVideo', 'Play Commercial Showreel')}
                   </span>
                   <span className="text-xs font-mono text-[#D4AF37] mt-1">
-                    (Sound initially muted · Tap to unmute)
+                    (Fast H.264 · 2.6 MB · Audio initially muted)
                   </span>
                 </div>
               )}
@@ -105,7 +123,7 @@ export default function Video() {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={togglePlay}
-                      className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors"
+                      className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors cursor-pointer"
                       aria-label={isPlaying ? 'Pause' : 'Play'}
                     >
                       {isPlaying ? <FiPause size={16} /> : <FiPlay size={16} />}
@@ -113,20 +131,20 @@ export default function Video() {
 
                     <button
                       onClick={toggleMute}
-                      className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors"
+                      className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors cursor-pointer"
                       aria-label={isMuted ? 'Unmute' : 'Mute'}
                     >
                       {isMuted ? <FiVolumeX size={16} /> : <FiVolume2 size={16} />}
                     </button>
 
                     <span className="text-xs font-mono text-[#9AA4BC]">
-                      1080p Showreel
+                      720p HD Showreel
                     </span>
                   </div>
 
                   <button
                     onClick={handleFullscreen}
-                    className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors"
+                    className="p-2 rounded-lg bg-white/10 hover:bg-[#D4AF37] hover:text-[#070A12] transition-colors cursor-pointer"
                     aria-label="Fullscreen"
                   >
                     <FiMaximize size={16} />

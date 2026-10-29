@@ -189,20 +189,29 @@ export default function CreativeWork() {
                   glow="gold"
                 >
                   <div className="relative aspect-[3/4] overflow-hidden bg-[#0E1320]">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
+                    <picture>
+                      <source
+                        srcSet={item.image.replace(/\.(png|jpg|jpeg)$/, '.webp')}
+                        type="image/webp"
+                      />
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        loading="lazy"
+                        decoding="async"
+                        width="600"
+                        height="800"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </picture>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#070A12] via-transparent to-transparent opacity-70 group-hover:opacity-40 transition-opacity" />
                     <button
-                      className="absolute top-3 right-3 p-2 rounded-full bg-[#070A12]/80 text-[#D4AF37] opacity-0 group-hover:opacity-100 transition-all border border-white/10"
+                      className="absolute top-3 end-3 p-2 rounded-full bg-[#070A12]/80 text-[#D4AF37] opacity-0 group-hover:opacity-100 transition-all border border-white/10"
                       aria-label="Inspect Full Poster"
                     >
                       <FiMaximize2 size={15} />
                     </button>
-                    <div className="absolute bottom-3 left-3 right-3 space-y-1">
+                    <div className="absolute bottom-3 start-3 end-3 space-y-1 text-start">
                       <span className="text-[10px] font-mono text-[#D4AF37] bg-black/60 px-2 py-0.5 rounded">
                         {item.category}
                       </span>
@@ -236,7 +245,7 @@ export default function CreativeWork() {
             >
               <button
                 onClick={closeLightbox}
-                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-[#141A2B] text-white hover:text-[#D4AF37] transition-colors"
+                className="absolute top-4 end-4 z-20 p-2 rounded-full bg-[#141A2B] text-white hover:text-[#D4AF37] transition-colors cursor-pointer"
                 aria-label="Close Lightbox"
               >
                 <FiX size={18} />
@@ -244,11 +253,20 @@ export default function CreativeWork() {
 
               {/* Poster View */}
               <div className="md:w-1/2 rounded-2xl overflow-hidden bg-[#070A12] border border-white/10 flex items-center justify-center">
-                <img
-                  src={activeItem.image}
-                  alt={activeItem.title}
-                  className="max-h-[60vh] w-auto object-contain mx-auto"
-                />
+                <picture>
+                  <source
+                    srcSet={activeItem.image.replace(/\.(png|jpg|jpeg)$/, '.webp')}
+                    type="image/webp"
+                  />
+                  <img
+                    src={activeItem.image}
+                    alt={activeItem.title}
+                    decoding="async"
+                    width="600"
+                    height="800"
+                    className="max-h-[60vh] w-auto object-contain mx-auto"
+                  />
+                </picture>
               </div>
 
               {/* Caption & Specs */}
