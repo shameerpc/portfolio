@@ -1,4 +1,4 @@
-// Lightweight telemetry / event tracking helper
+// Lightweight analytics / event tracking helper
 export function trackEvent(eventName, payload = {}) {
   try {
     if (typeof window !== 'undefined') {

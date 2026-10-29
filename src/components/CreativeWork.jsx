@@ -240,6 +240,9 @@ export default function CreativeWork() {
             className="fixed inset-0 z-50 bg-[#070A12]/95 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6"
           >
             <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={activeItem.title}
               onClick={(e) => e.stopPropagation()}
               className="relative max-w-4xl w-full rounded-3xl bg-[#0E1320] border border-[#D4AF37]/30 p-5 sm:p-7 shadow-2xl flex flex-col md:flex-row gap-6 max-h-[90vh] overflow-y-auto"
             >

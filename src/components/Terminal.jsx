@@ -247,7 +247,7 @@ export default function Terminal() {
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               placeholder="type 'help', 'cv', 'hire', 'projects', 'konami'..."
-              className="flex-1 bg-transparent text-white font-mono text-xs sm:text-sm focus:outline-none placeholder-[#475569]"
+              className="flex-1 bg-transparent text-white font-mono text-base sm:text-sm focus:outline-none placeholder-[#475569]"
               autoComplete="off"
               spellCheck="false"
             />

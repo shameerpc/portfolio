@@ -24,7 +24,7 @@ const characterClasses = [
     accent: '#D4AF37',
     borderClass: 'border-[#D4AF37]/50 hover:border-[#D4AF37]',
     bgGlow: 'hover:shadow-[0_16px_40px_rgba(0,0,0,0.6),0_0_35px_rgba(212,175,55,0.3)]',
-    badge: 'HYBRID COMMANDER',
+    badge: 'HYBRID LEAD',
     isDefault: true,
     icon: <FiZap className="text-3xl text-[#D4AF37]" />,
     desc: 'Build it AND brand it. Enterprise software engineering coupled with prestige commercial ad design for maximum market impact.',
@@ -95,7 +95,7 @@ export function CharacterSelect({ onSelect, onSkip }) {
       {/* Header */}
       <div className="relative z-10 text-center max-w-2xl mx-auto space-y-2 mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0E1320] border border-[#D4AF37]/30 text-[#D4AF37] font-mono text-xs uppercase tracking-widest rounded-full">
-          <span>OPERATIVE CLASS SELECT</span>
+          <span>PORTFOLIO ROLE SELECT</span>
         </div>
         <h2 className="text-3xl sm:text-5xl font-black font-heading text-[#F4F6FB] tracking-tight">
           Who are you looking for?

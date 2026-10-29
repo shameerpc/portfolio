@@ -309,7 +309,7 @@ export default function Contact() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Tariq Al-Mansoor"
-                        className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                        className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all"
                       />
                     </div>
 
@@ -323,7 +323,7 @@ export default function Contact() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="tariq@company.com"
-                        className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                        className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all"
                       />
                     </div>
                   </div>
@@ -359,7 +359,7 @@ export default function Contact() {
                     <select
                       value={formData.budget}
                       onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                      className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all"
                     >
                       <option value="< $3,000">&lt; $3,000 (Targeted module / Brand assets / Poster series)</option>
                       <option value="$3,000 - $8,000">$3,000 - $8,000 (Full-stack web application / Corporate portal)</option>
@@ -379,7 +379,7 @@ export default function Contact() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Outline target platform goals, technical requirements, deliverables, or target launch deadlines..."
-                      className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all resize-y"
+                      className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all resize-y"
                     />
                   </div>
 
