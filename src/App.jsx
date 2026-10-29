@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { LanguageProvider } from './i18n';
+import IntroGate from './components/intro/IntroGate';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -13,6 +15,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 
 export default function App() {
+  const [introComplete, setIntroComplete] = useState(false);
   const [scanlinesActive, setScanlinesActive] = useState(false);
 
   useEffect(() => {
@@ -31,50 +34,41 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#070A12] text-[#F4F6FB] selection:bg-[#D4AF37] selection:text-[#070A12] font-sans">
-      {/* Optional Retro Scanline Overlay Easter Egg */}
-      {scanlinesActive && <div className="scanlines-fx" />}
+    <LanguageProvider>
+      <div className="relative min-h-screen bg-[#070A12] text-[#F4F6FB] selection:bg-[#D4AF37] selection:text-[#070A12] font-sans">
+        {/* Cinematic Game-Style Intro Gate */}
+        {!introComplete && (
+          <IntroGate onComplete={() => setIntroComplete(true)} />
+        )}
 
-      {/* Main Mecha HUD Navigation */}
-      <Navbar
-        scanlinesActive={scanlinesActive}
-        onToggleScanlines={toggleScanlines}
-      />
+        {/* Optional Retro Scanline Overlay Easter Egg */}
+        {scanlinesActive && <div className="scanlines-fx" />}
 
-      <main>
-        {/* Hero with Dual-View Mecha Avatar Deck */}
-        <Hero />
+        {/* Main Application Suite */}
+        {introComplete && (
+          <>
+            <Navbar
+              scanlinesActive={scanlinesActive}
+              onToggleScanlines={toggleScanlines}
+            />
 
-        {/* Executive Holographic Dossier */}
-        <About />
+            <main>
+              <Hero />
+              <About />
+              <Services />
+              <WebDev />
+              <CreativeWork />
+              <Brochure />
+              <Video />
+              <Terminal />
+              <Skills />
+              <Contact />
+            </main>
 
-        {/* Tactical Services Modules */}
-        <Services />
-
-        {/* Live GCC Enterprise Deployments */}
-        <WebDev />
-
-        {/* Commercial Posters & Lightbox Modal */}
-        <CreativeWork />
-
-        {/* Corporate Print & Brochure Systems */}
-        <Brochure />
-
-        {/* High-Retention Motion & Video Reels */}
-        <Video />
-
-        {/* Interactive Operative CLI Terminal */}
-        <Terminal />
-
-        {/* Weaponized Technical Matrices */}
-        <Skills />
-
-        {/* Secure Communications & Project Dispatch */}
-        <Contact />
-      </main>
-
-      {/* Mission Footer */}
-      <Footer />
-    </div>
+            <Footer />
+          </>
+        )}
+      </div>
+    </LanguageProvider>
   );
 }
