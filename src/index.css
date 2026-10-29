@@ -3,29 +3,33 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════
-   MECHA GAMING HUD & CYBERPUNK DESIGN SYSTEM
-   Shamseer PC — Enterprise Mecha Architect Portfolio
+   NEON GOLD NOIR DESIGN SYSTEM
+   Shamseer PC — Executive Full-Stack & Creative Portfolio
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  --bg-primary: #040711;
-  --bg-secondary: #080d1a;
-  --bg-card: #0d1527;
-  --bg-card-hover: #131f38;
-  --cyber-cyan: #00f0ff;
-  --cyber-purple: #b026ff;
-  --cyber-magenta: #ff007f;
-  --cyber-gold: #ffb703;
-  --cyber-emerald: #00ff66;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border-cyber: rgba(0, 240, 255, 0.22);
-  --border-light: rgba(255, 255, 255, 0.08);
-  --font-orbitron: 'Orbitron', monospace, sans-serif;
-  --font-rajdhani: 'Rajdhani', sans-serif;
-  --font-space: 'Space Grotesk', sans-serif;
+  --bg-primary: #070A12;
+  --bg-surface: #0E1320;
+  --bg-elevated: #141A2B;
+  --bg-card: #0E1320;
+  --bg-card-hover: #141A2B;
+  --accent-gold: #D4AF37;
+  --accent-gold-light: #F5E6A8;
+  --accent-cyan: #22D3EE;
+  --accent-magenta: #FF3D8B;
+  --text-primary: #F4F6FB;
+  --text-secondary: #9AA4BC;
+  --text-muted: #9AA4BC;
+  --text-darkmuted: #5D6882;
+  --border-subtle: rgba(244, 246, 251, 0.08);
+  --border-gold: rgba(212, 175, 55, 0.18);
+  --border-gold-hover: rgba(212, 175, 55, 0.4);
+
+  --font-heading: 'Sora', 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-cairo: 'Cairo', sans-serif;
+  --font-orbitron: 'Orbitron', sans-serif;
 }
 
 *,
@@ -41,7 +45,7 @@ html {
   font-size: 16px;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-rajdhani);
+  font-family: var(--font-body);
 }
 
 body {
@@ -51,180 +55,217 @@ body {
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
+  font-family: var(--font-body);
 }
 
-/* Custom Mecha Futuristic Scrollbar */
+/* ═══════════════════════════════════════════════════════════════
+   CUSTOM CHAMPAGNE GOLD SCROLLBAR
+   ═══════════════════════════════════════════════════════════════ */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #040711;
-  border-left: 1px solid rgba(0, 240, 255, 0.1);
+  background: #070A12;
+  border-left: 1px solid rgba(212, 175, 55, 0.08);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #00f0ff 0%, #b026ff 100%);
-  border-radius: 2px;
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+  background: linear-gradient(180deg, #D4AF37 0%, #997D20 100%);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00f0ff;
-  box-shadow: 0 0 16px #00f0ff;
+  background: linear-gradient(180deg, #F5E6A8 0%, #D4AF37 100%);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
 }
 
 ::selection {
-  background: #00f0ff;
-  color: #040711;
+  background: #D4AF37;
+  color: #070A12;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CYBER HUD BRACKETS & FRAMES (.hud-frame)
+   PREMIUM GLASSMORPHISM CARDS (16-24px radius + 1px border)
    ═══════════════════════════════════════════════════════════════ */
 
-.hud-frame {
+.glass-card {
   position: relative;
-  background: rgba(13, 21, 39, 0.7);
-  border: 1px solid rgba(0, 240, 255, 0.18);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(14, 19, 32, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(244, 246, 251, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hud-frame::before,
-.hud-frame::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  pointer-events: none;
-  z-index: 2;
-  transition: all 0.3s ease;
+.glass-card:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.45), 0 0 25px -4px rgba(212, 175, 55, 0.16);
+  transform: translateY(-2px);
 }
 
-/* Top-Left & Bottom-Right Corner brackets */
-.hud-frame::before {
-  top: -1px;
-  left: -1px;
-  border-top: 2px solid #00f0ff;
-  border-left: 2px solid #00f0ff;
-}
-
-.hud-frame::after {
-  bottom: -1px;
-  right: -1px;
-  border-bottom: 2px solid #00f0ff;
-  border-right: 2px solid #00f0ff;
-}
-
-/* Optional full 4-corner accents via child elements */
-.hud-bracket-tr {
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  width: 12px;
-  height: 12px;
-  border-top: 2px solid #00f0ff;
-  border-right: 2px solid #00f0ff;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.hud-bracket-bl {
-  position: absolute;
-  bottom: -1px;
-  left: -1px;
-  width: 12px;
-  height: 12px;
-  border-bottom: 2px solid #00f0ff;
-  border-left: 2px solid #00f0ff;
-  pointer-events: none;
-  z-index: 2;
+/* Refined HUD Frame (replaces harsh robotic brackets with sleek glassmorphism) */
+.hud-frame {
+  position: relative;
+  background: rgba(14, 19, 32, 0.72);
+  border: 1px solid rgba(244, 246, 251, 0.09);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hud-frame:hover {
-  border-color: rgba(0, 240, 255, 0.45);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.15), inset 0 0 15px rgba(0, 240, 255, 0.05);
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 0 24px rgba(212, 175, 55, 0.14);
 }
 
-.hud-frame:hover::before,
-.hud-frame:hover::after,
-.hud-frame:hover .hud-bracket-tr,
-.hud-frame:hover .hud-bracket-bl {
-  border-color: #00f0ff;
-  box-shadow: 0 0 8px #00f0ff;
-}
-
-/* Purple variant */
-.hud-frame-purple::before,
-.hud-frame-purple::after {
-  border-color: #b026ff;
-}
-.hud-frame-purple:hover {
-  border-color: rgba(176, 38, 255, 0.45);
-  box-shadow: 0 0 25px rgba(176, 38, 255, 0.18);
-}
-
-/* Gold variant */
-.hud-frame-gold::before,
-.hud-frame-gold::after {
-  border-color: #ffb703;
-}
-.hud-frame-gold:hover {
-  border-color: rgba(255, 183, 3, 0.5);
-  box-shadow: 0 0 25px rgba(255, 183, 3, 0.2);
+/* Disable harsh corner brackets */
+.hud-frame::before,
+.hud-frame::after,
+.hud-bracket-tr,
+.hud-bracket-bl {
+  display: none !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CYBER GRID BACKGROUND
+   GOLD DIVIDER & GRADIENTS
+   ═══════════════════════════════════════════════════════════════ */
+
+.gold-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.35) 50%, transparent 100%);
+  border: none;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5E6A8 40%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-cyan {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5E6A8 30%, #D4AF37 70%, #22D3EE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5E6A8 50%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Replaced glitch text with luxury gold gradient */
+.cyber-glitch-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5E6A8 40%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cyber-glitch-text::before,
+.cyber-glitch-text::after {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BUTTONS (removed clip-path chamfering; luxury rounded style)
+   ═══════════════════════════════════════════════════════════════ */
+
+.btn-cyber-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #F5E6A8 0%, #D4AF37 100%);
+  color: #070A12;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1.6rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.28);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.875rem;
+  overflow: hidden;
+}
+
+.btn-cyber-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(212, 175, 55, 0.45);
+  filter: brightness(1.05);
+}
+
+.btn-cyber-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(14, 19, 32, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: #F4F6FB;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1.6rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.875rem;
+}
+
+.btn-cyber-secondary:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.1);
+  color: #F5E6A8;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ATMOSPHERIC NOIR BACKGROUND & SUBTLE GRID
    ═══════════════════════════════════════════════════════════════ */
 
 .cyber-grid-bg {
-  background-size: 40px 40px;
+  background-size: 48px 48px;
   background-image: 
-    linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
 }
 
 .cyber-grid-perspective {
-  perspective: 600px;
+  perspective: 700px;
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.15;
 }
 
 .cyber-grid-floor {
   position: absolute;
-  top: 40%;
+  top: 45%;
   left: -50%;
   width: 200%;
   height: 200%;
   background-image: 
-    linear-gradient(to right, rgba(0, 240, 255, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 240, 255, 0.15) 1px, transparent 1px);
-  background-size: 50px 50px;
+    linear-gradient(to right, rgba(212, 175, 55, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(212, 175, 55, 0.12) 1px, transparent 1px);
+  background-size: 60px 60px;
   transform: rotateX(75deg);
   transform-origin: 50% 0%;
-  animation: gridMove 6s linear infinite;
   mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
   -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
 }
 
-@keyframes gridMove {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 50px;
-  }
-}
-
 /* ═══════════════════════════════════════════════════════════════
-   CRT SCANLINES OVERLAY (.scanlines-fx)
+   OPTIONAL SCANLINES ("RETRO MODE" EASTER EGG)
    ═══════════════════════════════════════════════════════════════ */
 
 .scanlines-fx {
@@ -234,182 +275,20 @@ body {
   z-index: 9999;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.25) 50%
-  ), linear-gradient(
-    90deg,
-    rgba(255, 0, 0, 0.03),
-    rgba(0, 255, 0, 0.01),
-    rgba(0, 0, 255, 0.03)
+    rgba(0, 0, 0, 0.15) 50%
   );
-  background-size: 100% 4px, 6px 100%;
-  opacity: 0.65;
+  background-size: 100% 4px;
+  opacity: 0.35;
 }
 
-.scanlines-fx::after {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.45) 100%);
-  pointer-events: none;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   TEXT GLITCH & CYBER GRADIENTS
-   ═══════════════════════════════════════════════════════════════ */
-
-.cyber-glitch-text {
-  position: relative;
-  display: inline-block;
-}
-
-.cyber-glitch-text::before,
-.cyber-glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  clip: rect(0, 0, 0, 0);
-}
-
-.cyber-glitch-text:hover::before {
-  left: 2px;
-  text-shadow: -2px 0 #ff007f;
-  clip: rect(24px, 550px, 90px, 0);
-  animation: glitch-anim-1 2s infinite linear alternate-reverse;
-}
-
-.cyber-glitch-text:hover::after {
-  left: -2px;
-  text-shadow: -2px 0 #00f0ff;
-  clip: rect(85px, 550px, 140px, 0);
-  animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim-1 {
-  0% { clip: rect(20px, 9999px, 44px, 0); }
-  25% { clip: rect(12px, 9999px, 80px, 0); }
-  50% { clip: rect(65px, 9999px, 99px, 0); }
-  75% { clip: rect(5px, 9999px, 30px, 0); }
-  100% { clip: rect(40px, 9999px, 60px, 0); }
-}
-
-@keyframes glitch-anim-2 {
-  0% { clip: rect(70px, 9999px, 110px, 0); }
-  25% { clip: rect(35px, 9999px, 55px, 0); }
-  50% { clip: rect(90px, 9999px, 130px, 0); }
-  75% { clip: rect(15px, 9999px, 45px, 0); }
-  100% { clip: rect(50px, 9999px, 85px, 0); }
-}
-
-.gradient-text-cyan {
-  background: linear-gradient(135deg, #00f0ff 0%, #b026ff 60%, #ff007f 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gradient-text-gold {
-  background: linear-gradient(135deg, #fff3b0 0%, #ffb703 50%, #fb8500 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   RADAR & TARGETING RETICLES
-   ═══════════════════════════════════════════════════════════════ */
-
-.reticle-crosshair {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  pointer-events: none;
-}
-
-.reticle-crosshair::before,
-.reticle-crosshair::after {
-  content: '';
-  position: absolute;
-  background: #00f0ff;
-}
-
-.reticle-crosshair::before {
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  transform: translateY(-50%);
-}
-
-.reticle-crosshair::after {
-  left: 50%;
-  top: 0;
-  height: 100%;
-  width: 1px;
-  transform: translateX(-50%);
-}
-
-/* Chamfered Cyber Button */
-.btn-cyber-primary {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, #00f0ff 0%, #00a8ff 100%);
-  color: #040711;
-  font-family: var(--font-orbitron);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.75rem 1.6rem;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-  box-shadow: 0 0 18px rgba(0, 240, 255, 0.45);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-}
-
-.btn-cyber-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
-  background: #00f0ff;
-  color: #000;
-}
-
-.btn-cyber-secondary {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(13, 21, 39, 0.8);
-  border: 1px solid rgba(0, 240, 255, 0.35);
-  color: #00f0ff;
-  font-family: var(--font-orbitron);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  padding: 0.75rem 1.6rem;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-}
-
-.btn-cyber-secondary:hover {
-  transform: translateY(-2px);
-  border-color: #00f0ff;
-  background: rgba(0, 240, 255, 0.12);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-  color: #ffffff;
-}
-
-/* Pulse Beacon */
+/* Beacon indicator */
 .cyber-beacon {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #00ff66;
+  background-color: #D4AF37;
   position: relative;
-  box-shadow: 0 0 10px #00ff66;
+  box-shadow: 0 0 10px #D4AF37;
 }
 
 .cyber-beacon::after {
@@ -417,19 +296,26 @@ body {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 1px solid #00ff66;
-  animation: beaconPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  border: 1px solid #D4AF37;
+  animation: beaconPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @keyframes beaconPing {
   0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(2.8); opacity: 0; }
+  100% { transform: scale(2.5); opacity: 0; }
 }
 
-/* Custom terminal code block */
-.terminal-window {
-  font-family: var(--font-mono);
-  background: #030712;
-  border: 1px solid rgba(0, 240, 255, 0.25);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 240, 255, 0.1);
+/* ═══════════════════════════════════════════════════════════════
+   REDUCED MOTION SUPPORT (WCAG 2.1 & 60fps)
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

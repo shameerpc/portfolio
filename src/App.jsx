@@ -13,7 +13,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 
 export default function App() {
-  const [scanlinesActive, setScanlinesActive] = useState(true);
+  const [scanlinesActive, setScanlinesActive] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('spc_crt_scanlines');
@@ -31,8 +31,8 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#040711] text-[#f1f5f9] selection:bg-[#00f0ff] selection:text-[#040711] font-rajdhani">
-      {/* CRT Scanline Overlay Effect */}
+    <div className="relative min-h-screen bg-[#070A12] text-[#F4F6FB] selection:bg-[#D4AF37] selection:text-[#070A12] font-sans">
+      {/* Optional Retro Scanline Overlay Easter Egg */}
       {scanlinesActive && <div className="scanlines-fx" />}
 
       {/* Main Mecha HUD Navigation */}
