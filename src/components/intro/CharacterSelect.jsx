@@ -40,7 +40,7 @@ const characterClasses = [
     badge: 'VISUAL MAESTRO',
     icon: <FiPenTool className="text-3xl text-[#FF3D8B]" />,
     desc: 'Posters, social media ads, brochures & video motion designed for luxury brands and corporate recruitment in Dubai & Qatar.',
-    skills: ['Commercial Key Visuals', 'Social Ad Suites', 'Recruitment Brochures', 'CapCut & Premiere Video'],
+    skills: ['Commercial Key Visuals', 'Social Ad Suites', 'Recruitment Brochures', 'CapCut & VN Editor Video'],
   },
 ];
 

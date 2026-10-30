@@ -58,7 +58,7 @@ const questTimeline = [
     role: 'Commercial Creative Director & Performance Designer',
     company: 'GCC Luxury Brands & Agency Retainers',
     desc: 'Created over 100+ commercial key visuals, Meta paid social ad assets, and corporate brochures tailored for Gulf business aesthetics.',
-    tags: ['Photoshop', 'Illustrator', 'CapCut Pro', 'Meta Ads'],
+    tags: ['ChatGPT & Gemini AI', 'Poster Design', 'CapCut', 'VN Editor'],
   },
   {
     id: 'foundations',

@@ -43,7 +43,7 @@ const services = [
     outcome: 'Data-driven growth campaigns paired with kinetic short-form video that drive real customer acquisition.',
     bullets: [
       'Meta / Facebook Ads Management & Funnel Architecture',
-      'CapCut Pro & Premiere Pro Commercial Video Reels',
+      'CapCut & VN Editor Commercial Video Reels',
       'Technical SEO & Search Console Optimization',
       'Google Analytics 4 (GA4) Tracking & ROAS Attribution',
     ],

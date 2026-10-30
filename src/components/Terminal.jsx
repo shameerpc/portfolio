@@ -40,8 +40,8 @@ const COMMANDS = {
   skills: [
     '[MERN CORE]   : React 19, Node.js, Express.js, MongoDB, RESTful APIs',
     '[FULL STACK]  : Redux Toolkit, Context API, Tailwind CSS 3, Framer Motion',
-    '[CREATIVE]    : Luxury Poster Design, Key Visuals, Photoshop, Illustrator',
-    '[VIDEO/MEDIA] : Meta Ads Manager, Premiere Pro, CapCut, Motion Design',
+    '[CREATIVE]    : Luxury Poster Design, Key Visuals, ChatGPT & Gemini AI',
+    '[VIDEO/MEDIA] : Meta Ads Manager, CapCut, VN Editor, Motion Design',
     'Competency    : Enterprise-grade architecture, scalable clean code, GCC deployment.',
   ],
   cv: [
