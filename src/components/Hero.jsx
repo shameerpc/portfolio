@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiDownload, FiPenTool } from 'react-icons/fi';
+import { FiArrowRight, FiDownload } from 'react-icons/fi';
 import { FaWhatsapp, FaReact, FaNodeJs } from 'react-icons/fa';
-import { SiMongodb, SiMeta } from 'react-icons/si';
+import { SiMongodb, SiMeta, SiGooglegemini } from 'react-icons/si';
 import { cyberAudio } from '../utils/cyberAudio';
 import { Button } from './ui/Button';
 import { useLanguage } from '../i18n';
@@ -29,7 +29,7 @@ const floatingChips = [
   { name: 'React 19', icon: <FaReact className="text-[#22D3EE]" />, pos: 'top-2 -start-6 sm:-start-8' },
   { name: 'Node.js', icon: <FaNodeJs className="text-[#10B981]" />, pos: 'top-1/3 -end-6 sm:-end-8' },
   { name: 'MongoDB', icon: <SiMongodb className="text-[#10B981]" />, pos: 'bottom-24 -start-6 sm:-start-8' },
-  { name: 'Photoshop', icon: <FiPenTool className="text-[#22D3EE]" />, pos: '-bottom-3 end-8' },
+  { name: 'ChatGPT & Gemini AI', icon: <SiGooglegemini className="text-[#22D3EE]" />, pos: '-bottom-3 end-8' },
   { name: 'Meta Ads', icon: <SiMeta className="text-[#3b82f6]" />, pos: 'bottom-8 -end-4 sm:-end-6' },
 ];
 

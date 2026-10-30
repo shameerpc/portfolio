@@ -63,7 +63,7 @@ export default function Video() {
                 <span className="gold-gradient-text">Short-Form Motion</span>
               </>
             }
-            subtitle={t('video.subtitle', 'Engaging video cuts crafted with CapCut Pro and Premiere Pro for social ad campaigns and brand reels.')}
+            subtitle={t('video.subtitle', 'Engaging video cuts crafted with CapCut and VN Editor for social ad campaigns and brand reels.')}
           />
         </Reveal>
 

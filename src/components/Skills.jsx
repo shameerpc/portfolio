@@ -40,7 +40,7 @@ const skillCategories = [
     icon: <FiPenTool className="text-[#F5E6A8]" />,
     accent: '#F5E6A8',
     skills: [
-      { name: 'Adobe Photoshop', level: 'Expert', note: 'Commercial photo retouching & composites' },
+      { name: 'ChatGPT & Gemini AI Design', level: 'Expert', note: 'AI poster creation, prompt crafting & visuals' },
       { name: 'Commercial Poster Design', level: 'Expert', note: 'Dubai travel & salon campaigns' },
       { name: 'Recruitment Brochures', level: 'Expert', note: 'Multi-page logistics fleet print' },
       { name: 'Brand Identity Systems', level: 'Advanced', note: 'Color palettes & typography grids' },
@@ -54,8 +54,8 @@ const skillCategories = [
     accent: '#FF3D8B',
     skills: [
       { name: 'Meta Ads Manager', level: 'Advanced', note: 'Targeted campaign budget optimization' },
-      { name: 'CapCut Pro Video Editing', level: 'Expert', note: 'Kinetic typography & social reels' },
-      { name: 'Premiere Pro Motion Cutting', level: 'Advanced', note: 'Commercial pacing and transitions' },
+      { name: 'CapCut Video Editing', level: 'Expert', note: 'Kinetic typography & social reels' },
+      { name: 'VN Video Editor', level: 'Expert', note: 'Commercial pacing, cuts & multi-track transitions' },
       { name: 'Technical SEO & Indexing', level: 'Advanced', note: 'Schema markup & performance' },
       { name: 'Google Analytics 4 (GA4)', level: 'Proficient', note: 'Conversion tracking & event auditing' },
     ],
