@@ -88,122 +88,128 @@ export function CharacterSelect({ onSelect, onSkip }) {
   }, [selectedIdx, confirmChoice, onSkip]);
 
   return (
-    <div className="relative w-full min-h-full py-12 px-4 sm:px-6 flex flex-col justify-between bg-[#070A12] text-[#F4F6FB] overflow-y-auto select-none">
+    <div
+      className="relative w-full h-full overflow-y-auto overflow-x-hidden bg-[#070A12] text-[#F4F6FB] select-none scroll-smooth"
+      style={{ WebkitOverflowScrolling: 'touch' }}
+    >
       {/* Background Ambience */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-[#D4AF37]/5 rounded-full blur-[180px] pointer-events-none" />
 
-      {/* Header */}
-      <div className="relative z-10 text-center max-w-2xl mx-auto space-y-2 mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0E1320] border border-[#D4AF37]/30 text-[#D4AF37] font-mono text-xs uppercase tracking-widest rounded-full">
-          <span>PORTFOLIO ROLE SELECT</span>
+      {/* Main Inner Content Container */}
+      <div className="relative z-10 min-h-full w-full max-w-6xl mx-auto flex flex-col justify-between pt-16 sm:pt-14 pb-12 sm:pb-14 px-4 sm:px-6">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto space-y-2 mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#0E1320] border border-[#D4AF37]/30 text-[#D4AF37] font-mono text-xs uppercase tracking-widest rounded-full">
+            <span>PORTFOLIO ROLE SELECT</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading text-[#F4F6FB] tracking-tight">
+            Who are you looking for?
+          </h2>
+          <p className="text-xs sm:text-base text-[#9AA4BC] font-sans">
+            Tailor your portfolio journey to match your immediate project requirements.
+          </p>
         </div>
-        <h2 className="text-3xl sm:text-5xl font-black font-heading text-[#F4F6FB] tracking-tight">
-          Who are you looking for?
-        </h2>
-        <p className="text-sm sm:text-base text-[#9AA4BC] font-sans">
-          Tailor your portfolio journey to match your immediate project requirements.
-        </p>
-      </div>
 
-      {/* Three Character Select Cards Grid */}
-      <div className="relative z-10 max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch my-auto">
-        {characterClasses.map((cls, idx) => {
-          const isSelected = selectedIdx === idx;
-          return (
-            <motion.div
-              key={cls.id}
-              onClick={() => {
-                cyberAudio.playSoftClick();
-                setSelectedIdx(idx);
-              }}
-              whileHover={{ y: -6, scale: 1.01 }}
-              transition={{ duration: 0.2 }}
-              className={`relative rounded-2xl p-6 sm:p-7 flex flex-col justify-between bg-[#0E1320]/85 backdrop-blur-xl border transition-all duration-300 cursor-pointer ${
-                isSelected
-                  ? 'border-[#D4AF37] shadow-[0_16px_40px_rgba(0,0,0,0.6),0_0_30px_rgba(212,175,55,0.28)] ring-1 ring-[#D4AF37]'
-                  : 'border-[#F4F6FB]/10 hover:border-[#D4AF37]/40 shadow-[0_8px_30px_rgba(0,0,0,0.4)]'
-              }`}
-            >
-              {/* Default Highlight Badge */}
-              {cls.isDefault && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] text-[10px] font-mono font-black tracking-widest uppercase shadow-md">
-                  RECOMMENDED
-                </div>
-              )}
-
-              <div>
-                {/* Card Head */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
-                  <div className="p-3 bg-[#070A12] rounded-xl border border-white/10">
-                    {cls.icon}
-                  </div>
-                  <span
-                    className="text-[10px] font-mono font-bold tracking-wider px-2.5 py-1 rounded-full uppercase"
-                    style={{
-                      color: cls.accent,
-                      backgroundColor: `${cls.accent}15`,
-                      border: `1px solid ${cls.accent}40`,
-                    }}
-                  >
-                    {cls.badge}
-                  </span>
-                </div>
-
-                {/* Name & Role */}
-                <h3 className="text-2xl font-bold font-heading text-[#F4F6FB] mb-1">
-                  {cls.name}
-                </h3>
-                <div className="text-xs font-mono font-semibold text-[#D4AF37] mb-3">
-                  {cls.role}
-                </div>
-
-                <p className="text-sm text-[#9AA4BC] font-sans leading-relaxed mb-6">
-                  {cls.desc}
-                </p>
-
-                {/* Core Capabilities */}
-                <div className="space-y-2 mb-6">
-                  {cls.skills.map((sk) => (
-                    <div key={sk} className="flex items-center gap-2 text-xs font-sans text-[#F4F6FB]">
-                      <FiCheck className="text-xs shrink-0" style={{ color: cls.accent }} />
-                      <span>{sk}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  confirmChoice(cls);
+        {/* Three Character Select Cards Grid */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch my-auto py-2">
+          {characterClasses.map((cls, idx) => {
+            const isSelected = selectedIdx === idx;
+            return (
+              <motion.div
+                key={cls.id}
+                onClick={() => {
+                  cyberAudio.playSoftClick();
+                  setSelectedIdx(idx);
                 }}
-                className={`w-full py-3 px-4 rounded-full text-xs font-heading font-bold tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 ${
+                whileHover={{ y: -6, scale: 1.01 }}
+                transition={{ duration: 0.2 }}
+                className={`relative rounded-2xl p-5 sm:p-7 flex flex-col justify-between bg-[#0E1320]/85 backdrop-blur-xl border transition-all duration-300 cursor-pointer ${
                   isSelected
-                    ? 'bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] shadow-lg'
-                    : 'bg-[#141A2B] border border-white/10 text-white hover:border-[#D4AF37] hover:text-[#D4AF37]'
+                    ? 'border-[#D4AF37] shadow-[0_16px_40px_rgba(0,0,0,0.6),0_0_30px_rgba(212,175,55,0.28)] ring-1 ring-[#D4AF37]'
+                    : 'border-[#F4F6FB]/10 hover:border-[#D4AF37]/40 shadow-[0_8px_30px_rgba(0,0,0,0.4)]'
                 }`}
               >
-                <span>SELECT & LOCK IN</span>
-                <FiArrowRight className="text-xs" />
-              </button>
-            </motion.div>
-          );
-        })}
-      </div>
+                {/* Default Highlight Badge */}
+                {cls.isDefault && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] text-[10px] font-mono font-black tracking-widest uppercase shadow-md">
+                    RECOMMENDED
+                  </div>
+                )}
 
-      {/* Bottom Footer Action Controls */}
-      <div className="relative z-10 max-w-6xl mx-auto w-full mt-8 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between text-xs font-mono text-[#9AA4BC] gap-3">
-        <span className="hidden sm:inline">Use Arrow keys ← → and Enter to select</span>
-        <button
-          onClick={() => {
-            cyberAudio.playSoftClick();
-            confirmChoice(characterClasses[1]); // Default to "The Full Package"
-          }}
-          className="text-[#D4AF37] hover:text-[#F5E6A8] hover:underline font-bold ml-auto flex items-center gap-1"
-        >
-          <span>Skip with Full Package ›</span>
-        </button>
+                <div>
+                  {/* Card Head */}
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3 sm:pb-4 mb-4 sm:mb-5">
+                    <div className="p-2.5 sm:p-3 bg-[#070A12] rounded-xl border border-white/10">
+                      {cls.icon}
+                    </div>
+                    <span
+                      className="text-[10px] font-mono font-bold tracking-wider px-2.5 py-1 rounded-full uppercase"
+                      style={{
+                        color: cls.accent,
+                        backgroundColor: `${cls.accent}15`,
+                        border: `1px solid ${cls.accent}40`,
+                      }}
+                    >
+                      {cls.badge}
+                    </span>
+                  </div>
+
+                  {/* Name & Role */}
+                  <h3 className="text-xl sm:text-2xl font-bold font-heading text-[#F4F6FB] mb-1">
+                    {cls.name}
+                  </h3>
+                  <div className="text-xs font-mono font-semibold text-[#D4AF37] mb-2 sm:mb-3">
+                    {cls.role}
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-[#9AA4BC] font-sans leading-relaxed mb-4 sm:mb-6">
+                    {cls.desc}
+                  </p>
+
+                  {/* Core Capabilities */}
+                  <div className="space-y-1.5 sm:space-y-2 mb-5 sm:mb-6">
+                    {cls.skills.map((sk) => (
+                      <div key={sk} className="flex items-center gap-2 text-xs font-sans text-[#F4F6FB]">
+                        <FiCheck className="text-xs shrink-0" style={{ color: cls.accent }} />
+                        <span>{sk}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    confirmChoice(cls);
+                  }}
+                  className={`group w-full py-3.5 px-4 rounded-full text-xs font-heading font-extrabold tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 ${
+                    isSelected
+                      ? 'bg-gradient-to-r from-[#F5E6A8] via-[#D4AF37] to-[#C59B27] text-[#070A12] shadow-[0_0_24px_rgba(212,175,55,0.45)] ring-2 ring-[#F5E6A8]/70 hover:brightness-110 active:scale-[0.98]'
+                      : 'bg-[#141A2B] hover:bg-[#1A2238] border border-white/20 hover:border-[#D4AF37]/60 text-[#F4F6FB] hover:text-[#F5E6A8] shadow-md active:scale-[0.98]'
+                  }`}
+                >
+                  <span>SELECT & LOCK IN</span>
+                  <FiArrowRight className="text-xs transition-transform group-hover:translate-x-1" />
+                </button>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Bottom Footer Action Controls */}
+        <div className="w-full mt-6 sm:mt-8 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between text-xs font-mono text-[#9AA4BC] gap-3">
+          <span className="hidden sm:inline">Use Arrow keys ← → and Enter to select</span>
+          <button
+            onClick={() => {
+              cyberAudio.playSoftClick();
+              confirmChoice(characterClasses[1]); // Default to "The Full Package"
+            }}
+            className="text-[#D4AF37] hover:text-[#F5E6A8] hover:underline font-bold ml-auto flex items-center gap-1 py-1"
+          >
+            <span>Skip with Full Package ›</span>
+          </button>
+        </div>
       </div>
 
       {/* Optimization Toast Notification */}

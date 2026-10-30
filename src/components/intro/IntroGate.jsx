@@ -133,7 +133,7 @@ export function IntroGate({ onComplete }) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.35 }}
-            className="w-full h-full"
+            className="w-full h-full overflow-hidden"
           >
             <CharacterSelect onSelect={handleCharacterSelect} onSkip={handleSkipAll} />
           </motion.div>
