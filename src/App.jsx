@@ -1,80 +1,125 @@
-import { useState, useEffect } from 'react';
+import { useState, lazy, Suspense } from 'react';
+import { LanguageProvider } from './i18n';
+import { GameProvider, useGame } from './context';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
-import Services from './components/Services';
-import WebDev from './components/WebDev';
-import CreativeWork from './components/CreativeWork';
-import Brochure from './components/Brochure';
-import Video from './components/Video';
-import Terminal from './components/Terminal';
-import Skills from './components/Skills';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
+import AchievementToaster from './components/extras/AchievementToaster';
 
-export default function App() {
-  const [scanlinesActive, setScanlinesActive] = useState(true);
+// Lazy-loaded Below-the-Fold Sections & Game Modals for Code Splitting
+const IntroGate = lazy(() => import('./components/intro/IntroGate'));
+const Services = lazy(() => import('./components/Services'));
+const WebDev = lazy(() => import('./components/WebDev'));
+const CreativeWork = lazy(() => import('./components/CreativeWork'));
+const Video = lazy(() => import('./components/Video'));
+const Skills = lazy(() => import('./components/Skills'));
+const Testimonials = lazy(() => import('./components/Testimonials'));
+const CVSection = lazy(() => import('./components/CVSection'));
+const Terminal = lazy(() => import('./components/Terminal'));
+const Contact = lazy(() => import('./components/Contact'));
 
-  useEffect(() => {
-    const saved = localStorage.getItem('spc_crt_scanlines');
-    if (saved !== null) {
-      setScanlinesActive(saved === 'true');
-    }
-  }, []);
+// Lazy Extras
+const CustomCursor = lazy(() => import('./components/extras/CustomCursor'));
+const SecretConsultationModal = lazy(() => import('./components/extras/SecretConsultationModal'));
+const Confetti = lazy(() => import('./components/extras/Confetti'));
 
-  const toggleScanlines = () => {
-    setScanlinesActive((prev) => {
-      const next = !prev;
-      localStorage.setItem('spc_crt_scanlines', String(next));
-      return next;
-    });
-  };
+// Minimal elegant fallback for lazy chunks
+function SectionLoader() {
+  return (
+    <div className="py-24 flex items-center justify-center">
+      <div className="w-7 h-7 rounded-full border-2 border-[#D4AF37]/20 border-t-[#D4AF37] animate-spin" />
+    </div>
+  );
+}
+
+function AppContent() {
+  const { playerClass, retroMode, confettiActive } = useGame();
+  const [introComplete, setIntroComplete] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-[#040711] text-[#f1f5f9] selection:bg-[#00f0ff] selection:text-[#040711] font-rajdhani">
-      {/* CRT Scanline Overlay Effect */}
-      {scanlinesActive && <div className="scanlines-fx" />}
+    <div className="relative min-h-screen bg-[#070A12] text-[#F4F6FB] selection:bg-[#D4AF37] selection:text-[#070A12] font-sans">
+      {/* Desktop-only custom cursor */}
+      <Suspense fallback={null}>
+        <CustomCursor />
+      </Suspense>
 
-      {/* Main Mecha HUD Navigation */}
-      <Navbar
-        scanlinesActive={scanlinesActive}
-        onToggleScanlines={toggleScanlines}
-      />
+      {/* Floating achievement toasts */}
+      <AchievementToaster />
 
-      <main>
-        {/* Hero with Dual-View Mecha Avatar Deck */}
-        <Hero />
+      {/* Easter egg consultation reward modal */}
+      <Suspense fallback={null}>
+        <SecretConsultationModal />
+      </Suspense>
 
-        {/* Executive Holographic Dossier */}
-        <About />
+      {/* Canvas confetti celebration */}
+      <Suspense fallback={null}>
+        <Confetti active={confettiActive} />
+      </Suspense>
 
-        {/* Tactical Services Modules */}
-        <Services />
+      {/* Cinematic Game-Style Intro Gate */}
+      {!introComplete && (
+        <Suspense fallback={null}>
+          <IntroGate onComplete={() => setIntroComplete(true)} />
+        </Suspense>
+      )}
 
-        {/* Live GCC Enterprise Deployments */}
-        <WebDev />
+      {/* Optional Retro CRT Scanlines overlay */}
+      {retroMode && <div className="scanlines-fx" />}
 
-        {/* Commercial Posters & Lightbox Modal */}
-        <CreativeWork />
+      {/* Main Application Suite */}
+      {introComplete && (
+        <>
+          <Navbar />
 
-        {/* Corporate Print & Brochure Systems */}
-        <Brochure />
+          <main id="main-content" tabIndex="-1" className="focus:outline-none">
+            <Hero />
+            <About />
 
-        {/* High-Retention Motion & Video Reels */}
-        <Video />
+            {/* Personalized Section Ordering based on player_class */}
+            <Suspense fallback={<SectionLoader />}>
+              {playerClass === 'developer' ? (
+                <>
+                  <WebDev />
+                  <Services />
+                  <CreativeWork />
+                </>
+              ) : playerClass === 'creative' ? (
+                <>
+                  <CreativeWork />
+                  <Services />
+                  <WebDev />
+                </>
+              ) : (
+                <>
+                  <Services />
+                  <WebDev />
+                  <CreativeWork />
+                </>
+              )}
 
-        {/* Interactive Operative CLI Terminal */}
-        <Terminal />
+              <Video />
+              <Skills />
+              <Testimonials />
+              <CVSection />
+              <Terminal />
+              <Contact />
+            </Suspense>
+          </main>
 
-        {/* Weaponized Technical Matrices */}
-        <Skills />
-
-        {/* Secure Communications & Project Dispatch */}
-        <Contact />
-      </main>
-
-      {/* Mission Footer */}
-      <Footer />
+          <Footer />
+        </>
+      )}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <GameProvider>
+        <AppContent />
+      </GameProvider>
+    </LanguageProvider>
   );
 }

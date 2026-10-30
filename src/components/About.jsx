@@ -1,199 +1,244 @@
-import { motion } from 'framer-motion';
 import { 
-  FiCheckCircle, 
   FiMapPin, 
-  FiCpu, 
-  FiShield,
-  FiExternalLink
+  FiGlobe, 
+  FiClock, 
+  FiCalendar, 
+  FiBriefcase, 
+  FiAward 
 } from 'react-icons/fi';
-import { cyberAudio } from '../utils/cyberAudio';
+import { SectionTitle } from './ui/SectionTitle';
+import { GlassCard } from './ui/GlassCard';
+import { Reveal } from './ui/Reveal';
+import { useLanguage } from '../i18n';
+import HiddenCoin from './extras/HiddenCoin';
 
-const capabilities = [
-  { title: 'Enterprise MERN Stack Architecture', category: 'DEV' },
-  { title: 'Redis Caching & Real-Time WebSockets', category: 'PERF' },
-  { title: 'Multi-Division RBAC Access Systems', category: 'SECURITY' },
-  { title: 'Dubai Luxury Brand & Poster Design', category: 'CREATIVE' },
-  { title: 'High-Converting Meta Ad Creative Suites', category: 'GROWTH' },
-  { title: 'Commercial Video Reels & Motion Direction', category: 'MEDIA' },
+const factCards = [
+  {
+    icon: <FiMapPin className="text-[#D4AF37]" />,
+    label: 'Primary Location',
+    value: 'Kerala, India · Actively Serving Qatar, UAE & Remote',
+  },
+  {
+    icon: <FiGlobe className="text-[#22D3EE]" />,
+    label: 'Languages',
+    value: 'English, Malayalam, [CONFIRM: Arabic / Hindi]',
+  },
+  {
+    icon: <FiClock className="text-[#10B981]" />,
+    label: 'Response SLA',
+    value: 'Within 24 business hours',
+  },
+  {
+    icon: <FiBriefcase className="text-[#FF3D8B]" />,
+    label: 'Core Focus',
+    value: 'Full-Stack MERN + Luxury Ad Creatives',
+  },
 ];
 
-const telemetryCards = [
-  { label: 'PRIMARY DOMAINS', val: 'DUBAI // QATAR // GLOBAL REMOTE', color: '#00f0ff' },
-  { label: 'EXPERIENCE LEVEL', val: 'FULL-STACK + CREATIVE LEAD', color: '#b026ff' },
-  { label: 'DEPLOYMENT RECORD', val: 'PRODUCTION SAAS & GCC PORTALS', color: '#00ff66' },
-  { label: 'COMMERCIAL REACH', val: 'ENTERPRISE & LUXURY BRANDS', color: '#ffb703' },
+const questTimeline = [
+  {
+    id: 'value-fm-exp',
+    period: '2025 - Present',
+    role: 'Lead Full-Stack Web Architect',
+    company: 'Value FM (Facility Management · Qatar & Dubai)',
+    desc: 'Architected the core enterprise operations portal handling automated scheduling, asset tracking, and SLA ticketing with Redis caching.',
+    tags: ['MERN', 'Redis', 'SLA Tracking', 'Enterprise SaaS'],
+  },
+  {
+    id: 'al-shareef-exp',
+    period: '2024 - 2025',
+    role: 'Full-Stack Developer & Corporate Portal Engineer',
+    company: 'Al Shareef Holding Group (Qatar)',
+    desc: 'Built the multi-division corporate umbrella system with RBAC security, corporate sub-tenant management, and brand visual design.',
+    tags: ['React.js', 'RBAC', 'Multi-Division', 'Security'],
+  },
+  {
+    id: 'creative-director-freelance',
+    period: '2023 - Present',
+    role: 'Commercial Creative Director & Performance Designer',
+    company: 'GCC Luxury Brands & Agency Retainers',
+    desc: 'Created over 100+ commercial key visuals, Meta paid social ad assets, and corporate brochures tailored for Gulf business aesthetics.',
+    tags: ['Photoshop', 'Illustrator', 'CapCut Pro', 'Meta Ads'],
+  },
+  {
+    id: 'foundations',
+    period: '2022 - 2023',
+    role: 'Full-Stack Web Developer',
+    company: 'Freelance & Independent SaaS',
+    desc: 'Engineered production applications including Moestay Travel Admin and MyThoughtsHub publishing engine with modern JavaScript tooling.',
+    tags: ['React', 'Node.js', 'MongoDB', 'Redux Toolkit'],
+  },
 ];
 
 export default function About() {
+  const { t } = useLanguage();
+
   return (
-    <section className="relative py-24 bg-[#080d1a] border-t border-b border-[#00f0ff]/15 overflow-hidden" id="about">
-      {/* Background cyber pattern */}
-      <div className="absolute inset-0 cyber-grid-bg opacity-30 pointer-events-none" />
-      <div className="absolute top-1/2 -left-32 w-80 h-80 bg-[#00f0ff]/10 rounded-full blur-[140px] pointer-events-none" />
+    <section className="relative py-28 bg-[#070A12] border-t border-white/5 overflow-hidden" id="about">
+      {/* Background Subtle Radial Accent */}
+      <div className="absolute top-1/2 -left-48 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mb-14 text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#040711] border border-[#00f0ff]/30 text-[#00f0ff] font-mono text-xs uppercase tracking-widest rounded-sm">
-            <FiCpu className="text-xs" />
-            <span>EXECUTIVE DOSSIER // CLASSIFIED INTEL</span>
+        <Reveal>
+          <SectionTitle
+            eyebrow={t('about.badge', 'Executive Profile')}
+            title={
+              <>
+                Bridging Enterprise Engineering with{' '}
+                <span className="gold-gradient-text">Commercial Creative Power</span>
+              </>
+            }
+            subtitle={t('about.subtitle', 'Full-stack engineering paired with commercial advertising design.')}
+          />
+        </Reveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Left: Professional Portrait Crop & Fact Cards (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
+            <Reveal delay={0.1}>
+              <GlassCard className="p-6 sm:p-7" glow="gold">
+                {/* Clean Professional Photo Frame */}
+                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-[#0B0F1C] border border-white/10 mb-5">
+                  <picture>
+                    <source srcSet="/images/about/shamseer-about.webp" type="image/webp" />
+                    <img
+                      src="/images/about/shamseer-about.jpg"
+                      alt="Shamseer PC in executive attire"
+                      loading="lazy"
+                      decoding="async"
+                      width="800"
+                      height="1000"
+                      className="w-full h-full object-cover object-top filter brightness-105"
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/about/profile.jpg';
+                      }}
+                    />
+                  </picture>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0E1320] via-transparent to-transparent opacity-80" />
+                  <div className="absolute bottom-4 start-4 end-4 text-start">
+                    <div className="text-base font-heading font-bold text-white">
+                      Shamseer PC
+                    </div>
+                    <div className="text-xs font-mono text-[#D4AF37]">
+                      Full-Stack MERN Architect &amp; Creative Director
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Fact Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-start">
+                  {factCards.map((fact) => (
+                    <div
+                      key={fact.label}
+                      className="p-3 rounded-xl bg-[#070A12]/80 border border-white/5 space-y-1"
+                    >
+                      <div className="flex items-center gap-1.5 text-xs text-[#9AA4BC]">
+                        <span>{fact.icon}</span>
+                        <span className="font-mono text-[10px] uppercase">{fact.label}</span>
+                      </div>
+                      <div className="text-xs font-sans font-medium text-[#F4F6FB] leading-snug">
+                        {fact.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </GlassCard>
+            </Reveal>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-orbitron tracking-tight text-white">
-            ARCHITECTING DIGITAL <span className="gradient-text-cyan">SUPREMACY</span>
-          </h2>
-          <p className="text-base sm:text-lg text-[#94a3b8] font-rajdhani">
-            Uniting hard-nosed enterprise software engineering with aesthetic luxury brand advertising for global visionaries.
-          </p>
+
+          {/* Right: Authentic Narrative in Shamseer's Voice (7 cols) */}
+          <div className="lg:col-span-7 space-y-6 text-start">
+            <Reveal delay={0.2}>
+              <GlassCard className="p-7 sm:p-8 space-y-5" glow="gold">
+                <div className="text-xs font-mono text-[#D4AF37] tracking-wider uppercase flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+                  <span>THE BACKGROUND</span>
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-bold font-heading text-white leading-snug">
+                  Software that solves enterprise problems, visuals that convert high-value clients.
+                </h3>
+
+                <div className="space-y-4 text-base text-[#9AA4BC] font-sans leading-relaxed">
+                  <p>
+                    I operate at the intersection of engineering discipline and commercial creative direction.
+                    Most companies face a disconnect: software developers rarely grasp brand positioning, while
+                    graphic designers don&apos;t know how to deploy a scalable Node.js backend.
+                  </p>
+                  <p>
+                    I bridge this gap. For enterprise clients like <strong className="text-[#F4F6FB]">Value FM</strong> and{' '}
+                    <strong className="text-[#F4F6FB]">Al Shareef Holding Group</strong> in Qatar and Dubai, I design
+                    robust software architectures with role-based permissions and high uptime—while simultaneously
+                    producing high-end commercial visual assets, posters, and Meta ad suites that drive brand prestige.
+                  </p>
+                  <p>
+                    Whether engineering a custom React 19 portal, deploying Redis caching, or art-directing a
+                    commercial campaign, I build with business outcomes at the center.
+                  </p>
+                </div>
+              </GlassCard>
+            </Reveal>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left Column: Holographic Executive Identity Card (5 cols) */}
-          <motion.div
-            className="lg:col-span-5"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="hud-frame p-6 h-full flex flex-col justify-between rounded-lg bg-[#040711]/90 border-[#00f0ff]/30">
-              <div className="hud-bracket-tr" />
-              <div className="hud-bracket-bl" />
+        {/* Quest Log Career Milestones Tree */}
+        <div className="mt-20 space-y-8">
+          <Reveal>
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-2.5 px-3 py-1 bg-[#0E1320] border border-[#D4AF37]/25 text-[#D4AF37] font-mono text-xs uppercase tracking-widest rounded-full">
+                <FiAward size={12} />
+                <span>EXPERIENCE &amp; MILESTONES</span>
+                {/* Hidden Coin 3 */}
+                <HiddenCoin id="coin-about" className="ms-1" />
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-bold font-heading text-[#F4F6FB]">
+                Career Timeline &amp; Selected Milestones
+              </h3>
+            </div>
+          </Reveal>
 
-              <div>
-                {/* ID Card Top Header */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6 text-xs font-mono">
-                  <div className="flex items-center gap-2 text-[#00f0ff]">
-                    <FiShield className="text-sm" />
-                    <span className="font-bold tracking-wider">GCC ENTERPRISE CLEARANCE</span>
-                  </div>
-                  <span className="px-2 py-0.5 bg-[#00ff66]/10 text-[#00ff66] border border-[#00ff66]/30 rounded text-[10px]">
-                    VERIFIED
-                  </span>
-                </div>
+          {/* Vertical Timeline Tree */}
+          <div className="relative border-s border-white/10 ms-4 sm:ms-8 ps-6 sm:ps-8 space-y-8 text-start">
+            {questTimeline.map((item, idx) => (
+              <Reveal key={item.id} delay={idx * 0.1}>
+                <div className="relative group">
+                  {/* Timeline Glowing Dot */}
+                  <div className="absolute -start-[31px] sm:-start-[39px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#0E1320] border-2 border-[#D4AF37] group-hover:scale-125 transition-transform" />
 
-                {/* Identity Snapshot */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="relative w-20 h-20 rounded-md overflow-hidden border border-[#00f0ff]/50 bg-[#080d1a] shrink-0">
-                    <img
-                      src="/images/about/avatar_cyber.jpg"
-                      alt="Shamseer PC"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold font-orbitron text-white">SHAMSEER PC</h3>
-                    <div className="text-sm text-[#00f0ff] font-mono">FULL-STACK MECHA ARCHITECT</div>
-                    <div className="text-xs text-[#64748b] flex items-center gap-1 mt-1 font-mono">
-                      <FiMapPin className="text-[#ffb703]" />
-                      <span>DUBAI / QATAR / GLOBAL REMOTE</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Telemetry Matrix Rows */}
-                <div className="space-y-3 font-mono text-xs">
-                  {telemetryCards.map((c) => (
-                    <div key={c.label} className="p-2.5 rounded bg-[#080d1a] border border-white/5 flex flex-col gap-0.5">
-                      <span className="text-[10px] text-[#64748b] tracking-wider">{c.label}</span>
-                      <span className="font-bold text-white tracking-wide" style={{ color: c.color }}>
-                        {c.val}
+                  <GlassCard className="p-5 sm:p-6 space-y-3" glow="gold">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-xs font-mono font-bold text-[#D4AF37] flex items-center gap-1.5">
+                        <FiCalendar size={13} />
+                        {item.period}
+                      </span>
+                      <span className="text-xs font-mono text-[#9AA4BC]">
+                        {item.company}
                       </span>
                     </div>
-                  ))}
+
+                    <h4 className="text-lg font-bold font-heading text-[#F4F6FB]">
+                      {item.role}
+                    </h4>
+
+                    <p className="text-sm text-[#9AA4BC] font-sans leading-relaxed">
+                      {item.desc}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {item.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-0.5 rounded-full bg-[#070A12] border border-white/5 text-[11px] font-mono text-[#9AA4BC]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </GlassCard>
                 </div>
-              </div>
-
-              {/* Bottom Target Signature */}
-              <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono text-[#64748b]">
-                <span>ENCRYPTION: SHAMSEER-2026-X</span>
-                <span className="text-[#00f0ff]">AUTHENTICATED</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Column: Strategic Narrative & Weaponized Capabilities (7 cols) */}
-          <motion.div
-            className="lg:col-span-7 flex flex-col justify-between space-y-6"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="hud-frame p-6 sm:p-8 rounded-lg bg-[#040711]/90 space-y-5">
-              <div className="text-xs font-mono text-[#00f0ff] tracking-widest uppercase flex items-center gap-2">
-                <span className="w-2 h-2 bg-[#00f0ff] rounded-full animate-ping" />
-                // OPERATIONAL OVERVIEW
-              </div>
-
-              <h3 className="text-2xl sm:text-3xl font-bold font-orbitron text-white leading-snug">
-                Where Military-Grade Code Meets <span className="text-[#ffb703]">High-Converting Luxury Brand Power</span>.
-              </h3>
-
-              <div className="space-y-4 text-base text-[#94a3b8] font-rajdhani leading-relaxed">
-                <p>
-                  As an engineering and creative powerhouse, I do not just build web apps or make pretty posters — I construct entire digital ecosystems that command market authority and convert visitors into long-term enterprise contracts.
-                </p>
-                <p>
-                  My engineering background centers on the <strong className="text-white font-semibold">MERN ecosystem</strong>, high-performance caching via Redis, role-based access authorization (RBAC) for complex multi-division holding corporations, and mission-critical cloud deployments across GCC regions including Qatar and Dubai.
-                </p>
-                <p>
-                  Simultaneously, I spearhead commercial poster direction, luxury branding visuals, high-converting social ad campaigns, and video storytelling. This hybrid duality eliminates the gap between design and engineering, allowing companies to execute complete go-to-market strategies with zero friction.
-                </p>
-              </div>
-
-              {/* Glowing Tactical Highlights Matrix */}
-              <div className="pt-3">
-                <div className="text-xs font-mono text-[#64748b] uppercase tracking-wider mb-3">
-                  // DEPLOYED COMBAT CAPABILITIES
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {capabilities.map((cap, i) => (
-                    <motion.div
-                      key={cap.title}
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.08 }}
-                      className="p-3 bg-[#080d1a] border border-[#00f0ff]/20 rounded-sm flex items-start gap-2.5 hover:border-[#00f0ff] transition-all group"
-                      onMouseEnter={() => cyberAudio.playHover()}
-                    >
-                      <FiCheckCircle className="text-[#00f0ff] mt-0.5 shrink-0 group-hover:scale-110 transition-transform" />
-                      <div>
-                        <div className="text-sm font-semibold text-white group-hover:text-[#00f0ff] transition-colors">
-                          {cap.title}
-                        </div>
-                        <div className="text-[10px] font-mono text-[#64748b] tracking-wider mt-0.5">
-                          SYS.CLASS // {cap.category}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action Link to Contact */}
-              <div className="pt-4 flex flex-wrap items-center gap-4">
-                <a
-                  href="#contact"
-                  onMouseEnter={() => cyberAudio.playHover()}
-                  onClick={() => cyberAudio.playCyberClick()}
-                  className="btn-cyber-primary text-xs"
-                >
-                  <span>REQUEST CONSULTATION // GCC & GLOBAL</span>
-                  <FiExternalLink />
-                </a>
-                <a
-                  href="#services"
-                  onMouseEnter={() => cyberAudio.playHover()}
-                  onClick={() => cyberAudio.playCyberClick()}
-                  className="text-xs font-mono text-[#00f0ff] hover:underline tracking-wider"
-                >
-                  VIEW TECHNICAL SERVICES →
-                </a>
-              </div>
-            </div>
-          </motion.div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -1,145 +1,142 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FiExternalLink, 
-  FiArrowRight, 
-  FiChevronLeft, 
-  FiChevronRight, 
-  FiServer, 
-  FiActivity
-} from 'react-icons/fi';
+import { FiExternalLink, FiChevronLeft, FiChevronRight, FiCheckCircle } from 'react-icons/fi';
+import { SectionTitle } from './ui/SectionTitle';
+import { GlassCard } from './ui/GlassCard';
+import { Reveal } from './ui/Reveal';
 import { cyberAudio } from '../utils/cyberAudio';
+import { useLanguage } from '../i18n';
+import { useGame } from '../context';
+import TiltCard from './extras/TiltCard';
 
 const projects = [
   {
-    id: 'DEPLOY-01',
-    title: 'Value FM Platform',
-    category: 'Enterprise SaaS // GCC Facility Management',
-    region: 'QATAR & DUBAI',
-    uptime: '99.9%',
-    desc: 'High-availability enterprise facility operations platform built for commercial facility maintenance across Qatar and Dubai. Features automated work-order dispatching, real-time maintenance telemetry, Redis caching for high-speed reporting, and automated SLA tracking.',
-    stack: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Redis Caching', 'Tailwind CSS', 'REST API'],
-    images: ['/images/webdev/valufm1.png', '/images/webdev/valuefm2.png'],
+    id: 'value-fm',
+    title: 'Value FM Operations Platform',
+    category: 'Enterprise SaaS',
+    filterTag: 'Qatar',
+    region: '🇶🇦 Qatar & Dubai',
     live: 'https://valuefm.com.qa',
-    status: 'ACTIVE PRODUCTION',
+    problem: 'Facility maintenance operations struggled with dispatch bottlenecks, manual paperwork, and delayed SLA reporting across commercial sites.',
+    solution: 'Architected an automated MERN platform with Redis in-memory caching, real-time ticket dispatching, and predictive maintenance tracking.',
+    result: '[CONFIRM: 40% faster dispatch times and automated SLA compliance across commercial properties]',
+    stack: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Redis', 'Tailwind CSS'],
+    images: ['/images/webdev/valufm1.png', '/images/webdev/valuefm2.png'],
   },
   {
-    id: 'DEPLOY-02',
-    title: 'Al Shareef Holding Portal',
-    category: 'Enterprise Group Portal // Multi-Division RBAC',
-    region: 'QATAR CORP HQ',
-    uptime: '99.8%',
-    desc: 'Comprehensive enterprise portal for a prominent Qatar holding conglomerate overseeing Facility Management, Real Estate, International Trading, and F&B hospitality divisions. Built with multi-level role-based access control (RBAC), executive audit logging, and automated reporting.',
-    stack: ['React.js', 'Node.js', 'MongoDB', 'RBAC Authorization', 'Webhooks', 'JWT Authentication'],
-    images: ['/images/webdev/alshareefholding.png', '/images/webdev/alshareef2.png'],
+    id: 'al-shareef',
+    title: 'Al Shareef Holding Group Portal',
+    category: 'Corporate Portal',
+    filterTag: 'Qatar',
+    region: '🇶🇦 Qatar',
     live: 'https://alshareef.com.qa',
-    status: 'ENTERPRISE LIVE',
+    problem: 'Multi-division conglomerate needed a unified executive interface to manage real estate, trading, hospitality, and facility units securely.',
+    solution: 'Engineered a high-security holding group portal with granular Role-Based Access Control (RBAC), multi-tenant division routing, and audit logs.',
+    result: '[CONFIRM: Unified executive oversight across 4 commercial subsidiaries with zero permission conflicts]',
+    stack: ['React.js', 'Node.js', 'MongoDB', 'RBAC Security', 'Webhooks'],
+    images: ['/images/webdev/alshareefholding.png', '/images/webdev/alshareef2.png'],
   },
   {
-    id: 'DEPLOY-03',
-    title: 'Moestay Travel Admin',
-    category: 'Analytics Dashboard // Booking Engine',
-    region: 'INTERNATIONAL',
-    uptime: '99.95%',
-    desc: 'Ultra-modern travel booking administration console with real-time room inventory management, dynamic pricing engines, revenue tracking charts, and granular customer access management powered by Redux Toolkit and optimized React pipelines.',
-    stack: ['React.js', 'Redux Toolkit', 'Tailwind CSS', 'Node.js', 'MongoDB', 'Data Viz'],
-    images: ['/images/webdev/moestay.png', '/images/webdev/moestay2.png', '/images/webdev/moestay3.png'],
+    id: 'moestay',
+    title: 'Moestay Travel Admin Dashboard',
+    category: 'Web apps',
+    filterTag: 'Web apps',
+    region: '🌍 International',
     live: 'https://moestay-admin.netlify.app/dashboard',
-    status: 'CLOUD ACTIVE',
+    problem: 'Travel managers needed a streamlined dashboard to monitor room inventory, track bookings, and evaluate revenue trends without UI lag.',
+    solution: 'Built a responsive admin analytics suite powered by Redux Toolkit for seamless client-side state caching and fast data visualization.',
+    result: '[CONFIRM: Instant multi-room scheduling and transparent booking revenue tracking]',
+    stack: ['React.js', 'Redux Toolkit', 'Tailwind CSS', 'Node.js', 'REST APIs'],
+    images: ['/images/webdev/moestay.png', '/images/webdev/moestay2.png', '/images/webdev/moestay3.png'],
   },
   {
-    id: 'DEPLOY-04',
-    title: 'MyThoughtsHub',
-    category: 'Full-Stack Editorial // Publishing CMS',
-    region: 'GLOBAL CLOUD',
-    uptime: '99.7%',
-    desc: 'High-performance digital publication platform featuring markdown rich-text authoring, robust JWT authentication, threaded discussion engines, and automated SEO schema indexing for superior organic search discoverability.',
-    stack: ['React.js', 'Node.js', 'Express', 'MongoDB', 'JWT Auth', 'REST APIs', 'SEO Engine'],
-    images: ['/images/webdev/mythoughts.png', '/images/webdev/mythoughtshub2.png'],
+    id: 'my-thoughts-hub',
+    title: 'MyThoughtsHub Editorial Platform',
+    category: 'Web apps',
+    filterTag: 'Web apps',
+    region: '🌍 International',
     live: 'https://mythoughtshub.eu.cc/',
-    status: 'PRODUCTION DEPLOYED',
+    problem: 'Content creators needed a lightweight, high-performance editorial publishing platform with clean reading experiences and user discussion.',
+    solution: 'Engineered a full-stack publishing web app with JWT authentication, rich-text markdown rendering, threaded comments, and SEO optimization.',
+    result: '[CONFIRM: Fast page loads and structured organic search indexing for all published essays]',
+    stack: ['React.js', 'Node.js', 'Express', 'MongoDB', 'JWT Auth'],
+    images: ['/images/webdev/mythoughts.png', '/images/webdev/mythoughtshub2.png'],
   },
 ];
 
-function ShowcaseCarousel({ images, title }) {
+const filterOptions = ['All', 'Qatar', 'Web apps'];
+
+function ProjectCarousel({ images, title, onInteract }) {
   const [current, setCurrent] = useState(0);
-  const total = images.length;
 
   const next = useCallback(() => {
-    cyberAudio.playHover();
-    setCurrent((c) => (c + 1) % total);
-  }, [total]);
+    cyberAudio.playSoftClick?.();
+    onInteract?.();
+    setCurrent((c) => (c + 1) % images.length);
+  }, [images.length, onInteract]);
 
   const prev = useCallback(() => {
-    cyberAudio.playHover();
-    setCurrent((c) => (c - 1 + total) % total);
-  }, [total]);
-
-  useEffect(() => {
-    if (total <= 1) return;
-    const timer = setInterval(() => {
-      setCurrent((c) => (c + 1) % total);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [total]);
+    cyberAudio.playSoftClick?.();
+    onInteract?.();
+    setCurrent((c) => (c - 1 + images.length) % images.length);
+  }, [images.length, onInteract]);
 
   return (
-    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#030611] select-none group">
+    <div className="relative aspect-[16/10] overflow-hidden bg-[#0A0D18] group">
       <AnimatePresence mode="wait">
-        <motion.div
-          key={current}
+        <motion.picture
+          key={images[current]}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full h-full relative"
+          transition={{ duration: 0.25 }}
+          className="w-full h-full block"
         >
+          <source
+            srcSet={images[current].replace(/\.(png|jpg|jpeg)$/, '.webp')}
+            type="image/webp"
+          />
           <img
             src={images[current]}
             alt={`${title} screenshot ${current + 1}`}
+            loading="lazy"
+            decoding="async"
+            width="1280"
+            height="800"
             className="w-full h-full object-cover object-top"
+            onError={(e) => {
+              e.currentTarget.src = '/images/webdev/valufm1.png';
+            }}
           />
-        </motion.div>
+        </motion.picture>
       </AnimatePresence>
 
-      {/* Slide Navigation Buttons */}
-      {total > 1 && (
+      {/* Navigation Arrows */}
+      {images.length > 1 && (
         <>
           <button
             onClick={prev}
-            className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-[#040711]/80 hover:bg-[#00f0ff]/20 border border-white/10 hover:border-[#00f0ff] text-white hover:text-[#00f0ff] rounded-sm text-xs opacity-0 group-hover:opacity-100 transition-all z-20"
-            aria-label="Previous Image"
+            className="absolute start-2.5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#070A12]/80 hover:bg-[#D4AF37] text-white hover:text-[#070A12] border border-white/10 opacity-0 group-hover:opacity-100 transition-all z-20 cursor-pointer"
+            aria-label="Previous Slide"
           >
-            <FiChevronLeft size={16} />
+            <FiChevronLeft size={16} className="rtl:rotate-180" />
           </button>
           <button
             onClick={next}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-[#040711]/80 hover:bg-[#00f0ff]/20 border border-white/10 hover:border-[#00f0ff] text-white hover:text-[#00f0ff] rounded-sm text-xs opacity-0 group-hover:opacity-100 transition-all z-20"
-            aria-label="Next Image"
+            className="absolute end-2.5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#070A12]/80 hover:bg-[#D4AF37] text-white hover:text-[#070A12] border border-white/10 opacity-0 group-hover:opacity-100 transition-all z-20 cursor-pointer"
+            aria-label="Next Slide"
           >
-            <FiChevronRight size={16} />
+            <FiChevronRight size={16} className="rtl:rotate-180" />
           </button>
-
-          {/* Slide Indicator Dots */}
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20 bg-black/60 px-2.5 py-1 rounded-full border border-white/10">
+          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20 bg-black/60 px-2.5 py-1 rounded-full">
             {images.map((_, i) => (
-              <button
+              <span
                 key={i}
-                onClick={() => {
-                  cyberAudio.playHover();
-                  setCurrent(i);
-                }}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === current ? 'w-5 bg-[#00f0ff]' : 'w-1.5 bg-white/40'
+                  i === current ? 'w-4 bg-[#D4AF37]' : 'w-1.5 bg-white/40'
                 }`}
-                aria-label={`Slide ${i + 1}`}
               />
             ))}
-          </div>
-
-          {/* Slide Counter */}
-          <div className="absolute top-2 right-2 px-2 py-0.5 bg-black/70 border border-white/10 text-[10px] font-mono text-[#00f0ff] rounded z-20">
-            FRAME {current + 1} / {total}
           </div>
         </>
       )}
@@ -148,149 +145,175 @@ function ShowcaseCarousel({ images, title }) {
 }
 
 export default function WebDev() {
+  const { t } = useLanguage();
+  const { playerClass, unlockAchievement } = useGame();
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  const isDevClass = playerClass === 'developer';
+
+  const filteredProjects = activeFilter === 'All'
+    ? projects
+    : projects.filter((p) => p.filterTag === activeFilter);
+
+  const handleInteraction = () => {
+    unlockAchievement('explorer');
+  };
+
   return (
-    <section className="relative py-24 bg-[#080d1a] border-t border-b border-[#00f0ff]/15 overflow-hidden" id="webdev">
-      {/* Background Cyber Grid */}
-      <div className="absolute inset-0 cyber-grid-bg opacity-25 pointer-events-none" />
-
+    <section className="relative py-28 bg-[#070A12] border-t border-white/5 overflow-hidden" id="webdev">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#040711] border border-[#00f0ff]/30 text-[#00f0ff] font-mono text-xs uppercase tracking-widest rounded-sm">
-            <FiServer className="text-xs" />
-            <span>ENTERPRISE ARCHITECTURE // PRODUCTION DEPLOYMENTS</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-orbitron tracking-tight text-white">
-            MISSION-CRITICAL <span className="gradient-text-cyan">DEPLOYMENTS</span>
-          </h2>
-          <p className="text-base sm:text-lg text-[#94a3b8] font-rajdhani">
-            Live enterprise platforms actively serving businesses across Dubai, Qatar, and international markets.
-          </p>
-        </div>
+        <Reveal>
+          <SectionTitle
+            eyebrow={t('work.badge', 'Selected Work')}
+            title={
+              <>
+                Production Web Platforms &{' '}
+                <span className={isDevClass ? 'cyan-gradient-text' : 'gold-gradient-text'}>
+                  Enterprise Solutions
+                </span>
+              </>
+            }
+            subtitle={t('work.subtitle', 'Real case studies deployed for commercial organizations in Qatar, the UAE, and global markets.')}
+          />
+        </Reveal>
 
-        {/* Deployments List */}
-        <div className="space-y-12">
-          {projects.map((p, idx) => (
-            <motion.div
-              key={p.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ delay: idx * 0.1, duration: 0.8 }}
-              className="hud-frame p-6 sm:p-8 rounded-lg bg-[#040711]/90 border-[#00f0ff]/25 hover:border-[#00f0ff]/50 transition-all duration-300"
+        {/* Filter Pills */}
+        <div className="flex items-center justify-center gap-2 mb-14">
+          {filterOptions.map((f) => (
+            <button
+              key={f}
+              onClick={() => {
+                cyberAudio.playSoftClick?.();
+                setActiveFilter(f);
+                handleInteraction();
+              }}
+              className={`px-4 py-1.5 rounded-full text-xs font-heading font-semibold transition-all duration-200 border cursor-pointer ${
+                activeFilter === f
+                  ? isDevClass
+                    ? 'bg-[#22D3EE] text-[#070A12] border-[#22D3EE] shadow-sm font-bold'
+                    : 'bg-[#D4AF37] text-[#070A12] border-[#D4AF37] shadow-sm'
+                  : 'bg-[#0E1320] border-white/10 text-[#9AA4BC] hover:text-[#F4F6FB]'
+              }`}
             >
-              <div className="hud-bracket-tr" />
-              <div className="hud-bracket-bl" />
-
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                {/* Visual Side: Simulated Cyber Browser Chrome (7 cols) */}
-                <div className="lg:col-span-7">
-                  <div className="rounded-lg overflow-hidden border border-[#00f0ff]/30 bg-[#030611] shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-                    {/* Simulated Browser Chrome Header */}
-                    <div className="px-4 py-2.5 bg-[#080d1a] border-b border-[#00f0ff]/20 flex items-center justify-between text-xs font-mono">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ff007f]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ffb703]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#00ff66]" />
-                        <span className="ml-2 px-2.5 py-0.5 bg-[#040711] text-[#94a3b8] rounded border border-white/5 text-[11px] truncate max-w-[200px] sm:max-w-[300px]">
-                          https://{new URL(p.live).hostname}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[10px] text-[#00ff66]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00ff66] animate-pulse" />
-                        <span>SSL SECURED</span>
-                      </div>
-                    </div>
-
-                    {/* Screenshot Carousel */}
-                    <ShowcaseCarousel images={p.images} title={p.title} />
-
-                    {/* Browser Footer Telemetry */}
-                    <div className="px-4 py-2 bg-[#080d1a] border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-[#64748b]">
-                      <span>SYSTEM ID: {p.id}</span>
-                      <span className="text-[#00f0ff]">UPTIME SLA: {p.uptime}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content Side: Specs & Actions (5 cols) */}
-                <div className="lg:col-span-5 space-y-4">
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-                    <span className="px-2.5 py-1 bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/30 rounded text-[11px] font-bold">
-                      {p.category}
-                    </span>
-                    <span className="px-2 py-1 bg-[#ffb703]/10 text-[#ffb703] border border-[#ffb703]/30 rounded text-[10px] font-bold">
-                      {p.region}
-                    </span>
-                  </div>
-
-                  <h3 className="text-2xl sm:text-3xl font-black font-orbitron text-white leading-tight">
-                    {p.title}
-                  </h3>
-
-                  <p className="text-sm text-[#94a3b8] font-rajdhani leading-relaxed">
-                    {p.desc}
-                  </p>
-
-                  {/* Tech Stack Pills with Neon Accents */}
-                  <div className="space-y-1.5 pt-1">
-                    <div className="text-[10px] font-mono text-[#64748b] uppercase tracking-wider">
-                      // ARCHITECTURE COMPONENT MATRIX
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {p.stack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-1 bg-[#080d1a] border border-[#00f0ff]/20 hover:border-[#00f0ff] text-white hover:text-[#00f0ff] rounded-sm text-xs font-mono transition-colors"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Status & Live CTA Button */}
-                  <div className="pt-4 flex items-center gap-4">
-                    <a
-                      href={p.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onMouseEnter={() => cyberAudio.playHover()}
-                      onClick={() => cyberAudio.playCyberClick()}
-                      className="btn-cyber-primary text-xs"
-                    >
-                      <span>LAUNCH LIVE PLATFORM</span>
-                      <FiExternalLink />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              {f === 'All' ? t('work.filterAll', 'All Deployments') : f === 'Qatar' ? t('work.filterQatar', 'Qatar 🇶🇦') : t('work.filterWebApps', 'Web Apps')}
+            </button>
           ))}
         </div>
 
-        {/* Global Consultation Dispatcher */}
-        <div className="mt-16 hud-frame p-8 rounded-lg bg-[#040711]/90 text-center space-y-4 max-w-2xl mx-auto border-[#00f0ff]/30">
-          <div className="text-xs font-mono text-[#00ff66] flex items-center justify-center gap-2">
-            <FiActivity className="text-sm" />
-            <span>CAPACITY AVAILABLE FOR GCC ENTERPRISE PROJECTS</span>
-          </div>
-          <h4 className="text-xl sm:text-2xl font-bold font-orbitron text-white">
-            Need a High-Concurrency Platform Built for Scale?
-          </h4>
-          <p className="text-sm text-[#94a3b8] font-rajdhani">
-            From automated holding portals in Doha to facility management SaaS in Dubai, let's architect your platform with military precision.
-          </p>
-          <div className="pt-2">
-            <a
-              href="#contact"
-              onClick={() => cyberAudio.playCyberClick()}
-              className="btn-cyber-primary text-xs"
-            >
-              <span>DISPATCH ENTERPRISE PROPOSAL</span>
-              <FiArrowRight />
-            </a>
-          </div>
+        {/* Case Studies List */}
+        <div className="space-y-12">
+          {filteredProjects.map((p, idx) => (
+            <Reveal key={p.id} delay={idx * 0.1}>
+              <TiltCard maxTilt={5}>
+                <GlassCard 
+                  className={`p-6 sm:p-8 rounded-3xl group relative overflow-hidden transition-all duration-300 ${
+                    isDevClass 
+                      ? 'border-[#22D3EE]/50 shadow-[0_0_35px_rgba(34,211,238,0.2)]' 
+                      : 'border-white/10'
+                  }`} 
+                  glow={isDevClass ? 'cyan' : 'gold'}
+                >
+                  {/* Hover Stamp: "Mission complete ✓" */}
+                  <div className="absolute top-4 end-4 z-20 px-3 py-1 rounded-full bg-[#10B981]/15 border border-[#10B981]/40 text-[#10B981] text-[11px] font-mono font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1 shadow-sm">
+                    <FiCheckCircle size={12} />
+                    <span>{t('work.missionComplete', 'Mission complete ✓')}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    {/* Browser Mockup Visual (6 cols) */}
+                    <div className="lg:col-span-6 rounded-2xl overflow-hidden border border-white/10 bg-[#0E1320] shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                      {/* Simulated Browser Chrome Bar */}
+                      <div className="px-4 py-2.5 bg-[#141A2B] border-b border-white/10 flex items-center justify-between text-xs font-mono text-[#9AA4BC]">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#FF3D8B]/70" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#D4AF37]/70" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]/70" />
+                          <span className="ms-2 text-[11px] text-[#9AA4BC] truncate max-w-[200px]">
+                            https://{new URL(p.live).hostname}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-[#D4AF37] font-semibold">{p.region}</span>
+                      </div>
+
+                      <ProjectCarousel images={p.images} title={p.title} onInteract={handleInteraction} />
+                    </div>
+
+                    {/* Case Study Details (6 cols) */}
+                    <div className="lg:col-span-6 space-y-4 text-start">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs font-mono font-bold uppercase tracking-wider ${isDevClass ? 'text-[#22D3EE]' : 'text-[#D4AF37]'}`}>
+                          {p.category}
+                        </span>
+                        <span className="text-white/20">•</span>
+                        <span className="text-xs font-mono text-[#9AA4BC]">{p.region}</span>
+                      </div>
+
+                      <h3 className="text-2xl font-bold font-heading text-white">
+                        {p.title}
+                      </h3>
+
+                      {/* Problem -> Solution -> Result */}
+                      <div className="space-y-2.5 text-xs sm:text-sm font-sans pt-1">
+                        <div className="p-3 rounded-xl bg-[#070A12]/80 border border-white/5 space-y-1">
+                          <span className="text-[10px] font-mono font-bold uppercase text-[#FF3D8B] tracking-wider block">
+                            {t('work.problem', 'Challenge')}
+                          </span>
+                          <p className="text-[#9AA4BC] leading-relaxed">{p.problem}</p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-[#070A12]/80 border border-white/5 space-y-1">
+                          <span className={`text-[10px] font-mono font-bold uppercase tracking-wider block ${isDevClass ? 'text-[#22D3EE]' : 'text-[#D4AF37]'}`}>
+                            {t('work.solution', 'Architecture')}
+                          </span>
+                          <p className="text-[#9AA4BC] leading-relaxed">{p.solution}</p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-[#10B981]/5 border border-[#10B981]/20 space-y-1">
+                          <span className="text-[10px] font-mono font-bold uppercase text-[#10B981] tracking-wider block">
+                            {t('work.outcome', 'Impact')}
+                          </span>
+                          <p className="text-[#cbd5e1] leading-relaxed">{p.result}</p>
+                        </div>
+                      </div>
+
+                      {/* Tech Chips */}
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        {p.stack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-2.5 py-1 rounded-lg bg-[#141A2B] border border-white/10 text-[11px] font-mono text-[#F4F6FB]"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Direct Live Site Button */}
+                      <div className="pt-2">
+                        <a
+                          href={p.live}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => {
+                            cyberAudio.playSoftClick?.();
+                            handleInteraction();
+                          }}
+                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-xs transition-all ${
+                            isDevClass
+                              ? 'bg-[#22D3EE] text-[#070A12] hover:bg-[#67E8F9] shadow-[0_0_20px_rgba(34,211,238,0.35)]'
+                              : 'bg-gradient-to-r from-[#D4AF37] to-[#F5E6A8] text-[#070A12] hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                          }`}
+                        >
+                          <span>{t('work.visitSite', 'Visit live site')}</span>
+                          <FiExternalLink size={13} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </GlassCard>
+              </TiltCard>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
