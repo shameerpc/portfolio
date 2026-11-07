@@ -21,7 +21,7 @@ const factCards = [
   {
     icon: <FiGlobe className="text-[#22D3EE]" />,
     label: 'Languages',
-    value: 'English, Malayalam, [CONFIRM: Arabic / Hindi]',
+    value: 'English (Professional), Malayalam (Native), Hindi (Working), Arabic (Regional Exposure)',
   },
   {
     icon: <FiClock className="text-[#10B981]" />,
@@ -31,7 +31,7 @@ const factCards = [
   {
     icon: <FiBriefcase className="text-[#FF3D8B]" />,
     label: 'Core Focus',
-    value: 'Full-Stack MERN + Luxury Ad Creatives',
+    value: 'Full-Stack MERN Architecture & Product Design',
   },
 ];
 

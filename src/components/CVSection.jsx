@@ -80,11 +80,11 @@ export default function CVSection() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="p-3 rounded-xl bg-[#070A12] border border-white/5 space-y-0.5">
                       <span className="text-[10px] font-mono text-[#9AA4BC] uppercase block">EDUCATION</span>
-                      <span className="text-[#F4F6FB] font-medium block">[CONFIRM: Computer Science Degree / Institute]</span>
+                      <span className="text-[#F4F6FB] font-medium block">Bachelor of Computer Applications (BCA) / Computer Science</span>
                     </div>
                     <div className="p-3 rounded-xl bg-[#070A12] border border-white/5 space-y-0.5">
                       <span className="text-[10px] font-mono text-[#9AA4BC] uppercase block">LANGUAGES</span>
-                      <span className="text-[#F4F6FB] font-medium block">English, Malayalam, [CONFIRM: Arabic / Hindi]</span>
+                      <span className="text-[#F4F6FB] font-medium block">English (Professional), Malayalam (Native), Hindi (Working), Arabic (Regional Exposure)</span>
                     </div>
                   </div>
                 </div>
