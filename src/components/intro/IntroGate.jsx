@@ -29,6 +29,7 @@ export function IntroGate({ onComplete }) {
       if (!localStorage.getItem('player_class')) {
         localStorage.setItem('player_class', 'full_package');
       }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
     onComplete();
   }, [onComplete]);
@@ -61,6 +62,7 @@ export function IntroGate({ onComplete }) {
   const handleWarpComplete = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('intro_seen', 'true');
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
     onComplete();
   };
