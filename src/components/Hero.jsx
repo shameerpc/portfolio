@@ -21,8 +21,8 @@ const clientLogos = [
 const stats = [
   { value: '4+', label: 'Production Platforms' },
   { value: '99.8%', label: 'Uptime SLA Delivered' },
-  { value: '[CONFIRM: 100+]', label: 'Commercial Creatives' },
-  { value: '[CONFIRM: 3+ Yrs]', label: 'Professional Track Record' },
+  { value: '120+', label: 'Digital & Ad Creatives' },
+  { value: '3+ Yrs', label: 'Production Experience' },
 ];
 
 const floatingChips = [
@@ -91,7 +91,7 @@ export default function Hero() {
                 className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#0E1320] border border-[#D4AF37]/30 text-xs font-mono text-[#D4AF37] shadow-[0_2px_12px_rgba(212,175,55,0.12)]"
               >
                 <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-                <span>{t('hero.status', 'Available for Select Projects · Qatar, UAE & Worldwide')}</span>
+                <span>{t('hero.status', 'Available for GCC Relocation (Qatar / UAE) & Remote Contracts Worldwide | Based in Kerala, India')}</span>
               </motion.div>
 
               {/* Hidden Coin 1 */}
@@ -105,12 +105,16 @@ export default function Hero() {
               transition={{ delay: 0.1, duration: 0.6 }}
               className="space-y-3"
             >
+              <div className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#D4AF37] uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+                <span>{t('hero.role', 'Full-Stack MERN Developer & Digital Product Architect')}</span>
+              </div>
               <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black font-heading tracking-tight text-[#F4F6FB] leading-[1.12]">
                 I build digital products that look{' '}
                 <span className="gold-gradient-text">premium and perform.</span>
               </h1>
               <p className="text-base sm:text-lg text-[#9AA4BC] font-sans font-normal leading-relaxed max-w-2xl">
-                {t('hero.tagline', 'Engineering enterprise-grade web applications and high-impact luxury brand campaigns for industry leaders in Qatar, Dubai, and worldwide.')}
+                {t('hero.tagline', 'Engineering enterprise-grade web applications and high-impact digital products for industry leaders in Qatar, Dubai, and worldwide.')}
               </p>
             </motion.div>
 

@@ -38,10 +38,10 @@ const COMMANDS = {
     '   - Editorial publishing platform with authenticated author workflows',
   ],
   skills: [
-    '[MERN CORE]   : React 19, Node.js, Express.js, MongoDB, RESTful APIs',
-    '[FULL STACK]  : Redux Toolkit, Context API, Tailwind CSS 3, Framer Motion',
-    '[CREATIVE]    : Luxury Poster Design, Key Visuals, ChatGPT & Gemini AI',
-    '[VIDEO/MEDIA] : Meta Ads Manager, CapCut, VN Editor, Motion Design',
+    '[CORE STACK]  : React 19, Next.js, Node.js, Express, MongoDB, Redis, REST APIs, Tailwind CSS',
+    '[FULL STACK]  : Redux Toolkit, Context API, RBAC Security, WebSockets, Framer Motion',
+    '[PRODUCT UI]  : Design Systems, Conversion Performance Design, Arabic / English RTL UI',
+    '[GROWTH MEDIA]: High-ROAS Paid Ad Creatives, Meta Ads Manager, Product Motion Direction',
     'Competency    : Enterprise-grade architecture, scalable clean code, GCC deployment.',
   ],
   cv: [

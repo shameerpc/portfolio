@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiExternalLink, FiChevronLeft, FiChevronRight, FiCheckCircle } from 'react-icons/fi';
+import { FiExternalLink, FiChevronLeft, FiChevronRight, FiCheckCircle, FiLock } from 'react-icons/fi';
+import { FaGithub } from 'react-icons/fa';
 import { SectionTitle } from './ui/SectionTitle';
 import { GlassCard } from './ui/GlassCard';
 import { Reveal } from './ui/Reveal';
@@ -17,9 +18,11 @@ const projects = [
     filterTag: 'Qatar',
     region: '🇶🇦 Qatar & Dubai',
     live: 'https://valuefm.com.qa',
+    repoType: 'enterprise',
+    ndaText: 'Enterprise Architecture (Private Repository / NDA Protected)',
     problem: 'Facility maintenance operations struggled with dispatch bottlenecks, manual paperwork, and delayed SLA reporting across commercial sites.',
     solution: 'Architected an automated MERN platform with Redis in-memory caching, real-time ticket dispatching, and predictive maintenance tracking.',
-    result: '[CONFIRM: 40% faster dispatch times and automated SLA compliance across commercial properties]',
+    result: 'Delivered real-time dispatch dashboards and automated SLA compliance tracking across Qatar and Dubai commercial facilities.',
     stack: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Redis', 'Tailwind CSS'],
     images: ['/images/webdev/valufm1.png', '/images/webdev/valuefm2.png'],
   },
@@ -30,9 +33,11 @@ const projects = [
     filterTag: 'Qatar',
     region: '🇶🇦 Qatar',
     live: 'https://alshareef.com.qa',
+    repoType: 'enterprise',
+    ndaText: 'Enterprise Architecture (Private Repository / NDA Protected)',
     problem: 'Multi-division conglomerate needed a unified executive interface to manage real estate, trading, hospitality, and facility units securely.',
     solution: 'Engineered a high-security holding group portal with granular Role-Based Access Control (RBAC), multi-tenant division routing, and audit logs.',
-    result: '[CONFIRM: Unified executive oversight across 4 commercial subsidiaries with zero permission conflicts]',
+    result: 'Engineered role-based access control (RBAC) security and multi-division management portals across 4 commercial subsidiaries.',
     stack: ['React.js', 'Node.js', 'MongoDB', 'RBAC Security', 'Webhooks'],
     images: ['/images/webdev/alshareefholding.png', '/images/webdev/alshareef2.png'],
   },
@@ -43,9 +48,11 @@ const projects = [
     filterTag: 'Web apps',
     region: '🌍 International',
     live: 'https://moestay-admin.netlify.app/dashboard',
+    repoType: 'github',
+    githubUrl: 'https://github.com/shamseerpc',
     problem: 'Travel managers needed a streamlined dashboard to monitor room inventory, track bookings, and evaluate revenue trends without UI lag.',
     solution: 'Built a responsive admin analytics suite powered by Redux Toolkit for seamless client-side state caching and fast data visualization.',
-    result: '[CONFIRM: Instant multi-room scheduling and transparent booking revenue tracking]',
+    result: 'Architected multi-property scheduling, guest management, and transparent booking revenue analytics.',
     stack: ['React.js', 'Redux Toolkit', 'Tailwind CSS', 'Node.js', 'REST APIs'],
     images: ['/images/webdev/moestay.png', '/images/webdev/moestay2.png', '/images/webdev/moestay3.png'],
   },
@@ -56,9 +63,11 @@ const projects = [
     filterTag: 'Web apps',
     region: '🌍 International',
     live: 'https://mythoughtshub.eu.cc/',
+    repoType: 'github',
+    githubUrl: 'https://github.com/shamseerpc',
     problem: 'Content creators needed a lightweight, high-performance editorial publishing platform with clean reading experiences and user discussion.',
     solution: 'Engineered a full-stack publishing web app with JWT authentication, rich-text markdown rendering, threaded comments, and SEO optimization.',
-    result: '[CONFIRM: Fast page loads and structured organic search indexing for all published essays]',
+    result: 'Developed full-stack editorial publishing system with JWT authentication and structured SEO indexing.',
     stack: ['React.js', 'Node.js', 'Express', 'MongoDB', 'JWT Auth'],
     images: ['/images/webdev/mythoughts.png', '/images/webdev/mythoughtshub2.png'],
   },
@@ -288,8 +297,8 @@ export default function WebDev() {
                         ))}
                       </div>
 
-                      {/* Direct Live Site Button */}
-                      <div className="pt-2">
+                      {/* Action CTAs: Live Site + Code Transparency */}
+                      <div className="pt-2 flex flex-wrap items-center gap-3">
                         <a
                           href={p.live}
                           target="_blank"
@@ -307,6 +316,31 @@ export default function WebDev() {
                           <span>{t('work.visitSite', 'Visit live site')}</span>
                           <FiExternalLink size={13} />
                         </a>
+
+                        {p.repoType === 'github' ? (
+                          <a
+                            href={p.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => {
+                              cyberAudio.playSoftClick?.();
+                              handleInteraction();
+                            }}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#141A2B] hover:bg-[#1A2238] border border-white/10 hover:border-[#D4AF37]/50 text-xs font-heading font-medium text-[#F4F6FB] hover:text-[#F5E6A8] transition-all shadow-sm"
+                            title="Inspect repository on GitHub"
+                          >
+                            <FaGithub size={13} className="text-[#9AA4BC]" />
+                            <span>View Code (GitHub)</span>
+                          </a>
+                        ) : (
+                          <div
+                            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#0E1320] border border-white/10 text-[11px] font-mono text-[#9AA4BC]"
+                            title={p.ndaText}
+                          >
+                            <FiLock size={12} className="text-[#D4AF37] shrink-0" />
+                            <span>Enterprise (Private Repo / NDA)</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

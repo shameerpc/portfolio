@@ -27,7 +27,7 @@ export default function Contact() {
     name: '',
     email: '',
     scope: 'Web & SaaS Development',
-    budget: '$3,000 - $8,000',
+    budget: '$1,000 – $2,500',
     message: '',
   });
   const [honeypot, setHoneypot] = useState('');
@@ -92,7 +92,7 @@ export default function Contact() {
       name: '',
       email: '',
       scope: 'Web & SaaS Development',
-      budget: '$3,000 - $8,000',
+      budget: '$1,000 – $2,500',
       message: '',
     });
     setStatus('idle');
@@ -361,10 +361,10 @@ export default function Contact() {
                       onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                       className="w-full px-4 py-3 bg-[#141A2B]/80 border border-white/10 focus:border-[#D4AF37] text-white rounded-xl text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all"
                     >
-                      <option value="< $3,000">&lt; $3,000 (Targeted module / Brand assets / Poster series)</option>
-                      <option value="$3,000 - $8,000">$3,000 - $8,000 (Full-stack web application / Corporate portal)</option>
-                      <option value="$8,000 - $20,000">$8,000 - $20,000 (Custom enterprise SaaS / Multi-platform suite)</option>
-                      <option value="$20,000+">$20,000+ (Retained technical leadership / Comprehensive ecosystem)</option>
+                      <option value="$1,000 – $2,500">$1,000 – $2,500 (Fast MVPs & Landing Platforms)</option>
+                      <option value="$2,500 – $5,000">$2,500 – $5,000 (Full-Stack Applications)</option>
+                      <option value="$5,000+">$5,000+ (Enterprise & Custom Platforms)</option>
+                      <option value="Flexible / Consultation">Flexible / Consultation</option>
                     </select>
                   </div>
 

@@ -16,10 +16,10 @@ export const en = {
     toggleLang: 'العربية',
   },
   hero: {
-    status: 'Available for Select Engagements · Qatar, UAE & Worldwide',
+    status: 'Available for GCC Relocation (Qatar / UAE) & Remote Contracts Worldwide | Based in Kerala, India',
     name: 'Shamseer PC',
-    role: 'Full-Stack MERN Developer & Creative Director',
-    tagline: 'Engineering enterprise-grade web applications and high-impact luxury brand campaigns for industry leaders in Qatar, Dubai, and worldwide.',
+    role: 'Full-Stack MERN Developer & Digital Product Architect',
+    tagline: 'Engineering enterprise-grade web applications and high-impact digital products for industry leaders in Qatar, Dubai, and worldwide.',
     ctaWorkDefault: 'View Selected Work',
     ctaWorkDev: 'Inspect Web & SaaS Systems',
     ctaWorkCreative: 'See My Creative Work',
