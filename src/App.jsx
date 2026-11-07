@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { LanguageProvider } from './i18n';
 import { GameProvider, useGame } from './context';
 import Navbar from './components/Navbar';
@@ -36,6 +36,29 @@ function SectionLoader() {
 function AppContent() {
   const { playerClass, retroMode, confettiActive } = useGame();
   const [introComplete, setIntroComplete] = useState(false);
+
+  // Guarantee that entering the home page always starts at the top (Hero / Home section)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+
+      // If user enters with a lingering hash (e.g. #webdev from a previous session), reset to top
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname);
+        window.scrollTo(0, 0);
+      }
+    }
+  }, []);
+
+  // When intro gate completes or is skipped, ensure viewport starts cleanly at the top of the Home section
+  useEffect(() => {
+    if (introComplete && typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [introComplete]);
 
   return (
     <div className="relative min-h-screen bg-[#070A12] text-[#F4F6FB] selection:bg-[#D4AF37] selection:text-[#070A12] font-sans">
